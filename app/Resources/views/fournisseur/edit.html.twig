@@ -1,0 +1,114 @@
+{% extends "adminLayout.html.twig" %}
+
+
+{% block stylesheets %}
+
+    {{parent()}}
+
+    <link href="{{asset('adminTemplate/css/plugins/summernote/summernote.css')}}" rel="stylesheet">
+    <link href="{{asset('adminTemplate/css/plugins/summernote/summernote-bs3.css')}}" rel="stylesheet">
+
+    <link href="{{asset('adminTemplate/css/plugins/datapicker/datepicker3.css')}}" rel="stylesheet">
+
+    <link href="{{asset('adminTemplate/css/animate.css')}}" rel="stylesheet">
+    <link href="{{asset('adminTemplate/css/style.css')}}" rel="stylesheet">
+
+{% endblock %}
+
+{% block body %}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-lg-10">
+                <h2>Modification d'un fournisseur</h2>
+                <a href="{{ path('fournisseur_index') }}"><i class="fa fa-list"></i>Liste fournisseur</a>
+            </div>
+        </div>
+
+        <div class="wrapper wrapper-content animated fadeInRight ecommerce">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="tabs-container">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a data-toggle="tab" href="#tab-1"> Modification fournisseur</a></li>
+                            </ul>
+                            
+                            <div class="tab-content">
+                                    <div class="panel-body">
+                                        
+                                        {{ form_start(edit_form) }}
+                                        <fieldset class="form-horizontal">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">{{ form_label(edit_form.raisoc) }}:</label>
+                                                <div class="col-sm-10">
+                                                    {{ form_widget(edit_form.raisoc) }}
+                                                </div>
+                                            </div>
+                                           
+                                            <div class="form-group"><label class="col-sm-2 control-label">{{ form_label(edit_form.adresse) }}:</label>
+                                                <div class="col-sm-10">
+                                                        {{ form_widget(edit_form.adresse) }}
+                                                </div>
+                                            </div>
+                                            <div class="form-group"><label class="col-sm-2 control-label">{{ form_label(edit_form.telephone) }}:</label>
+                                                <div class="col-sm-10">
+                                                    {{ form_widget(edit_form.telephone) }}
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group"><label class="col-sm-2 control-label">{{ form_label(edit_form.email) }}:</label>
+                                                <div class="col-sm-10">
+                                                    {{ form_widget(edit_form.email) }}
+                                                </div>
+                                            </div>
+                                            <div class="form-group"><label class="col-sm-2 control-label">{{ form_label(edit_form.user.username) }}:</label>
+                                                <div class="col-sm-10">
+                                                    {{ form_widget(edit_form.user.username) }}
+                                                </div>
+                                            </div>
+
+                                            <div class="">
+                                                {{ form_widget(edit_form.save) }}
+                                            </div>
+                                            
+                                        </fieldset>
+                                        {{ form_end(edit_form) }}
+                                    </div>
+                                
+                            </div>
+                            
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+{{parent()}}
+
+<!-- SUMMERNOTE -->
+<script src="{{asset('adminTemplate/js/plugins/summernote/summernote.min.js')}}"></script>
+
+<!-- Data picker -->
+<script src="{{asset('adminTemplate/js/plugins/datapicker/bootstrap-datepicker.js')}}"></script>
+
+<script>
+    $(document).ready(function(){
+
+        $('.summernote').summernote();
+
+        $('.input-group.date').datepicker({
+            todayBtn: "linked",
+            keyboardNavigation: false,
+            forceParse: false,
+            calendarWeeks: true,
+            autoclose: true
+        });
+
+    });
+</script>
+
+{% endblock %}

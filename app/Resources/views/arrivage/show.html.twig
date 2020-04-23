@@ -1,0 +1,61 @@
+{% extends "adminLayout.html.twig" %}
+{% set breadCrumbPosition = "Gestion des arrivages" %}
+{% set breadcrumbs = ['Arrivages', 'Suppression'] %}
+{% block body %}
+    
+
+    <table class="table table-stripped toggle-arrow-tiny table-bordered table-hover dataTables-example" data-page-navigation="#"  data-page-size="15">
+        <thead>
+            <tr>
+                <th > Date</th>
+                <th >Designation Art.</th>
+                <th >Qte. Arrivage</th>
+                <th >Prix d&apos;achat</th>
+                <th >Montant TVA</th>
+                <th >Autres Taxes</th>
+                <th >Marge</th>
+                <th >P.V. Final</th>
+                <th >PU. Calculé</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td> {{ arrivage.createdAt | date('d/m/Y') }} </td>
+                <td> {{ arrivage.article.designation }} </td>
+                <td> {{ arrivage.qte|number_format(0, '', ' ')  }} </td>
+                <td> {{ arrivage.prixAchat|number_format(0, '', ' ')  }} </td>
+                <td> {{ arrivage.tva|number_format(0, '', ' ')  }} </td>
+                <td> {{ arrivage.taxes|number_format(0, '', ' ')  }} </td>
+                <td> {{ (arrivage.taxes +  arrivage.tva + arrivage.prixAchat)|number_format(0, '', ' ')  }} </td>
+                <td> {{ (arrivage.marge + arrivage.taxes +  arrivage.tva + arrivage.prixAchat)|number_format(0, '', ' ')  }} </td>
+                <td> {{ arrivage.stock.punit|number_format(0, '', ' ')  }} </td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    {{ form_start(delete_form) }}
+        {% if not delete_form.vars.valid %}
+            <ul>
+                {# Loop through every form item #}
+                {% for child in form.children %}
+                    {# Display the errors of the form item #}
+                    {%for error in child.vars.errors%}
+                        <li>{{error.message}}</li>
+                    {%endfor%}
+                {%endfor%}
+            </ul>
+        {%endif%}
+        <button class="btn btn-danger">  Supprimer ce arrivage </button>
+    {{ form_end(delete_form) }}
+
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="form-group">
+                <a href="{{ path('backoffice_arrivage_new') }}"> Retourner sur la liste </a>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

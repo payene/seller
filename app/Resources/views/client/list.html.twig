@@ -1,0 +1,177 @@
+{% extends "adminLayout.html.twig" %}
+{% set breadCrumbPosition = "Clients" %}
+{% set breadcrumbs = ['Liste'] %}
+
+
+{% block stylesheets %}
+    {{parent()}}
+
+    <!-- FooTable -->
+    <link href='{{asset("adminTemplate/css/plugins/footable/footable.core.css")}}' rel="stylesheet">
+
+    <link href='{{asset("adminTemplate/css/animate.css")}}' rel="stylesheet">
+    <link href='{{asset("adminTemplate/css/style.css")}}' rel="stylesheet">
+
+{% endblock %}
+
+{% block body %}
+
+    <div class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-lg-10">
+                <h2>Liste des clients</h2>
+                <a href="{{ path('client_new') }}"><i class="fa fa-plus"></i>Ajout client</a>
+            </div>
+        </div>
+
+        <div class="wrapper wrapper-content animated fadeInRight ecommerce">
+
+            {#{form_start(formSearch)}}
+                
+            <div class="ibox-content m-b-sm border-bottom">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <!--label class="control-label" for="product_name">Product Name</label-->
+                            {{ form_widget(formSearch.designation) }}
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        {{form_errors(formSearch.priceMin)}}
+                        <div class="form-group">
+                            {{ form_widget(formSearch.priceMin) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_widget(formSearch.priceMax) }}
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        {{form_errors(formSearch.stockMin)}}
+                        <div class="form-group">
+                            {{ form_widget(formSearch.stockMin) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_widget(formSearch.stockMax) }}
+                        </div>
+                    </div>
+    
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            {{ form_widget(formSearch.category) }}
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            {{ form_widget(formSearch.save) }}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            {{form_end(formSearch)}#}
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox">
+                        <div class="ibox-content">
+
+                             <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
+                                <thead>
+                                <tr>
+
+                                    <th data-toggle="true">Nom</th>
+                                    <th data-hide="phone">Prenom</th>
+                                    <th data-hide="all">Raisoc</th>
+                                    <th data-hide="phone">Adresse</th>
+                                    <th data-hide="phone,tablet" >Telephone</th>
+                                    <th data-hide="phone,tablet" >E-mail</th>
+                                    <th class="text-right" data-sort-ignore="true">Action</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+
+
+                                {#% set category = categories[0] %}
+                                {% for l in category.articles %}
+
+                                {{ l.designation }}
+
+                                {% endfor %#}
+                                
+                                {% for client in clients %}
+
+                                    <tr>
+                                    <td>
+                                       {{ client.nom }}
+                                    </td>
+                                    <td>
+                                        {{ client.prenom }}
+                                    </td>
+                                    <td>
+                                        {{ client.raisoc }}
+                                    </td>
+                                    <td>
+                                        {{ client.adresse }}
+                                    </td>
+                                    <td>
+                                        {{ client.telephone }}
+                                    </td>
+                                    <td>
+                                        {{ client.email }}
+                                    </td>
+                                   
+                                    <td class="text-right">
+                                        <div class="btn-group">
+                                            <a href="{{ path('client_show',{id : client.id}) }}"><button class="btn-white btn btn-xs">Voir</button></a>
+                                            <a href="{{ path('client_edit',{id : client.id}) }}"><button class="btn-white btn btn-xs">Modifier</button></a>
+                                           
+                                           
+                                            
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="6">
+                                        <ul class="pagination pull-right"></ul>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+
+<script src='{{asset("adminTemplate/js/plugins/footable/footable.all.min.js")}}'></script>
+
+<!-- Page-Level Scripts -->
+<script>
+$(document).ready(function() {
+
+    $('.footable').footable();
+
+});
+
+</script>
+
+
+
+{% endblock %}

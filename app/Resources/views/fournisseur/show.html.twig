@@ -1,0 +1,119 @@
+{% extends "adminLayout.html.twig" %}
+
+{% block stylesheets %}
+
+{{parent()}}
+
+    <link href="{{asset('adminTemplate/css/plugins/slick/slick.css')}}" rel="stylesheet">
+    <link href="{{asset('adminTemplate/css/plugins/slick/slick-theme.css')}}" rel="stylesheet">
+
+    <link href="{{asset('adminTemplate/css/animate.css')}}" rel="stylesheet">
+    <link href="{{asset('adminTemplate/css/style.css')}}" rel="stylesheet">
+
+{% endblock %}
+
+{%block body%}
+
+<div class="gray-bg">
+        
+        <div class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-lg-12">
+                <h2>Detail Fournisseur</h2>
+                
+            </div>
+            <div class="col-lg-2">
+
+            </div>
+        </div>
+
+        <div class="wrapper wrapper-content animated fadeInRight">
+
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <div class="ibox product-detail">
+                        <div class="ibox-content">
+
+                            <div class="row">
+                                
+                                <div class="col-md-2">
+
+                                    <h2 class="font-bold m-b-xs">
+                                        Raison sociale
+                                    </h2>
+                                    <p>{{fournisseur.raisoc}}</p>
+                                </div>
+                             
+                                <div class="col-md-2">
+
+                                    <h2 class="font-bold m-b-xs">
+                                        Adresse
+                                    </h2>
+                                    <p>{{fournisseur.adresse}}</p>
+                                </div>
+                                <div class="col-md-2">
+
+                                    <h2 class="font-bold m-b-xs">
+                                        Telephone
+                                    </h2>
+                                    <p>{{fournisseur.telephone}}</p>
+                                    
+                                </div>
+                                <div class="col-md-2">
+
+                                    <h2 class="font-bold m-b-xs">
+                                        E-mail
+                                    </h2>
+                                    <p>{{fournisseur.email}}</p>
+                                   
+                                </div>
+                                <div class="col-md-2">
+
+                                    <h2 class="font-bold m-b-xs">
+                                        Utilisateur
+                                    </h2>
+                                    <p>{{fournisseur.user.id}}</p>
+                                   
+                                </div>
+                            </div>
+
+                        </div>
+                        
+                    </div>
+
+                </div>
+            </div>
+
+      
+    </div>
+
+
+{%endblock%}
+
+{% block javascripts %}
+{{parent()}}
+
+<script src="{{asset('adminTemplate/js/plugins/metisMenu/jquery.metisMenu.js')}}"></script>
+<script src="{{asset('adminTemplate/js/plugins/slimscroll/jquery.slimscroll.min.js')}}"></script>
+
+<!-- Custom and plugin javascript -->
+<script src="{{asset('adminTemplate/js/inspinia.js')}}"></script>
+<script src="{{asset('adminTemplate/js/plugins/pace/pace.min.js')}}"></script>
+
+<!-- slick carousel-->
+<script src="{{asset('adminTemplate/js/plugins/slick/slick.min.js')}}"></script>
+
+<script>
+    $(document).ready(function(){
+
+
+        $('.product-images').slick({
+            dots: true
+        });
+
+    });
+
+</script>
+
+
+{% endblock %}

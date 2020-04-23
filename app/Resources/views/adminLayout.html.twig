@@ -1,0 +1,262 @@
+<!--
+*
+*  INSPINIA - Responsive Admin Theme
+*  version 2.7
+*
+-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title> STOKIA | Gestion de stock </title>
+
+    
+
+    {% block stylesheets %}
+
+        <link href="{{asset('adminTemplate/css/bootstrap.min.css')}}" rel="stylesheet">
+        <link href="{{asset('adminTemplate/font-awesome/css/font-awesome.css')}}" rel="stylesheet">
+        <!-- FooTable -->
+
+        <link href='{{asset("adminTemplate/css/animate.css")}}' rel="stylesheet">
+        <link href='{{asset("adminTemplate/css/style.css")}}' rel="stylesheet">
+    
+    {% endblock %}
+</head>
+
+<body>
+    <div id="wrapper">
+        <nav class="navbar-default navbar-static-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav metismenu" id="side-menu">
+                    <li class="nav-header">
+                        <div class="dropdown profile-element"> <span>
+                            <img alt="image" class="img-circle" src="{{asset('adminTemplate/img/profile_small.jpg')}}" />
+                             </span>
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold"> {{ app.user.username}} </strong>
+                             </span> <span class="text-muted text-xs block"> {{ app.user.roles[0] }} <b class="caret"></b></span> </span> </a>
+                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                               
+                                <li class="divider"></li>
+                                <li><a href="{{ path('fos_user_security_logout') }}"> D&eacute;conexion</a></li>
+                            </ul>
+                        </div>
+                        <div class="logo-element">
+                            Petit Budget
+                        </div>
+                    </li>
+                    <li>
+                        <a href="{{ path('dashboardIndex') }}">
+                            <i class="fa fa-picture-o"></i> 
+                            <span class="nav-label">Tableau de bord</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="#"><i class="fa fa-picture-o"></i> <span class="nav-label">Vente</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                           <li><a href="{{path('nouvelle_vente')}}">Nouveau</a></li>
+                            <li><a href="{{path('liste_ventes')}}">Historique</a></li>
+                        </ul>
+                    </li>
+                    
+                    <li>
+                        <a href="#"><i class="fa fa-picture-o"></i> <span class="nav-label">Caisse</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                           <li><a href="{{path('en_cours')}}">En cours</a></li>
+                            <li><a href="{{ path('rappels_de_caisse') }}">Rappels</a></li>
+                        </ul>
+                    </li>
+                    
+                    <li>
+                        <a href="#"><i class="fa fa-picture-o"></i> <span class="nav-label">Inventaire</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                           <li><a href="{{ path('listeInventaire') }}">Liste</a></li>
+                        </ul>
+                    </li>
+                    
+                    <li>
+                        <a href="#"><i class="fa fa-picture-o"></i> <span class="nav-label">Articles</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li><a href="{{path('article_list')}}">Liste</a></li>
+                            <li><a href="{{path('article_new')}}">Nouveau</a></li>
+
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="#"><i class="fa fa-picture-o"></i> <span class="nav-label">Categorie</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li><a href="{{path('category_list')}}">Liste</a></li>
+                            <li><a href="{{path('category_new')}}">Nouveau</a></li>
+
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-picture-o"></i> <span class="nav-label">Utilisateur</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li><a href="{{path('user_list')}}">Liste</a></li>
+                            <li><a href="{{path('user_new')}}">Nouveau</a></li>
+
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-picture-o"></i> <span class="nav-label">Employe</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li><a href="{{path('client_list')}}">Liste</a></li>
+                            <li><a href="{{path('client_new')}}">Nouveau</a></li>
+
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-picture-o"></i> <span class="nav-label">Client</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li><a href="{{path('client_list')}}">Liste</a></li>
+                            <li><a href="{{path('client_new')}}">Nouveau</a></li>
+                            <li><a href="{{path('price_attribution')}}">Attribution de prix</a></li>
+
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-picture-o"></i> <span class="nav-label">Fournisseur</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li><a href="{{path('fournisseur_index')}}">Liste</a></li>
+                            <li><a href="{{path('fournisseur_new')}}">Nouveau</a></li>
+
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="{{path('backoffice_arrivage_new')}}"><i class="fa fa-picture-o"></i> <span class="nav-label">Gestion des arrivages</span></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div id="page-wrapper" class="gray-bg">
+            {% include ('breadcrumb.html.twig') %}
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+            <div class="wrapper wrapper-content animated fadeInRight">
+                <div class="row border">
+                    <div class="row">
+                        {% block beforBody %}
+                        {% endblock %}
+                        <div class="col-lg-12">
+                            <div class="ibox float-e-margins">
+                                
+                                <div class="ibox-content mb-4">
+                                    {% block body %}
+                                    {% endblock %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+
+
+
+{% block javascripts %}
+    <script src="{{asset('adminTemplate/js/jquery-3.1.1.min.js')}}"></script>
+    <script src="{{asset('adminTemplate/js/bootstrap.min.js')}}"></script>
+
+<!-- Mainly scripts -->
+    <script src="{{asset('adminTemplate/js/plugins/metisMenu/jquery.metisMenu.js')}}"></script>
+    <script src="{{asset('adminTemplate/js/plugins/slimscroll/jquery.slimscroll.min.js')}}"></script>
+
+<!-- Custom and plugin javascript -->
+    <script src="{{asset('adminTemplate/js/inspinia.js')}}"></script>
+    <script src="{{asset('adminTemplate/js/plugins/pace/pace.min.js')}}"></script>
+
+
+  <!-- Data picker -->
+   <script src='{{ asset("adminTemplate/js/plugins/datapicker/bootstrap-datepicker.js") }}'></script>
+
+    <script src="{{asset('adminTemplate/js/plugins/select2/select2.full.min.js')}}"></script>
+
+     <!-- Peity -->
+    <script src="{{ asset('adminTemplate/js/plugins/peity/jquery.peity.min.js') }}"></script>
+    <script src="{{ asset('adminTemplate/js/plugins/dataTables/datatables.min.js') }}"></script>
+
+    <!-- Custom and plugin javascript -->
+
+    <!-- Rickshaw -->
+    <script src="{{ asset('adminTemplate/js/plugins/rickshaw/vendor/d3.v3.js') }}"></script>
+    <script src="{{ asset('adminTemplate/js/plugins/rickshaw/rickshaw.min.js') }}"></script>
+
+        <script type="text/javascript">
+            
+            $(".select2").select2();
+
+
+            $('.datepickerS').datepicker({
+                todayBtn: "linked",
+                keyboardNavigation: false,
+                forceParse: false,
+                calendarWeeks: true,
+                autoclose: true,
+            });
+
+
+        </script>
+
+        <script src="{{asset('script.js')}}"></script>
+
+        <script>
+        $(document).ready(function(){
+            $('.dataTables-example').DataTable({
+                pageLength: 25,
+                responsive: true,
+                dom: '<"html5buttons"B>lTfgitp',
+                buttons: [
+                    { extend: 'copy'},
+                    {extend: 'csv'},
+                    {extend: 'excel', title: 'ExampleFile'},
+                    {extend: 'pdf', title: 'ExampleFile'},
+
+                    {extend: 'print',
+                     customize: function (win){
+                            $(win.document.body).addClass('white-bg');
+                            $(win.document.body).css('font-size', '10px');
+
+                            $(win.document.body).find('table')
+                                    .addClass('compact')
+                                    .css('font-size', 'inherit');
+                    }
+                    }
+                ]
+
+            });
+
+        });
+
+    </script>
+
+
+    {% endblock %}
+
+
+    
+</body>
+</html>

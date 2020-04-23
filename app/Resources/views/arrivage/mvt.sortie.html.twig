@@ -1,0 +1,136 @@
+{% extends "adminLayout.html.twig" %}
+{% set breadCrumbPosition = "Gestion des arrivages" %}
+{% set breadcrumbs = ['Arrivages', 'Sortie de stock'] %}
+{% block body %}
+
+
+<div class="col-lg-12">
+    <span class="badge"> <h3> D&eacute;tails arrivage </h3> </span>
+    <table class="table table-stripped toggle-arrow-tiny table-bordered table-hover dataTables-example" data-page-navigation="#"  data-page-size="15">
+        <thead>
+            <tr>
+                <th > Date</th>
+                <th >Designation Art.</th>
+                <th >Stock initial</th>
+                <th >Stock Final</th>
+                <th >Prix d&apos;achat</th>
+                <th >Montant TVA</th>
+                <th >Autres Taxes</th>
+                <th >Marge</th>
+                <th >P.V. Final</th>
+                <th >PU. Calculé</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td> {{ arrivage.createdAt | date('d/m/Y') }} </td>
+                <td> {{ arrivage.article.designation }} </td>
+                <td> {{ arrivage.qte|number_format(0, '', ' ')  }} </td>
+                <td> {{ arrivage.stock.qte|number_format(0, '', ' ')  }} </td>
+                <td> {{ arrivage.prixAchat|number_format(0, '', ' ')  }} </td>
+                <td> {{ arrivage.tva|number_format(0, '', ' ')  }} </td>
+                <td> {{ arrivage.taxes|number_format(0, '', ' ')  }} </td>
+                <td> {{ (arrivage.taxes +  arrivage.tva + arrivage.prixAchat)|number_format(0, '', ' ')  }} </td>
+                <td> {{ (arrivage.marge + arrivage.taxes +  arrivage.tva + arrivage.prixAchat)|number_format(0, '', ' ')  }} </td>
+                <td> {{ arrivage.stock.punit|number_format(0, '', ' ')  }} </td>
+            </tr>
+        </tbody>
+    </table>
+<hr class="hr-line-solid block">
+</div> 
+
+
+<div class="col-lg-6">
+    <span class="badge"> <h3> Sortie de stock </h3> </span>
+    {{ form_start(mvtStockForm, {'attr' : {'class':''}}) }}
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label>Quantit&eacute;</label> 
+                    {{ form_widget(mvtStockForm.qte, { 'attr' : { 'class': 'form-control', 'autocomplete' : 'OFF'}}) }}
+                    <span class="text-danger"> {{ form_errors(mvtStockForm.qte) }} </span>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <label> Motif de la sortie </label> 
+                    {{ form_widget(mvtStockForm.motif, { 'attr' : { 'class': 'form-control '}}) }}
+                    <span class="text-danger"> {{ form_errors(mvtStockForm.motif) }} </span>
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <br/>
+                    <button class="btn btn-success"> Valider </button>
+                </div>
+            </div>
+        </div>
+
+    {{ form_end(mvtStockForm)  }}
+</div>
+
+<div class="col-lg-12">
+    <hr class="hr-line-solid block">
+    <span class="badge"> <h3> Historique des mouvement </h3> </span>
+    <p>&nbsp;</p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th > Date</th>
+                <th > Designation Art.</th>
+                <th > Qte. Mvt </th>
+                <th > Stk. Arvg.</th>
+                <th > Type Mvt.</th>
+                <th > Auteur </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% set mvts = arrivage.mvtsCollection|sort %}
+
+            {% if mvts is not empty %}
+            
+                {% for mvt in mvts|reverse %}                 
+                    {% if mvt.arrivage is not empty and mvt.mvtType == 1 %}
+                        {% set article = mvt.arrivage.article.designation %}
+                        {% set mvtType = "Entree" %}
+                        {% set arvgRest = mvt.arrivage.stock.qteInit  %}
+                    {% elseif  mvt.sortieStock is not empty and mvt.mvtType == 2 %}
+                        {% set article = mvt.sortieStock.arrivage.article.designation %}
+                        {% set mvtType = "Sortie" %}
+                        {% set arvgRest = mvt.arrivage.stock.qteInit - mvt.qteMvt %}
+                    {% elseif mvt.ligneVente is not empty and mvt.mvtType == 3 %}
+                        {% set article = mvt.ligneVente.article.designation %}
+                        {% set mvtType = "Vente" %}
+                        {% set arvgRest = mvt.arrivage.stock.qteInit - mvt.qteMvt %}
+                    {% else %}
+                        {% set article = '' %}                        
+                    {% endif %}
+                    <tr>
+                        <td> {{ mvt.createdAt|date('d/m/Y')  ~ "  "  ~ mvt.createdAt|date('H:i:s') }} </td>
+                        <td> {{ article }} </td>
+                        <td> {{ mvt.qteMvt }} </td>
+                        <td> {{ mvt.stockArvg}} </td>
+                        <td> {{ mvtType }} </td>
+                        <td> {{ mvt.createdBy.username }} </td>
+                    </tr>
+                {% endfor %}
+        
+            {% endif %}
+
+
+            
+        </tbody>
+    </table>
+    <hr class="hr-line-solid block">
+</div> 
+
+ <div class="row">
+        <div class="col-lg-3">
+            <div class="form-group">
+                <a href="{{ path('backoffice_arrivage_new') }}"> Retourner sur la liste </a>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

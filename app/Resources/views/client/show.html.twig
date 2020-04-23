@@ -1,0 +1,285 @@
+{% extends "adminLayout.html.twig" %}
+{% set breadCrumbPosition = "Clients" %}
+{% set breadcrumbs = ['Details'] %}
+
+{% block stylesheets %}
+
+{{parent()}}
+
+    <link href="{{asset('adminTemplate/css/plugins/slick/slick.css')}}" rel="stylesheet">
+    <link href="{{asset('adminTemplate/css/plugins/slick/slick-theme.css')}}" rel="stylesheet">
+
+    <link href="{{asset('adminTemplate/css/animate.css')}}" rel="stylesheet">
+    <link href="{{asset('adminTemplate/css/style.css')}}" rel="stylesheet">
+
+{% endblock %}
+
+{%block body%}
+
+<div class="gray-bg">
+        
+        <div class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-lg-12">
+                <h2>Detail client</h2>
+                
+            </div>
+            <div class="col-lg-2">
+
+            </div>
+        </div>
+
+        <div class="wrapper wrapper-content animated fadeInRight">
+
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <div class="ibox product-detail">
+                        <div class="ibox-content">
+
+                            <div class="row">
+                                
+                                <div class="col-md-2">
+
+                                    <h2 class="font-bold m-b-xs">
+                                        Nom client
+                                    </h2>
+                                    <p>{{client.nom}}</p>
+                                </div>
+                                <div class="col-md-2">
+
+                                    <h2 class="font-bold m-b-xs">
+                                        Prenom(s)
+                                    </h2>
+                                    <p>{{client.prenom}}</p>
+                                </div>
+                                <div class="col-md-2">
+
+                                    <h2 class="font-bold m-b-xs">
+                                        Raisoc
+                                    </h2>
+                                    <p>{{client.raisoc}}</p>
+                                </div>
+                                <div class="col-md-2">
+
+                                    <h2 class="font-bold m-b-xs">
+                                        Adresse Client
+                                    </h2>
+                                    <p>{{client.adresse}}</p>
+                                </div>
+                                <div class="col-md-2">
+
+                                    <h2 class="font-bold m-b-xs">
+                                        Telephone
+                                    </h2>
+                                    <p>{{client.telephone}}</p>
+                                    
+                                </div>
+                                <div class="col-md-2">
+
+                                    <h2 class="font-bold m-b-xs">
+                                        E-mail
+                                    </h2>
+                                    <p>{{client.email}}</p>
+                                   
+                                </div>
+                            </div>
+
+                        </div>
+                        
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <div class="wrapper wrapper-content animated fadeIn">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="tabs-container">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="false"> Liste des prix</a></li>
+                            <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="true">Commandes</a></li>
+                            <li class=""><a data-toggle="tab" href="#tab-3" aria-expanded="false">Livraisons</a></li>
+                            <li class=""><a data-toggle="tab" href="#tab-4" aria-expanded="true">Proformas</a></li>
+                            <li class=""><a data-toggle="tab" href="#tab-5" aria-expanded="false">Factures</a></li>
+                            <li class=""><a data-toggle="tab" href="#tab-6" aria-expanded="true">Creances</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="tab-1" class="tab-pane active">
+                                <div class="panel-body">
+                                    <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
+                                <thead>
+                                <tr>
+
+                                    <th data-toggle="true">Montant</th>
+                                    <th data-hide="phone">Date debut</th>
+                                    <th data-hide="all">Date fin</th>
+                                    <th data-hide="phone">Article</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                {% for prix in client.prices %}
+
+                                <tr>
+                                    <td>
+                                       {{ prix.montant }}
+                                    </td>
+                                    <td>
+                                        {{ prix.dateDebut|date('d-m-yyyy') }}
+                                    </td>
+                                    <td>
+                                        {{ prix.dateFin|date('d-m-yyyy') }}
+                                    </td>
+                                    <td>
+                                        {{ prix.article }}
+                                    </td>
+                                   
+                                </tr>
+                                {% endfor %}
+                                
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="6">
+                                        <ul class="pagination pull-right"></ul>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                                </div>
+                            </div>
+                            <div id="tab-2" class="tab-pane">
+                                <h1>Commandes</h1>
+                                <div class="panel-body">
+                                    <strong>Donec quam felis</strong>
+
+                                    <p>Thousand unknown plants are noticed by me: when I hear the buzz of the little world among the stalks, and grow familiar with the countless indescribable forms of the insects
+                                        and flies, then I feel the presence of the Almighty, who formed us in his own image, and the breath </p>
+
+                                    <p>I am alone, and feel the charm of existence in this spot, which was created for the bliss of souls like mine. I am so happy, my dear friend, so absorbed in the exquisite
+                                        sense of mere tranquil existence, that I neglect my talents. I should be incapable of drawing a single stroke at the present moment; and yet.</p>
+                                </div>
+                            </div>
+                            <div id="tab-3" class="tab-pane">
+                                <h1>Livraisons</h1>
+                                <div class="panel-body">
+                                    <strong>Lorem ipsum dolor sit amet, consectetuer adipiscing</strong>
+
+                                    <p>A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart. I am alone, and feel the charm of
+                                        existence in this spot, which was created for the bliss of souls like mine.</p>
+
+                                    <p>I am so happy, my dear friend, so absorbed in the exquisite sense of mere tranquil existence, that I neglect my talents. I should be incapable of drawing a single stroke at
+                                        the present moment; and yet I feel that I never was a greater artist than now. When.</p>
+                                </div>
+                            </div>
+                            <div id="tab-4" class="tab-pane">
+                                <div class="panel-body">
+                                    <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
+                                <thead>
+                                <tr>
+
+                                    <th data-toggle="true">Date proforma</th>
+                                    <th data-hide="phone">Total</th>
+                                    <th class="text-right" data-sort-ignore="true">Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                {% for devi in client.devis %}
+
+                                <tr>
+                                    <td>
+                                        {{ devi.dateProformat|date('d-m-yyyy') }}
+                                    </td>
+                                    <td>
+                                       {{ devi.total }}
+                                    </td>
+                                    <td class="text-right">
+                                        <div class="btn-group">
+                                            <a href="{{ path('proformat_show',{id : devi.id}) }}"><button class="btn-white btn btn-xs">voir</button></a>
+                                            
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="6">
+                                        <ul class="pagination pull-right"></ul>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                                </div>
+                            </div>
+                            <div id="tab-5" class="tab-pane">
+                                <h1>Liste des Factures</h1>
+                                <div class="panel-body">
+                                    <strong>Lorem ipsum dolor sit amet, consectetuer adipiscing</strong>
+
+                                    <p>A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart. I am alone, and feel the charm of
+                                        existence in this spot, which was created for the bliss of souls like mine.</p>
+
+                                    <p>I am so happy, my dear friend, so absorbed in the exquisite sense of mere tranquil existence, that I neglect my talents. I should be incapable of drawing a single stroke at
+                                        the present moment; and yet I feel that I never was a greater artist than now. When.</p>
+                                </div>
+                            </div>
+                            <div id="tab-6" class="tab-pane">
+                                <h1>Liste des creances</h1>
+                                <div class="panel-body">
+                                    <strong>Donec quam felis</strong>
+
+                                    <p>Thousand unknown plants are noticed by me: when I hear the buzz of the little world among the stalks, and grow familiar with the countless indescribable forms of the insects
+                                        and flies, then I feel the presence of the Almighty, who formed us in his own image, and the breath </p>
+
+                                    <p>I am alone, and feel the charm of existence in this spot, which was created for the bliss of souls like mine. I am so happy, my dear friend, so absorbed in the exquisite
+                                        sense of mere tranquil existence, that I neglect my talents. I should be incapable of drawing a single stroke at the present moment; and yet.</p>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+{%endblock%}
+
+{% block javascripts %}
+{{parent()}}
+
+<script src="{{asset('adminTemplate/js/plugins/metisMenu/jquery.metisMenu.js')}}"></script>
+<script src="{{asset('adminTemplate/js/plugins/slimscroll/jquery.slimscroll.min.js')}}"></script>
+
+<!-- Custom and plugin javascript -->
+<script src="{{asset('adminTemplate/js/inspinia.js')}}"></script>
+<script src="{{asset('adminTemplate/js/plugins/pace/pace.min.js')}}"></script>
+
+<!-- slick carousel-->
+<script src="{{asset('adminTemplate/js/plugins/slick/slick.min.js')}}"></script>
+
+<script>
+    $(document).ready(function(){
+
+
+        $('.product-images').slick({
+            dots: true
+        });
+
+    });
+
+</script>
+
+
+{% endblock %}

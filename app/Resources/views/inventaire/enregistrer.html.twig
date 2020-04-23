@@ -1,0 +1,99 @@
+{% extends 'adminLayout.html.twig' %}
+
+{% block body %}
+    <h1>Enregistrer les éléments d'inventaire</h1>
+
+	   {{ form_start(inventaireView, {'attr' : {'class':'', 'id':'inventaireForm' }}) }}
+
+		
+
+			<div class="row">
+
+				<div class="col-lg-4">
+                    <div class="form-group">
+                        <label>Article</label>
+                        {{ form_widget(inventaireView.article, { 'attr' : { 'class': 'form-control select2', 'autocomplete':'off'}}) }}
+                    </div>
+				</div>
+
+
+				<div class="col-lg-2">
+
+                    <div class="form-group">
+                        <label>Qté</label> 
+                        {{ form_widget(inventaireView.qte, { 'attr' : { 'class': 'form-control', 'autocomplete':'off'}}) }}
+                               
+
+                    </div>
+
+				</div>
+
+
+				<div class="col-lg-2">
+					<label for=""> &nbsp; </label>
+                    <div class="form-group">
+                    	
+                        <input id="enregistrerInventaireSubmitBtn" type="submit" class="btn btn-primary" value="Valider" />
+
+                    </div>
+
+				</div>
+
+
+			</div>
+
+        {{ form_end(inventaireView) }}
+
+		<br/>
+
+		<div class="row">
+			<div class="col-lg-2">
+				  <a id="cloturerInventaireLink" href="{{ path('cloturerInventaire', {'id' : inventaire.id }) }}" class="btn btn-danger"> Clôturer l'inventaire </a>
+			</div>
+
+            <div class="col-lg-2">
+                  <a href="{{ path('listeInventaire') }}" class="btn btn-primary"> Liste des inventaires </a>
+            </div>
+		</div>
+
+
+		<br/>
+
+		<div class="row">
+			<div class="col-lg-12">
+				 
+                    <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
+                        <thead>
+                        	<tr>
+                        		 <th data-toggle="true">Article</th>
+                        		 <th data-toggle="true">PU</th>
+                        		 <th data-toggle="true">Qté</th>
+                        	</tr>
+                        </thead>
+                        <tbody>
+                        	{% for inventaire in inventairesArticles %}
+                            <tr>
+                            	 <td>{{ inventaire.article.designation }}</td>
+                            	 <td>{{ inventaire.article.defaultPrice }}</td>
+                            	 <td>{{ inventaire.qte | number_format(0, ',', ' ') }}</td>
+                            </tr>
+                            {% endfor %}
+
+                                
+                        </tbody>
+                    </table>
+                    
+			</div>
+		</div>
+
+
+
+{% endblock %}
+
+
+{% block javascripts %}
+	{{ parent() }}
+
+	<script type="text/javascript" src="{{ asset('my_files/js/inventaire/enregistrerInventaire.js') }}" ></script>
+
+{% endblock %}

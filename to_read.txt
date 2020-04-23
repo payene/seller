@@ -1,0 +1,8 @@
+http://localhost/seller/web/app_dev.php/shop/shop
+
+rm -rf var/cache/dev
+rm -rf var/cache/dev/*
+
+ sudo chmod -R 777 .
+
+ https://anil.io/blog/symfony/doctrine/symfony-and-doctrine-pagination-with-twig/

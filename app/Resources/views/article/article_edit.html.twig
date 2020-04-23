@@ -1,0 +1,176 @@
+{% extends "adminLayout.html.twig" %}
+
+
+{% block stylesheets %}
+    {{parent()}}
+
+    <link href="{{asset('adminTemplate/css/plugins/summernote/summernote.css')}}" rel="stylesheet">
+    <link href="{{asset('adminTemplate/css/plugins/summernote/summernote-bs3.css')}}" rel="stylesheet">
+
+    <link href="{{asset('adminTemplate/css/plugins/datapicker/datepicker3.css')}}" rel="stylesheet">
+
+    <link href="{{asset('adminTemplate/css/animate.css')}}" rel="stylesheet">
+    <link href="{{asset('adminTemplate/css/style.css')}}" rel="stylesheet">
+
+{% endblock %}
+
+{% set breadCrumbPosition = "Articles" %}
+{% set breadcrumbs = ['Modifications'] %}
+
+{% block body %}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-lg-10">
+                <h2>Modification d'un article</h2>
+                <a href="{{ path('article_list') }}"><i class="fa fa-list"></i>Liste article</a>
+            </div>
+        </div>
+
+        <div class="wrapper wrapper-content animated fadeInRight ecommerce">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="tabs-container">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a data-toggle="tab" href="#tab-1"> Info Article</a></li>
+                            </ul>
+                            
+                            <div class="tab-content">
+                                    <div class="panel-body">
+                                        
+                                        {{ form_start(edit_form,{'multipart':'true'}) }}
+                                        <fieldset class="form-horizontal">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">{{ form_label(edit_form.category) }}:</label>
+                                                <div class="col-sm-10">
+                                                    {{ form_widget(edit_form.category) }}
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">{{ form_label(edit_form.designation) }}:</label>
+                                                <div class="col-sm-10">
+                                                    {{ form_widget(edit_form.designation) }}
+                                                </div>
+                                            </div>
+                                            <div class="form-group"><label class="col-sm-2 control-label">{{ form_label(edit_form.defaultPrice) }}:</label>
+                                                <div class="col-sm-10">
+                                                    {{ form_widget(edit_form.defaultPrice) }}
+                                                </div>
+                                            </div>
+                                            <div class="form-group"><label class="col-sm-2 control-label">{{ form_label(edit_form.description) }}:</label>
+                                                <div class="col-sm-10">
+                                                        {{ form_widget(edit_form.description) }}
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group"><label class="col-sm-2 control-label">{{ form_label(edit_form.stock) }}:</label>
+                                                <div class="col-sm-10">
+                                                    {{ form_widget(edit_form.stock) }}
+                                                </div>
+                                            </div>
+
+                                            {#IMAGE#}
+
+                                            <div class="table-responsive">
+                                            <table class="table table-bordered table-stripped">
+                                                <thead>
+                                                <tr>
+                                                    <th>
+                                                        Apercu image
+                                                    </th>
+                                                   
+                                                    
+                                                    <th>
+                                                        Action
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td>
+                                                       
+                                                        <img class="img-responsive rounded" src="{{ asset(article.source1) }}" style="width: 100px;height: 100px;" alt="Image vide">
+                                                    </td>
+                                                    <td>
+                                                        <input type="file" id="" name="photo1">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img class="img-responsive rounded" src="{{ asset(article.source2) }}" style="width: 100px;height: 100px;" alt="Image vide">
+                                                    </td>
+                                                  
+                                                    <td>
+                                                        <input type="file" id="" name="photo2">
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        <img class="img-responsive rounded" src="{{ asset(article.source3) }}" style="width: 100px;height: 100px;" alt="Image vide">
+                                                    </td>
+                                                    
+                                                    <td>
+                                                        <input type="file" id="" name="photo3">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img class="img-responsive rounded" src="{{ asset(article.source4) }}" style="width: 100px;height: 100px;" alt="Image vide">
+                                                    </td>
+                                                    <td>
+                                                        <input type="file" id="" name="photo4">
+                                                    </td>
+                                                </tr>
+                                                
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+
+                                            <div class="">
+                                                {{ form_widget(edit_form.save) }}
+                                            </div>
+                                            
+                                        </fieldset>
+                                        {{ form_end(edit_form) }}
+                                    </div>
+                                
+                            </div>
+                            
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+
+{{parent()}}
+
+<!-- SUMMERNOTE -->
+<script src="{{asset('adminTemplate/js/plugins/summernote/summernote.min.js')}}"></script>
+
+<!-- Data picker -->
+<script src="{{asset('adminTemplate/js/plugins/datapicker/bootstrap-datepicker.js')}}"></script>
+
+<script>
+    $(document).ready(function(){
+
+        $('.summernote').summernote();
+
+        $('.input-group.date').datepicker({
+            todayBtn: "linked",
+            keyboardNavigation: false,
+            forceParse: false,
+            calendarWeeks: true,
+            autoclose: true
+        });
+
+    });
+</script>
+
+{% endblock %}

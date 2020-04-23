@@ -1,0 +1,175 @@
+{% extends "adminLayout.html.twig" %}
+{% set breadCrumbPosition = "Facture" %}
+{% set breadcrumbs = ['Apper&ccedil;u'] %}
+
+
+
+{% block body %}
+    <div class="row">
+         <div class="col-lg-3">             
+            <div class="form-group">
+                <a href="{{ path('nouvelle_vente')}}" class="btn btn-primary"> Nouvelle vente </a>
+            </div>
+         </div>
+         <div class="col-lg-3">             
+            <div class="form-group">
+                <a href="{{ path('liste_ventes')}}" class="btn btn-success">Retourner à l'historique</a>
+            </div>
+         </div>
+         <div class="col-lg-3">             
+            <div class="form-group">
+                <a href="{{ path('en_cours')}}" class="btn btn-info"> Caisse </a>
+            </div>
+         </div><div class="col-lg-2">             
+            <div class="form-group">
+                <a href="{{ path('prepare_card_edit', {'id':vente.id})}}" class="btn btn-danger"> R&eacute;edition </a>
+            </div>
+         </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="wrapper wrapper-content animated fadeInRight">
+                <div class="ibox-content p-xl">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h5>De:</h5>
+                                <address>
+                                    <strong>Petit Budget</strong><br>
+                                    Rue Sergent Aniko Palako<br>
+                                    Libreville, VT 32456<br>
+                                    <abbr title="Phone">Tel:</abbr> (123) 601-4590
+                                </address>
+                            </div>
+
+                            <div class="col-sm-6 text-right">
+                                <h4>Facture No. {{ vente.getId() }}</h4>
+                                <span>Doit:</span>
+                                <address>
+                                    <strong>
+                                    	{% if(vente.client) %}
+                                            {{ vente.client }}
+                                    	{%else %}
+                                    		Inconnu
+                                    	{% endif %}		
+                                    </strong>
+                                    <br>
+                                    {{ vente.client.adresse }}
+                                    <br>
+                                    <abbr title="Téléphone">Tél:</abbr> {{ vente.client.telephone }}
+                                </address>
+                                <p>
+                                    <span><strong> Date:</strong>  {{ vente.createdAt | date("d/m/Y   H:i") }} </span><br/>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive m-t">
+                            <table class="table invoice-table">
+                                <thead>
+                                <tr>
+                                    <th>Article</th>
+                                    <th>Qté</th>
+                                    <th>PU</th>
+                                    <th>Total</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                	{% for ligne_vente in ligneVenteArray %}
+	                                    <tr>
+	                                        <td> {{ ligne_vente.getArticle().getDesignation() }} </td>
+	                                        <td> {{ ligne_vente.getQte() }} </td>
+	                                        <td> {{ ligne_vente.getMontant() |number_format(0, ',', ' ')  }} </td>
+	                                        <td> {{ (ligne_vente.getMontant() * ligne_vente.getQte() ) |number_format(0, ',', ' ')  }} </td>
+	                                    </tr>
+                                	{% endfor %}
+                               
+
+                                </tbody>
+                            </table>
+                        </div><!-- /table-responsive -->
+
+                        <table class="table invoice-total">
+                            <tbody>
+                            <tr>
+                                <td><strong> Sous-total :</strong></td>
+                                <td> {{ vente.getTotalHt() |number_format(0, ',', ' ')  }} </td>
+                            </tr>
+                            <tr>
+                                <td><strong>TVA :</strong></td>
+                                <td> {{ vente.getTva() |number_format(0, ',', ' ') }}  </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Remise :</strong></td>
+                                <td> {{ vente.getRemise() |number_format(0, ',', ' ')  }}  </td>
+                            </tr>
+                            <tr>
+                                <td><strong>TOTAL :</strong></td>
+                                <td>
+                                	{% set totalAPayer = vente.getTotalHt() + vente.tva - vente.remise %} 
+                                	{{ totalAPayer |number_format(0, ',', ' ')  }}
+                                </td>
+                                	
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="text-right">
+                            {% if(vente.resteAPayer > 0 ) %}
+                            <a href="{{ path('payer_vente', {'id': vente.getId() }) }}" class="btn btn-primary"><i class="fa fa-money"></i> Payer ( Reste : {{ vente.resteAPayer | number_format(0, ',', ' ')  }}) </a>
+                            {% endif %}
+
+                            <a target="_blank" href="{{ path('imprimer_facture',  {'id': vente.getId() })  }}"> Imprimer </a>
+                        </div>
+
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h4>Paiements</h4>
+            <table class="table invoice-table">
+                <thead>
+                <tr>
+                    <th>Date de paiement</th>
+                    <th>Montant payé</th>
+                    <th>Mode</th>
+                    <th>Montant restant</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                    {% for paiement in vente.paiements |reverse %}
+                        <tr>
+                            <td> {{ paiement.createdAt | date("d/m/Y") }} </td>
+                            <td> {{ paiement.montant |number_format(0, ',', ' ')  }} </td>
+                            <td> 
+                                 {% if paiement.mode=="c" %}
+                                    Chèque
+                                 {% elseif paiement.mode=="e" %}
+                                    Espèce
+                                 {% elseif paiement.mode=="v" %}
+                                    Virement
+                                 {% endif %}
+                            </td>
+                            <td> 
+                                {{  paiement.resteAPayer |number_format(0, ',', ' ')  }} 
+                            </td>
+                        </tr>
+                    {% endfor %}
+               
+
+                </tbody>
+            </table>                
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block javascripts %}
+	{{ parent() }}
+
+{% endblock %}

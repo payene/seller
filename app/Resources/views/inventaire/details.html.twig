@@ -1,0 +1,85 @@
+{% extends 'adminLayout.html.twig' %}
+
+{% block body %}
+    <h1>Détails de l'inventaire</h1>
+
+
+		<div class="row">
+            {% if(inventaire.dateFin == null) %}
+    			<div class="col-lg-2">
+    				  <a id="cloturerInventaireLink" href="{{ path('cloturerInventaire', {'id' : inventaire.id }) }}" class="btn btn-danger"> Clôturer l'inventaire </a>
+    			</div>
+
+                <div class="col-lg-2">
+                    
+                    <a href="{{ path('enregistrerInventaire',{'id': inventaire.id}) }}" class="btn btn-primary">Continuer l'inventaire</a>
+                </div>
+            {% endif %}
+
+            <div class="col-lg-2">
+                  <a href="{{ path('listeInventaire') }}" class="btn btn-primary"> Liste des inventaires </a>
+            </div>
+
+		</div>
+
+
+		<br/>
+
+        <div class="row">
+             <div class="col-lg-12">
+                  <p>Créé le : {{ inventaire.dateDeb | date("d/m/Y H:m")  }}</p>
+
+                  {% if(inventaire.dateFin != null) %}
+                        <p>Clôturé le : {{ inventaire.dateFin | date("d/m/Y H:m")  }}</p>
+                  {% endif %}
+             </div>
+        </div>
+
+		<div class="row">
+			<div class="col-lg-12">
+				 
+                    <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
+                        <thead>
+                        	<tr>
+                        		 <th data-toggle="true">Article</th>
+                        		 <th data-toggle="true">PU</th>
+                        		 <th data-toggle="true">Qté</th>
+                                 <th data-toggle="true">Qté logicielle</th>
+                        	</tr>
+                        </thead>
+                        <tbody>
+                        	{% for l_inventaire in inventaire.inventairesarticles %}
+                            <tr>
+                            	 <td>{{ l_inventaire.article.designation }}</td>
+                            	 <td>{{ l_inventaire.article.defaultPrice }}</td>
+                            	 <td>{{ l_inventaire.qte | number_format(0, ',', ' ') }}</td>
+                                 <td>{{ l_inventaire.stockLogiciel | number_format(0, ',', ' ') }}</td>
+                            </tr>
+                            {% endfor %}
+
+                                
+                        </tbody>
+                    </table>
+                    
+			</div>
+		</div>
+
+
+
+{% endblock %}
+
+
+{% block javascripts %}
+	{{ parent() }}
+
+    <script type="text/javascript">
+            $(document).ready(function(){
+                $('#cloturerInventaireLink').click(function(e){
+                    if(!confirm("Clôturer l'inventaire ? "))
+                        return false;
+                })
+
+            });
+    </script>
+   
+{% endblock %}

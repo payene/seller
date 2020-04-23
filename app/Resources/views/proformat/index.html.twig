@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Proformats list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Dateproformat</th>
+                <th>Total</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for proformat in proformats %}
+            <tr>
+                <td><a href="{{ path('proformat_show', { 'id': proformat.id }) }}">{{ proformat.id }}</a></td>
+                <td>{% if proformat.dateProformat %}{{ proformat.dateProformat|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ proformat.total }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('proformat_show', { 'id': proformat.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('proformat_edit', { 'id': proformat.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('proformat_new') }}">Create a new proformat</a>
+        </li>
+    </ul>
+{% endblock %}

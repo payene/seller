@@ -1,0 +1,54 @@
+{% extends "base-shop.html.twig" %}
+
+{% block header %}
+	{{ parent() }}	
+{% endblock %}
+
+{% block menuarea %}
+{% endblock %}
+
+
+
+{% block breadcrumb_title %}
+	Espace client
+{% endblock %}
+
+{% block pagetitle %}
+	Espace client
+{% endblock %}
+
+{% block breadcrumb %}
+	<li><a href="index.html">Accueil</a>
+    </li>
+    <li><a href="about-us.html">Espace client</a>
+    </li>
+{% endblock %}
+
+{% block body %}
+	 <section class="pessonal-detail section-padding">
+        <div class="container">
+            <div class="row">
+				<div class="col-md-12 col-sm-12 col-xs-12">
+					<div class="headline">
+						<h2>Identifiez-vous</h2>
+					</div>
+					<div class="stay-left">
+						{% if app.request.hasPreviousSession %}
+						    {% for type, messages in app.session.flashbag.all() %}
+						        {% for message in messages %}
+						            <div class="flash-{{ type }}">
+						                {{ message }}
+						            </div>
+						        {% endfor %}
+						    {% endfor %}
+						{% endif %}
+
+						{% block fos_user_content %}
+						{% endblock fos_user_content %}
+                    </div>
+                
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

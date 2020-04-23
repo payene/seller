@@ -1,0 +1,316 @@
+<!doctype html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title> Les petits bras</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- favicon -->
+        <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
+        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+        <!-- Place favicon.ico in the root directory -->
+		<!-- all css here -->
+		<!-- style css -->
+		<link rel="stylesheet" href="{{ asset('rideo/style.css') }}">
+		<link rel="stylesheet" href="{{ asset('rideo/shortcode/style.css') }}">
+
+		<!-- modernizr js -->
+        <script src="{{ asset('rideo/js/vendor/modernizr-2.8.3.min.js') }}"></script>
+        <style type="text/css">
+        	.add-tocart-btn{
+        		margin-top: 2px;
+        	}
+
+        	.btn-ghost{
+        		background: white;
+        		border: solid 1px silver;
+        		padding: 3px;
+        		min-width: 30px;
+        		text-align: center;
+        	}
+
+        	.btn-ghost.phantom{
+        		border: none;
+        	}
+
+        	a.active-elmt{
+        		background: #ff6600;
+    			border-color: #ff6600;
+    			color: #fff;
+    			font-weight: bold;
+        	}
+        
+
+        </style>
+    </head>
+    <body>
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        
+		<!-- Preloader Start -->
+		<div class="preloader">
+			<div class="loading-center">
+				<div class="loading-center-absolute">
+					<div class="object object_one"></div>
+					<div class="object object_two"></div>
+					<div class="object object_three"></div>
+				</div>
+			</div>
+		</div>
+		<!-- Preloader End -->
+
+        <!-- header section start -->
+		<header>
+			<div class="header-top">
+				<div class="container">
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="left floatleft">
+								<ul>
+									<li>
+										<i class="fa fa-phone"></i> 
+										+228 93147404
+									</li>
+									<li>
+										<i class="fa fa-envelope-o"></i> 
+										contact@lespetitsbras.com
+									</li>
+								</ul>
+							</div>
+							<div class="right floatright">
+									<ul>
+										<li>
+											<i class="fa fa-shopping-cart"></i>
+											<a href="{{ path('shop') }}"> Boutique </a>
+											&nbsp;
+										</li>
+										{% if app.user %}
+										<li>
+											<i class="fa fa-user"></i> 
+											<a href="{{ path('account') }}"> Mon compte </a>
+											&nbsp;
+										</li>
+										<li>
+											<i class="fa fa-briefcase"></i> 
+											<a href="{{ path('backoffice_arrivage_new') }}"> Backoffice </a>
+											&nbsp;
+										</li>
+										<li>
+											<i class="fa fa-sign-out"></i> 
+											<a href="{{ path('fos_user_security_logout') }}"> D&eacute;connexion </a>
+											&nbsp;
+										</li>
+										{% else %}
+										<li>
+											&nbsp;
+											<i class="fa fa-sign-in"></i>
+											<a href="{{ path('fos_user_security_login') }}"> Connexion </a>
+										</li>
+										{% endif %}
+									</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="sticky-menu" class="header-bottom">
+				<div class="container">
+					<div class="row">
+						<div class="col-xs-12 header-bottom-bg">
+							<div class="logo floatleft">
+								<a href="{{ path('shop') }}">
+									<img style="width: 139px;height: 60px;" src="{{ asset('rideo/img/logo_b.png') }}" alt="Rideo" />
+								</a>
+							</div>		
+							<div class="mainmenu text-left floatleft">
+								<nav>
+									<ul>
+										{% block categories %}
+
+										{% endblock %}
+										
+										
+									</ul>
+								</nav>
+							</div>				
+						
+							<div class="cart-menu-area floatright">
+								{% set nbCart = app.session.get('nbrCart') %}
+								<ul>
+									<li><a href="#"><i class="pe-7s-shopbag"></i> <span id="cart-length"> {{ nbCart|number_format }}  </span></a>
+										<ul class="cart-menu">
+											<li class="cart-menu-btn">
+												<a href="{{ path('cart') }}">Voir panier</a>
+												<a href="{{ path('proceed_proforma') }}"> Proforma </a>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</header>
+        <!-- header section end -->
+		<!-- page banner area start -->
+		<div class="page-banner">
+			<img src="{{ asset('rideo/img/slider/bg3.jpg') }}" alt="Page Banner" />
+		</div>
+		<!-- page banner area end -->
+		{% block body %}
+
+		{% endblock %}
+		
+		<!-- footer section start -->
+		<footer>
+			<!-- brand logo area start -->
+			<!-- <div class="brand-logo-area">
+				<div class="container">
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="brand-logo">
+								<ul class="clearfix">
+									<li>
+										<a href="#"><img src="{{ asset('rideo/img/brand/2.png') }}" alt="Brand Logo" /></a>
+									</li>
+									<li>
+										<a href="#"><img src="{{ asset('rideo/img/brand/3.png') }}" alt="Brand Logo" /></a>
+									</li>
+									<li>
+										<a href="#"><img src="{{ asset('rideo/img/brand/1.png') }}" alt="Brand Logo" /></a>
+									</li>
+									<li>
+										<a href="#"><img src="{{ asset('rideo/img/brand/4.png') }}" alt="Brand Logo" /></a>
+									</li>
+									<li>
+										<a href="#"><img src="{{ asset('rideo/img/brand/5.png') }}" alt="Brand Logo" /></a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div> -->
+			<!-- brand logo area end -->
+			
+			<!-- contact area end -->
+			<!-- <div class="footer-logo-text">
+				<div class="container text-center">
+					ghfhg
+				</div>
+			</div> -->
+			<!-- footer top start -->
+			<div class="footer-top section-padding">
+				<div class="container">
+					<div class="row">
+						<div class="col-xs-12 col-sm-6 col-md-6">
+							<div class="s-footer-text">
+								<div class="footer-title">
+									<h4>R&eacute;seaux Sociaux </h4>
+								</div>
+								<div class="social-link actions-btn clearfix">
+									<ul>
+										<li>
+											<a href="#"><i class="fa fa-facebook"></i></a>
+										</li>
+										<li>
+											<a href="#"><i class="fa fa-twitter"></i></a>
+										</li>
+										<li>
+											<a href="#"><i class="fa fa-google-plus"></i></a>
+										</li>
+										<li>
+											<a href="#"><i class="fa fa-facebook"></i></a>
+										</li>
+									</ul>
+								</div>
+								<h4>Newsletter</h4>
+								<form action="#" method="POST">
+									<div class="input-text">
+										<small> Rensignez votre adresse mail pour rester aux courant des offres de promotions</small>
+										<input type="text" name="email" placeholder="Votre adresse mail ici" />
+									</div>
+									<div class="submit-text">
+										<input type="submit" name="submit" value="OK" />
+									</div>
+								</form>
+							</div>
+						</div>
+						<div class="col-xs-12 col-sm-6 col-md-6">
+							<div class="s-footer-text">
+								<div class="footer-title">
+									<h4>Contact</h4>
+								</div>
+								<div class="contact-link">
+									<ul>
+										<li>
+											<strong> <span>Email:</span><p> contact@lespetitsbras.com</p> </strong> 
+										</li>
+										<li>
+											<strong> <span>Phone:</span> <p>+228 93147404 </p> </strong> 
+										</li>
+										<li>
+											<strong> <span>Address:</span><p> Rue Sgt Anikko Palako, Qt Assivito</p> </strong> 
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						
+						
+					</div>
+				</div>
+			</div>
+			<!-- footer top end -->
+			<!-- footer bottom start -->
+			<div class="footer-bottom">
+				<div class="container">
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="left floatleft">
+								<p>Copyright &copy; {{ "now"|date('Y') }}  </p>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- footer bottom end -->
+		</footer>
+		<!-- footer section end -->
+		
+		{% block javascripts %}
+			<!-- all js here -->
+			<!-- jquery latest version -->
+	        <script src="{{ asset('rideo/js/vendor/jquery-1.12.3.min.js') }}"></script>
+			<!-- bootstrap js -->
+	        <script src="{{ asset('rideo/js/bootstrap.min.js') }}"></script>
+			<!-- camera slider JS -->
+	        <script src="{{ asset('rideo/js/camera.min.js') }}"></script>
+			<!-- jquery.easing js -->
+	        <script src="{{ asset('rideo/js/jquery.easing.1.3.js') }}"></script>
+			<!-- slick slider js -->
+	        <script src="{{ asset('rideo/js/slick.min.js') }}"></script>
+			<!-- jquery-ui js -->
+	        <script src="{{ asset('rideo/js/jquery-ui.min.js') }}"></script>
+			<!-- magnific-popup js -->
+	        <script src="{{ asset('rideo/js/magnific-popup.min.js') }}"></script>
+			<!-- countdown js -->
+	        <script src="{{ asset('rideo/js/countdown.js') }}"></script>
+			<!-- meanmenu js -->
+	        <script src="{{ asset('rideo/js/jquery.meanmenu.js') }}"></script>
+			<!-- plugins js -->
+	        <script src="{{ asset('rideo/js/plugins.js') }}"></script>
+			
+			<!-- Google Map JS -->
+			<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_Agsvf36du-7l_mp8iu1a-rXoKcWfs2I"> </script>
+			<!-- Custom map-script js -->
+	        <script src="{{ asset('rideo/js/map-script.js') }}"></script>
+			<!-- main js -->
+	        <script src="{{ asset('rideo/js/main.js') }}"></script>
+	    {% endblock %}
+    </body>
+</html>

@@ -1,0 +1,323 @@
+{% extends "adminLayout.html.twig"  %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+
+ 
+            <div class="row">
+
+                <div class="col-lg-12">
+                    <h2>Statistiques</h2>
+                </div>
+
+                
+
+                <div class="col-lg-12">
+                    <div class="tabs-container">
+                        <ul class="nav nav-tabs">
+                            <li class="{{ (tab == 'clt' or tab==null ) ? 'active' : ''}} "><a data-toggle="tab" href="#client"> Par client</a></li>
+                            <li class="{{ (tab == 'article') ? 'active' : ''}}"><a data-toggle="tab" href="#article">Par article</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="client" class="tab-pane {{ (tab == 'clt' or tab==null ) ? 'active' : ''}} ">
+                                <div class="panel-body" style="display:block;">
+                                        
+                                    {{ form_start(stat_by_clt_view, {'attr' : {'class':'', 'id':'stat_by_clt_form' }}) }}
+
+                                                      
+                                       <div class="row">
+
+                                            <div class="col-lg-4">
+                                                
+                                                    <div class="form-group">
+                                                              <label >Client</label> 
+                                                              {{ form_widget(stat_by_clt_view.client, { 'attr' : { 'class': 'form-control select2'}}) }}
+
+                                                     </div>
+
+                                            </div>
+
+
+                                            <div class="col-lg-3">
+                                                
+                                                    <div class="form-group">
+                                                              <label>Date de début</label> 
+                                                               <div class="input-group">
+                                                                  <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                                  {{ form_widget(stat_by_clt_view.dateDeb_search, { 'attr' : { 'class': 'form-control datepicker', 'autocomplete':'off'}}) }}
+                                                              </div>
+                                                             
+
+                                                     </div>
+
+                                            </div>
+
+
+                                            <div class="col-lg-3">
+                                                   
+                                                      <div class="form-group">
+                                                                <label>Date de fin</label> 
+                                                                <div class="input-group">
+                                                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                                      {{ form_widget(stat_by_clt_view.dateFin_search, { 'attr' : { 'class': 'form-control datepicker', 'autocomplete':'off'}}) }}
+                                                                </div>
+                                                               
+                                                       </div>
+
+                                              </div>
+
+
+                                              <div class="col-lg-2">
+                                                            <label for=""> </label>
+                                                      <div class="form-group">
+                                                             <button type="submit" class="btn btn-primary" >Rechercher</button>
+                                                       </div>
+
+                                              </div>
+
+
+
+                                         </div>
+
+
+                                    {{ form_end(stat_by_clt_view) }}
+
+                                    <div class="row">
+                                        <div class="col-lg-12" id="stat_by_clt_table_container">
+              <div class="navigation">
+                {% if statByCltMaxPages > 1 %}
+                  <ul class="pagination pagination-sm">
+                      {# `«` arrow  #}
+                      <li {{ thisStatByCltPage == 1 ? 'class="disabled"' }}>
+                          <a href="{{ path('stats_ventes', {statByCltPaginationPage: thisStatByCltPage-1 < 1 ? 1 : thisStatByCltPage-1}) }}&tab=clt">«</a>
+                      </li>
+
+                      {# Render each page number #}
+                      {% for i in 1..statByCltMaxPages %}
+                      <li {{ thisStatByCltPage == i ? 'class="active"' }}>
+                      <a href="{{ path('stats_ventes', {statByCltPaginationPage: i}) }}&tab=clt">{{ i }}</a>
+                      </li>
+                      {% endfor %}
+
+                      {# `»` arrow #}
+                      <li {{ thisStatByCltPage == statByCltMaxPages ? 'class="disabled"' }}>
+                          <a href="{{ path('stats_ventes', {statByCltPaginationPage: thisStatByCltPage+1 <= statByCltMaxPages ? thisStatByCltPage+1 : thisStatByCltPage}) }}&tab=clt">»</a>
+                      </li>
+                  </ul>
+                {% endif %}
+              </div>  
+                                                                      
+                                            <table id="stat_by_clt_table" class="footable table table-stripped toggle-arrow-tiny" data-page-navigation="#">
+                                                <thead>
+                                                  <tr>
+                                                     <th data-toggle="true"># Facture</th>
+                                                     <th data-toggle="true">Date</th>
+                                                     <th data-toggle="true">Client</th>
+                                                     <th data-hide="all"></th>
+                                                     <th data-toggle="true">Prix total</th>
+                                                     <th data-toggle="true">Total payé</th>
+                                                     <th data-toggle="true">Reste à payer</th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody>
+                                                  {% for vente in stat_by_clt %}
+                                                    <tr>
+                                                       <td>{{ vente.getId() }}</td>
+                                                       <td>{{ vente.getCreatedAt() | date("d/m/Y") }}</td>
+                                                       <td> {{ vente.getClient().getNom() }} {{ vente.getClient().getPrenom() }} </td>
+                                                       <td>
+
+                                                                <table class="table ">
+                                                                   <thead>
+                                                                      <tr>
+                                                                          <th>Article</th>
+                                                                          <th>PU</th>
+                                                                          <th>Qté</th>
+                                                                          <th>Prix total</th>
+                                                                      </tr>
+                                                                   </thead>
+                                                                   <tbody>
+                                                                      {% for ligne_vente in vente.getLignesVente() %}
+                                                                       <tr class="info">
+                                                                           <td> {{ ligne_vente.getArticle().getDesignation() }} </td>
+                                                                           <td> {{ ligne_vente.getArticle().getDefaultPrice() }} </td>
+                                                                           <td> {{ ligne_vente.getQte() }} </td>
+                                                                           <td> {{  ligne_vente.getArticle().getDefaultPrice()  * ligne_vente.getQte() }}  </td>
+                                                                       </tr>
+                                                                      {% endfor  %} 
+                                                                   </tbody>
+                                                                  
+                                                                </table>
+                                                       </td>
+                                                       <td>
+                                                        {{ (vente.getTotalHt() + vente.tva - vente.remise ) | number_format(0, ',', ' ')   }}
+                                                       </td>
+                                                       <td>
+                                                        {{ (vente.getTotalHt() + vente.tva - vente.remise - vente.resteAPayer ) | number_format(0, ',', ' ')   }}
+                                                       </td> 
+                                                       <td>
+                                                        {{ vente.resteAPayer | number_format(0, ',', ' ')   }}
+                                                       </td>
+                                                    </tr>
+                                                    {% endfor %}
+
+                                                        
+                                                </tbody>
+                                            </table>
+                                             
+                                        </div>
+                                    </div>
+
+    
+                                </div>
+                            </div>
+
+
+                            <div id="article"   class="tab-pane {{ (tab == 'article') ? 'active' : ''}}">
+                                <div class="panel-body">
+                                                            
+                                    {{ form_start(stat_by_article_view, {'attr' : {'class':'vertical-form', 'id':'stat_by_article_form' }}) }}
+
+                                                      
+                                  <div class="row">
+
+                                    
+
+                                      <div class="col-lg-3">
+                                          
+                                        <div class="form-group">
+                                          <label >Article</label> 
+                                          {{ form_widget(stat_by_article_view.article, { 'attr' : { 'class': 'form-control select2'} }) }}
+
+                                         </div>
+
+                                      </div>
+
+                                      <div class="col-lg-2">
+                                          
+                                              <div class="form-group">
+                                                        <label>Date de début</label> 
+                                                         <div class="input-group">
+                                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                            {{ form_widget(stat_by_article_view.dateDeb_search, { 'attr' : { 'class': 'form-control datepicker', 'autocomplete':'off'}}) }}
+                                                        </div>
+                                                       
+
+                                               </div>
+
+                                      </div>
+
+
+                                      <div class="col-lg-2">
+                                             
+                                          <div class="form-group">
+                                            <label>Date de fin</label> 
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                  {{ form_widget(stat_by_article_view.dateFin_search, { 'attr' : { 'class': 'form-control datepicker', 'autocomplete':'off'}}) }}
+                                            </div>
+                                          </div>
+
+                                      </div>
+
+                                      <div class="col-lg-2">
+                                          <label></label> 
+                                          <div class="form-group">
+                                              <button type="submit" class="btn btn-primary" >Rechercher</button>
+                                          </div>
+
+                                      </div>
+         
+                                      {{ form_end(stat_by_article_view) }}
+                                       
+                                  </div>
+
+                                      <div class="row">
+                                        <div class="col-lg-12" id="stat_by_article_table_container">
+
+         <div class="navigation">
+                {% if statByArtMaxPages > 1 %}
+                  <ul class="pagination pagination-sm">
+                      {# `«` arrow  #}
+                      <li {{ thisStatByArtPage == 1 ? 'class="disabled"' }}>
+                          <a href="{{ path('stats_ventes', {statByArtPaginationPage: thisStatByArtPage-1 < 1 ? 1 : thisStatByArtPage-1}) }}&tab=article">«</a>
+                      </li>
+
+                      {# Render each page number #}
+                      {% for i in 1..statByArtMaxPages %}
+                      <li {{ thisStatByArtPage == i ? 'class="active"' }}>
+                      <a href="{{ path('stats_ventes', {statByArtPaginationPage: i}) }}&tab=article">{{ i }}</a>
+                      </li>
+                      {% endfor %}
+
+                      {# `»` arrow #}
+                      <li {{ thisStatByArtPage == statByArtMaxPages ? 'class="disabled"' }}>
+                          <a href="{{ path('stats_ventes', {statByArtPaginationPage: thisStatByArtPage+1 <= statByArtMaxPages ? thisStatByArtPage+1 : thisStatByArtPage}) }}&tab=article">»</a>
+                      </li>
+                  </ul>
+                {% endif %}
+              </div>   
+
+                                                                      
+                                            <table id="stat_by_article_table" class="footable table table-stripped toggle-arrow-tiny" data-page-navigation="#" data-page-size="15">
+                                                <thead>
+                                                  <tr>
+                                                     <th data-toggle="true"># Article</th>
+                                                     <th data-toggle="true">Article</th>
+                                                     <th data-toggle="true">Date</th>
+                                                     <th data-toggle="true">Client</th>
+                                                     <th data-toggle="true">PU</th>
+                                                     <th data-toggle="true">Qté</th>
+                                                     <th data-toggle="true">Prix total</th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody>
+                                                  {% for ligne_vente in stat_by_article %}
+                                                    <tr>
+                                                       <td>{{ ligne_vente.article.id }}</td>
+                                                       <td>{{ ligne_vente.article.designation }}</td>
+                                                       <td>{{ ligne_vente.vente.getCreatedAt() | date("d/m/Y") }}</td>
+                                                       <td> {{ ligne_vente.vente.client.nom }} {{ ligne_vente.vente.client.prenom }} </td>
+                                                       <td> {{ ligne_vente.montant |number_format(0, ',', ' ') }} </td>
+                                                       <td> {{ ligne_vente.qte}} </td>
+                                                       <td> {{ (ligne_vente.qte * ligne_vente.montant) |number_format(0, ',', ' ')  }} </td>
+                                                    </tr>
+                                                    {% endfor %}
+
+                                                        
+                                                </tbody>
+                                            </table>
+                                             
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+{% endblock %}
+
+{% block javascripts %}
+	 {{ parent()}}
+	  
+    <script src='{{asset("adminTemplate/js/plugins/footable/footable.all.min.js")}}'></script>
+
+
+  <script src="{{ asset('my_files/js/statistique/statistiqueS.js') }}" type="text/javascript"></script>
+
+
+    <script>
+        $(document).ready(function() {
+
+            $('.footable').footable();
+
+        });
+
+    </script>
+
+
+{% endblock javascripts %}

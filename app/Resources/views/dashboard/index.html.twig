@@ -1,0 +1,227 @@
+{% extends "adminLayout.html.twig"  %}
+
+{% block title %}
+	Tableau de bord
+{% endblock %}
+{% set breadCrumbPosition = "Tableau de bord" %}
+{% set breadcrumbs = ['Statistiques'] %}
+
+{% block body %}
+	   {{ form_start(dashboardView, {'attr' : {'class':'' }}) }}
+
+			<div class="row">
+
+				<div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Article</label>
+                        {{ form_widget(dashboardView.article, { 'attr' : { 'class': 'form-control select2', 'autocomplete':'off'}}) }}
+                    </div>
+				</div>
+
+				<div class="col-lg-2">
+                    <div class="form-group">
+                        <label>Type d'historique</label>
+                        {{ form_widget(dashboardView.searchBy, { 'attr' : { 'class': 'form-control select2', 'autocomplete':'off'}}) }}
+                    </div>
+				</div>
+
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                      	<label>Date de début</label> 
+                       	<div class="input-group">
+                        	<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        	{{ form_widget(dashboardView.dateDebSearch, { 'attr' : { 'class': 'form-control datepicker', 'autocomplete':'off'}}) }}
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+	                    <label>Date de fin</label> 
+	                    <div class="input-group">
+	                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+	                        {{ form_widget(dashboardView.dateFinSearch, { 'attr' : { 'class': 'form-control datepicker', 'autocomplete':'off'}}) }}
+	                    </div>
+                    </div>
+                </div>
+				<div class="col-lg-2">
+					<label for=""> &nbsp; </label>
+                    <div class="form-group">
+                    	<button  id="searchSubmitBtn"  type="submit" class="btn btn-primary" > Valider </button>
+                    </div>
+				</div>
+			</div>
+
+        {{ form_end(dashboardView) }}
+
+		
+
+	        <div class="row">
+	        	  <div class="col-lg-12">
+		        	  	   
+		              <table class="footable table table-stripped toggle-arrow-tiny" data-page-navigation="#" data-page-size="15">
+		                  <thead>
+		                  	<tr>
+		                  		 <th data-toggle="true"># Facture</th>
+		                  		 <th data-toggle="true">Date</th>
+		                  		 <th data-toggle="true">Client</th>
+		                  		 <th data-toggle="true">Designation</th>
+		                  		 <th data-toggle="true">PU</th>
+		                  		 <th data-toggle="true">Qté</th>
+		                       <th data-toggle="true">Total vendu</th>
+		                       <th data-toggle="true"></th>
+		                  	</tr>
+		                  </thead>
+		                  <tbody>
+		                  	{% for ligne in lignesVentes %}
+		                      <tr>
+		                      	 <td>{{ ligne.vente.id }}</td>
+		                      	 <td>{{ ligne.vente.createdAt | date("d/m/Y H:i") }}</td>
+		                      	 <td> {{ ligne.vente.client }}  </td>
+		                      	 <td> {{ ligne.article.designation }}  </td>
+		                      	 <td> {{ ligne.montant | number_format(0, ',', ' ') }} </td>
+		                      	 <td> {{ ligne.qte | number_format(0, ',', ' ') }} </td>
+		                      	 <td> {{ (ligne.qte*ligne.qte) | number_format(0, ',', ' ') }} </td>
+		                      	 <td>
+		                      	 	 <a href="{{ path('facture_vente',{'id': ligne.vente.id}) }}" class="btn btn-info">Facture</a>
+		                      	 </td>
+		                      </tr>
+		                      {% endfor %}
+
+		                          
+		                  </tbody>
+		              </table>
+		              
+	        	  </div>
+	        </div>
+
+        {% if(articlesStocks is not empty) %}
+
+	        <div class="row">
+	        	<div class="col-lg-12">
+	        		  	   
+			              <table class="footable table table-stripped toggle-arrow-tiny" data-page-navigation="#" data-page-size="15">
+			                  <thead>
+			                  	<tr>
+			                  		 <th data-toggle="true">Article concerné</th>
+			                  		 <th data-toggle="true">Créé le</th>
+			                  		 <th data-toggle="true">Qté</th>
+			                  	</tr>
+			                  </thead>
+			                  <tbody>
+			                  	{% for ligne in articlesStocks %}
+			                      <tr>
+			                      	 <td> {{ ligne.article }} </td>
+			                      	 <td>{{ ligne.createdAt | date("d/m/Y H:i") }}</td>
+			                      	 <td> {{ ligne.qte  | number_format(0, ',', ' ') }}  </td>
+			                      </tr>
+			                      {% endfor %}
+
+			                          
+			                  </tbody>
+			              </table>
+			              
+	        	</div>
+	        </div>
+
+        {% endif %}
+
+        {% if(arrivages is not empty) %}
+
+	        <div class="row">
+	        	 <div class="col-lg-12">
+	        	 	 	  	   
+			              <table class="footable table table-stripped toggle-arrow-tiny" data-page-navigation="#" data-page-size="15">
+			                  <thead>
+			                  	<tr>
+			                  		 <th data-toggle="true">Article concerné</th>
+			                  		 <th data-toggle="true">Créé le</th>
+			                  		 <th data-toggle="true">Qté</th>
+			                  	</tr>
+			                  </thead>
+			                  <tbody>
+			                  	{% for ligne in arrivages %}
+			                      <tr>
+			                      	 <td> {{ ligne.article }} </td>
+			                      	 <td>{{ ligne.createdAt | date("d/m/Y H:i") }}</td>
+			                      	 <td> {{ ligne.qte  | number_format(0, ',', ' ') }}  </td>
+			                      </tr>
+			                      {% endfor %}
+
+			                          
+			                  </tbody>
+			              </table>
+			              
+	        	 </div>
+	        </div>
+
+        {% endif %}
+
+
+
+       <div class="navigation">
+        {% if maxPages > 1 %}
+          <ul class="pagination pagination-sm">
+            
+            {% if thisPage == 1 %} <li class="disabled" > {% else %} <li>  {% endif%}
+                  <a href="{{ path('dashboardIndex', {page: thisPage-1 < 1 ? 1 : thisPage-1}) }}">«</a>
+              </li>
+
+             
+              {% for i in 1..maxPages %}
+              {% if thisPage == i %} <li class="active" > {% else %} <li>  {% endif%}
+              	<a href="{{ path('dashboardIndex', {page: i}) }}">{{ i }}</a>
+              </li>
+              {% endfor %}
+
+             
+              {% if thisPage == maxPages %} <li class="disabled" > {% else %} <li>  {% endif%}
+                  <a href="{{ path('dashboardIndex', {page: thisPage+1 <= maxPages ? thisPage+1 : thisPage}) }}">»</a>
+              </li>
+          </ul>
+        {% endif %}
+      </div>  
+
+        
+
+ 
+
+{% endblock %}
+
+
+{% block javascripts %}
+	{{ parent() }}
+	<script type="text/javascript">
+		$(document).ready(function(e){
+
+			$('#searchSubmitBtn').click(function(e){
+				    let mode = $("#form_searchBy").val(),
+                    dateDeb = $('#form_dateDebSearch').val(),
+                    dateFin = $('#form_dateFinSearch').val();
+
+                if(!mode && !dateDeb && !dateFin)
+                {
+                   alert("Vous devez le type d'historique est les dates de recherche.") ;
+                   return false;
+                }
+
+                if(!dateDeb || !dateFin  )
+                {
+                   alert("Vous devez indiquer la date de début et de fin.") ;
+                   return false;
+                }
+                else //les deux dates sont indiquées
+                {
+                  if(dateDeb>dateFin)
+                  {
+                    alert("La date debut doit être inférieure à celle de fin");
+                    return false;
+                  }
+                }
+			});
+		});
+	</script>
+
+{% endblock %}

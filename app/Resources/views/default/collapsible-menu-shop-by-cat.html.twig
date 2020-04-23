@@ -1,0 +1,40 @@
+<div class="panel-group" id="accordion2">
+	{%  set active = "false" %}
+	{%  set index = 1 %}
+	{% for categ in categoryArray %}
+	{% if categ.id == currentRayonData.currentRayon.parent.id %}
+		{% set active = "true" %}
+		{% set panelType = "info" %}
+		{% set opening = "in " %}
+	{% else %}  
+		{% set opening = "" %} 
+		{% set panelType = "default" %}
+	{% endif %}
+
+	<div class="panel panel-{{panelType}}">
+		<div class="panel-heading" id="heading{{index}}">
+			<h4 class="panel-title">
+				<a data-toggle="collapse" data-parent="#accordion2" href="#collapse{{index}}" aria-expanded="{{ active }}" aria-controls="collapse{{index}}">
+					{{ categ.catname }}
+				</a>
+			</h4>
+		</div>
+		<div id="collapse{{index}}" class="panel-collapse collapse {{ opening }} ">
+			<div class="panel-body">
+				<ul>
+					{% for collapsedCateg in  categ.categories if collapsedCateg.id != collapsedCateg.parent.id %}
+						<li >
+							{% if collapsedCateg.id == currentRayon.id %}
+								<a style="color:#ff6600;" href="{{ path('shop_by_cat', {'cat':collapsedCateg.id}) }}"> {{collapsedCateg.catname }}</a>
+							{% else %}
+								<a href="{{ path('shop_by_cat', {'cat':collapsedCateg.id}) }}"> {{collapsedCateg.catname }}</a>
+							{% endif %}
+						</li>
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+	</div>
+	{% set index = index + 1 %}
+	{% endfor %}
+</div>

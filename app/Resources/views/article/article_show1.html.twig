@@ -1,0 +1,159 @@
+{% extends "adminLayout.html.twig" %}
+
+{% block stylesheets %}
+
+{{parent()}}
+
+    <link href="{{asset('adminTemplate/css/plugins/slick/slick.css')}}" rel="stylesheet">
+    <link href="{{asset('adminTemplate/css/plugins/slick/slick-theme.css')}}" rel="stylesheet">
+
+    <link href="{{asset('adminTemplate/css/animate.css')}}" rel="stylesheet">
+    <link href="{{asset('adminTemplate/css/style.css')}}" rel="stylesheet">
+
+{% endblock %}
+
+{% block body %}
+
+
+
+    
+
+    <div class="gray-bg">
+        
+        <div class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-lg-12">
+                <h2>Detail article</h2>
+                
+            </div>
+            <div class="col-lg-2">
+
+            </div>
+        </div>
+
+        <div class="wrapper wrapper-content animated fadeInRight">
+
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <div class="ibox product-detail">
+                        <div class="ibox-content">
+
+                            <div class="row">
+                                <div class="col-md-5">
+
+
+                                    <div class="product-images">
+                                        {% if article.source1 %}
+                                        <div>
+                                            <div class="image-imitation">
+                                                <img src="{{ article.source1 }}" class="w-100">
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                        {% if article.source2 %}
+                                        <div>
+                                            <div class="image-imitation">
+                                                [IMAGE 2]
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                        {% if article.source3 %}
+                                        <div>
+                                            <div class="image-imitation">
+                                                [IMAGE 3]
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                        {% if article.source4 %}
+                                        <div>
+                                            <div class="image-imitation">
+                                                [IMAGE 4]
+                                            </div>
+                                        </div>
+                                        {% endif %}
+
+                                    </div>
+
+                                </div>
+                                <div class="col-md-7">
+
+                                    <h2 class="font-bold m-b-xs">
+                                        {{ article.designation }}
+                                    </h2>
+                                    <!--small>Many desktop publishing packages and web page editors now.</small-->
+                                    <hr>
+                                    <div>
+                                        <h1 class="product-main-price">{{article.defaultPrice}} <small class="text-muted">F CFA</small> </h1>
+                                    </div>
+                                    <hr>
+                                    <h4>Stock </h4>
+
+                                    <div class="small text-muted">
+                                        {{article.stock}}
+                                    </div>
+
+                                    <h4>Description article</h4>
+
+                                    <div class="small text-muted">
+                                        {{article.description}}
+                                    </div>
+                                   
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="ibox-footer">
+                            <span class="pull-right">
+                                Full stock - <i class="fa fa-clock-o"></i> 14.04.2016 10:04 pm
+                            </span>
+                            The generated Lorem Ipsum is therefore always free
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+
+        </div>
+        <div class="footer">
+            <div class="pull-right">
+                10GB of <strong>250GB</strong> Free.
+            </div>
+            <div>
+                <strong>Copyright</strong> Example Company &copy; 2014-2017
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+{{parent()}}
+
+<script src="{{asset('adminTemplate/js/plugins/metisMenu/jquery.metisMenu.js')}}"></script>
+<script src="{{asset('adminTemplate/js/plugins/slimscroll/jquery.slimscroll.min.js')}}"></script>
+
+<!-- Custom and plugin javascript -->
+<script src="{{asset('adminTemplate/js/inspinia.js')}}"></script>
+<script src="{{asset('adminTemplate/js/plugins/pace/pace.min.js')}}"></script>
+
+<!-- slick carousel-->
+<script src="{{asset('adminTemplate/js/plugins/slick/slick.min.js')}}"></script>
+
+<script>
+    $(document).ready(function(){
+
+
+        $('.product-images').slick({
+            dots: true
+        });
+
+    });
+
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,69 @@
+<!-- quick view start -->
+<div class="product-details quick-view modal animated zoomIn" id="quick-view-{{index}}">
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="d-table">
+					<div class="d-tablecell">
+						<div class="modal-dialog">
+							<div class="main-view modal-content">
+								<div class="modal-footer" data-dismiss="modal">
+									<span>x</span>
+								</div>
+								<div class="row">
+									<div class="col-sm-6">
+										<div class="left">
+											<!-- Single-pro-slider Big-photo start -->
+											<div class="quick-img">													
+												{% if article.medias|length > 0 %}
+													<img src="{{ (article.medias[0]).source }}" alt="" />
+												{% endif %}
+											</div>	
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="right">
+											<div class="singl-pro-title">
+												<h3> {{ article.designation}} </h3>
+												<h1> {% if price is defined %} {{ price.montant }} {% else  %} {{ article.defaultPrice}}  {% endif %}</h1>
+												<hr />
+												<p> {{ article.description }} </p>
+												<hr />
+												<div class="color-brand clearfix">
+													<div class="s-select s-plus-minus">
+														<form action="{{ path('add_to_cart', {'article':article.id}) }}" id="add-to-cart-form" class="ajaxForm" method="POST">
+															<div class="">
+																<button type="submit" class="btn btn-default"><i class="fa fa-shopping-cart"></i> Ajouter au panier </button>
+															</div>
+														</form>
+													</div>
+												</div>
+												<br style="clear: both;" />
+												<hr />
+												<div class="categ-tag">
+													<ul class="clearfix">
+														<li>
+															CATEGORIES: 
+															<a href="#">Bike,</a> <a href="#">Cycle,</a> <a href="#">Ride,</a> <a href="#">Mountain</a>
+														</li>
+														<li>
+															TAG: 
+															<a href="#">Ride,</a> <a href="#">Helmet,</a> <a href="#">cycle,</a> <a href="#">bike</a> 
+														</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- quick view end -->
+
+

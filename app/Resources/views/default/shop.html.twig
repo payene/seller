@@ -1,0 +1,163 @@
+{% extends 'base-shop.html.twig' %}
+
+
+
+
+ {% block header %}
+	<!--Carousel Wrapper-->
+	<div id="carousel-example-1z" class="carousel slide carousel-fade pt-4 mb-4" data-ride="carousel">
+
+	{#<!--Indicators-->
+	<ol class="carousel-indicators">
+	  <li data-target="#carousel-example-1z" data-slide-to="0" class="active"></li>
+	  <li data-target="#carousel-example-1z" data-slide-to="1"></li>
+	  <li data-target="#carousel-example-1z" data-slide-to="2"></li>
+	</ol>
+	<!--/.Indicators-->#}
+
+	<!--Slides-->
+	<div class="carousel-inner" role="listbox">
+
+	  <!--First slide-->
+	  <div class="carousel-item active">
+	    <div class="view" style="background-image: url('https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/8-col/img%282%29.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+	      <!-- Mask & flexbox options-->
+	      <div class="mask rgba-black-strong d-flex justify-content-center align-items-center">
+
+	        <!-- Content -->
+	        <div class="text-center white-text mx-5 wow fadeIn">
+	          <h1 class="mb-4">
+	            <strong>Commandez en ligne</strong>
+	          </h1>
+
+	          <p>
+	            <strong>Best & free guide of responsive web design</strong>
+	          </p>
+
+	          <p class="mb-4 d-none d-md-block">
+	            <strong>The most comprehensive tutorial for the Bootstrap 4. Loved by over 500 000 users. Video and
+	              written versions
+	              available. Create your own, stunning website.</strong>
+	          </p>
+
+	        	{#<a target="_blank" href="https://mdbootstrap.com/education/bootstrap/" class="btn btn-outline-white btn-lg">Start
+	            free tutorial
+	            	<i class="fas fa-graduation-cap ml-2"></i>
+	        	</a>#}
+	        </div>
+	        <!-- Content -->
+
+	      </div>
+	      <!-- Mask & flexbox options-->
+
+	    </div>
+	  </div>
+	  <!--/First slide-->
+	</div>
+	<!--/.Slides-->
+
+	<!--Controls-->
+	<a class="carousel-control-prev" href="#carousel-example-1z" role="button" data-slide="prev">
+	  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+	  <span class="sr-only">Previous</span>
+	</a>
+	<a class="carousel-control-next" href="#carousel-example-1z" role="button" data-slide="next">
+	  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+	  <span class="sr-only">Next</span>
+	</a>
+	<!--/.Controls-->
+
+	</div>
+	<!--/.Carousel Wrapper-->
+
+  
+  
+  {% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+{% block categories %}
+
+{% endblock %}
+
+{% block body %}
+	<style type="text/css">
+		#form_category{
+			border: 1px solid #ddd;
+		    color: #777;
+		    font-weight: 400;
+		    line-height: 40px;
+		    margin-bottom: 15px;
+		    padding: 0 15px;			
+		}
+	</style>
+<!-- product content section start -->
+	<section class="product-content section-padding mt-4">
+		<div class="container-fluid">
+			{#<div class="row">
+				<div class="col-xs-12">
+					<div class="shop-menu clearfix margin-close">
+						<div class="left">
+							<h4> Nos rayons </h4>
+						</div>
+					</div>
+				</div>
+			</div>#}
+
+			<div class="row mt-4">
+				<div class="tab-content">
+					
+					{% include('default/rayon-gird-view.html.twig') %}
+					{# {% include('default/list-view.html.twig') %}  #}
+				</div>
+			</div>
+			
+		</div>
+	</section>
+<!-- product content section end -->
+{% endblock %}
+
+
+{% block javascripts %}
+	{{ parent() }}
+
+	<script type="text/javascript">
+		initAjaxForm();
+		function initAjaxForm()
+        {
+            $('body').on('submit', '.ajaxForm', function (e) {
+         
+                e.preventDefault();
+         
+                $.ajax({
+                    type: $(this).attr('method'),
+                    url: $(this).attr('action'),
+                    data: $(this).serialize()
+                })
+                .done(function (data) {
+                	console.log(data);
+                    if (typeof data !== 'undefined') {
+                    	if (typeof data['nbrCart'] !== 'undefined') {
+                        	$('#cart-length').html(data['nbrCart']);
+                        	// $('#cart-length').html(data['nbrCart']);
+                        	alert('article ajoute au panier avec success');
+                    	}
+                    }
+                });
+     //            .fail(function (jqXHR, textStatus, errorThrown) {
+					// alert('Echec du panier ' + errorThrown);
+     //            });
+            });
+        }
+	</script>
+
+{% endblock %}

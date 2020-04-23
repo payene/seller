@@ -1,0 +1,98 @@
+<div class="tab-pane fade in active text-center" id="grid">
+	<div class="single-products">
+		{% if articles is defined  %}
+		{% set products = articles %}
+			{% set i = 0 %}
+			{% for prod in products %}
+				{% set i = i+1 %}
+				<div class="col-xs-12 col-sm-2">
+					<div class="product-item margin40" style="box-shadow: 1px 1px 2px;">
+						<div class="pro-img">
+							<a href="product-details.html"><img class="shop-img" src="{{ prod.item.source1 }}" alt="Product" /></a>
+							<div class="actions-btn">
+								<ul class="clearfix">
+									<li>
+										<form action="{{ path('add_to_cart', {'article':prod.item.id}) }}" id="add-to-cart-form" class="ajaxForm" method="POST">
+											<div class="mt-1">
+												<button type="submit" class="add-tocart-btn btn-ghost btn"><i class="fa fa-shopping-cart"></i> </button>
+											</div>
+										</form>
+										<!-- <a href="cart.html"><i class="fa fa-shopping-cart"></i></a> -->
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="product-title">
+							<a href="product-details.html"><h5> {{ prod.item.designation }} </h5></a>
+							
+							<p>
+								{% if prod.price is defined %}
+									{% if prod.price is not null %}
+										<span style="color: #ff6600;font-weight: bold;"> {{ prod.price.montant }} </span>
+										<del> <small> {{ prod.item.defaultPrice }}</small> </del>
+									{% else %}
+										<span style="color: #ff6600;font-weight: bold;"> {{ prod.item.defaultPrice }} </span>
+									{% endif  %}
+								{% else %}
+									<span style="color: #ff6600;font-weight: bold;"> {{ prod.item.defaultPrice }} </span>
+								{% endif  %}
+
+							</p>
+						</div>
+					</div>
+				</div>
+				{% set vars = {'index': i, 'article':prod.item} %}
+				{% include 'default/article-quick-view.html.twig' with vars %}
+			{% endfor %}
+		{% endif %}
+
+		{#
+		{% if myarticles is defined %}
+			{% set i = 0 %}
+			{% for item in myarticles  %}
+				{% set i = i+1 %}
+				<div class="col-xs-12 col-sm-2" style="border-right: solid 1px silver;">
+					<div class="product-item margin40">
+						<div class="pro-img">
+							<a href="product-details.html"><img src="{{ item.source1 }}" alt="Product" /></a>							
+							<div class="actions-btn">
+
+								<ul class="clearfix">
+									<li>
+										<form action="{{ path('add_to_cart', {'article':item.id}) }}" id="add-to-cart-form" class="ajaxForm" method="POST">
+											<div class="">
+												<button type="submit" class="btn btn-default"><i class="fa fa-shopping-cart"></i> Ajouter au panier </button>
+											</div>
+										</form>
+									</li>
+									
+									<!-- <li>
+										<a href="#" data-toggle="modal" data-target="#quick-view-{{i}}"><i class="fa fa-eye"></i></a>
+									</li> -->
+								</ul>
+							</div>
+						</div>
+						<div class="product-title">
+							<a href="product-details.html"><h5> {{ item.item.designation }} </h5></a>
+							
+							<p>
+								{% if item.price %}
+									<span> {{ item.price.montant }} </span>
+									<del> {{ item.item.defaultPrice }} </del>
+								{% else %}
+									<span> {{ item.item.defaultPrice }} </span>
+								{% endif  %}
+							</p>
+						</div>
+					</div>
+				</div>
+
+
+				{% set vars = {'index': i, 'article':item, 'price':item.price} %}
+				{% include 'default/article-quick-view.html.twig' with vars %}
+
+			{% endfor %}
+		{% endif %}
+		#}
+	</div>
+</div>

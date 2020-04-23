@@ -1,0 +1,97 @@
+{% extends "adminLayout.html.twig" %}
+{% set breadCrumbPosition = "Caisse" %}
+{% set breadcrumbs = ['En cours'] %}
+{% block body %}
+        <div class="row">
+            <div class="col-xs-12">
+
+                    <h1> En attente de paiement </h1>
+
+                    <table class="footable table table-stripped toggle-arrow-tiny" data-page-navigation="#" data-page-size="15">
+                        <thead>
+                        	<tr>
+                        		 <th data-toggle="true">Date</th>
+                        		 <th data-toggle="true">Client</th>
+                             <th data-toggle="true">Total facture</th>
+                        		 <th data-toggle="true">Reste à payer</th>
+                             <th data-toggle="true"></th>
+                        	</tr>
+                        </thead>
+                        <tbody>
+                        	{% for vente in ventes |reverse %}
+                            <tr>
+                            	 <td>{{ vente.createdAt() | date("d/m/Y H:i") }}</td>
+                            	 <td> 
+
+                                     {% if(vente.client.nom!=false or vente.client.prenom!=false) %}
+                                          {{ vente.client }} 
+                                     {% else %}
+                                          {{ vente.client.telephone }} 
+                                     {% endif %}
+                                 </td>
+                            	 <td>
+                                  {{ (vente.totalHt + vente.tva - vente.remise ) | number_format(0, ',', ' ')  }}
+                            	 </td>
+                               <td>
+                                  {{ vente.getResteAPayer() | number_format(0, ',', ' ')  }}
+                               </td>
+                            	 <td>
+                            	 	 <a href="{{ path('facture_vente',{'id': vente.id}) }}" class="btn btn-info">Payer</a>
+                            	 </td>
+                            </tr>
+                            {% endfor %}
+
+                                
+                        </tbody>
+                    </table>
+                     
+
+                    <div class="navigation">
+                      {% if maxPages > 1 %}
+                        <ul class="pagination pagination-sm">
+                           
+                            <li {{ thisPage == 1 ? 'class="disabled"' : ""}}>
+                                <a href="{{ path('en_cours', {page: thisPage-1 < 1 ? 1 : thisPage-1}) }}">«</a>
+                            </li>
+
+                       
+                            {% for i in 1..maxPages %}
+                            <li {{ thisPage == i ? 'class="active"' : ""}}>
+                            <a href="{{ path('en_cours', {page: i}) }}">{{ i }}</a>
+                            </li>
+                            {% endfor %}
+
+                           
+                            <li {{ thisPage == maxPages ? 'class="disabled"' : ""}}>
+                                <a href="{{ path('en_cours', {page: thisPage+1 <= maxPages ? thisPage+1 : thisPage}) }}">»</a>
+                            </li>
+                        </ul>
+                      {% endif %}
+                    </div>  
+
+
+                            
+            </div>
+        </div>
+
+{% endblock %}
+
+
+
+{% block javascripts %}
+	 {{ parent()}}
+	  
+    <script src='{{asset("adminTemplate/js/plugins/footable/footable.all.min.js")}}'></script>
+
+    <script>
+        $(document).ready(function() {
+
+            $('.footable').footable();
+
+        });
+
+    </script>
+
+
+
+{% endblock javascripts %}

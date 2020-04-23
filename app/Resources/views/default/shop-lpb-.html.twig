@@ -1,0 +1,98 @@
+{% extends 'base-shop.html.twig' %}
+
+
+{% block categories %}
+	<li>
+		<h5>Nos cat&eacute;gries</h5>
+		<ul>
+			{% for category in categoryArray %}
+				<li>
+					<a href="{{ path('shop_by_cat', {'cat':category.id}) }}"> {{ category.catname }}</a>
+				</li>
+			{% endfor %}
+		</ul>
+	</li>
+	
+{% endblock %}
+
+{% block body %}
+<!-- product content section start -->
+	<section class="product-content section-padding">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="shop-menu clearfix margin-close">
+						
+						<div class="right floatright text-center">
+							<div class="pagnation-ul">
+								{% include 'default/shop-pagination.html.twig' with pagination %}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="tab-content">
+					
+					{% include('default/gird-view.html.twig') %}
+					{# {% include('default/list-view.html.twig') %}  #}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="shop-menu clearfix margin-close">
+						<div class="left floatleft">
+							<div class="tab-menu view-mode">
+								<a class="grid active" data-toggle="tab" href="#grid"><i class="fa fa-th"></i></a>
+								<a class="list" data-toggle="tab" href="#list"><i class="fa fa-bars"></i></a>
+							</div>
+						</div>
+						<div class="right floatright text-center">
+							<div class="pagnation-ul">
+								{% include 'default/shop-pagination.html.twig' with pagination %}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+<!-- product content section end -->
+{% endblock %}
+
+
+{% block javascripts %}
+	{{ parent() }}
+
+	<script type="text/javascript">
+		initAjaxForm();
+		function initAjaxForm()
+        {
+            $('body').on('submit', '.ajaxForm', function (e) {
+         
+                e.preventDefault();
+         
+                $.ajax({
+                    type: $(this).attr('method'),
+                    url: $(this).attr('action'),
+                    data: $(this).serialize()
+                })
+                .done(function (data) {
+                	console.log(data);
+                    if (typeof data !== 'undefined') {
+                    	if (typeof data['nbrCart'] !== 'undefined') {
+                        	$('#cart-length').html(data['nbrCart']);
+                        	// $('#cart-length').html(data['nbrCart']);
+                        	alert('article ajoute au panier avec success');
+                    	}
+                    }
+                });
+     //            .fail(function (jqXHR, textStatus, errorThrown) {
+					// alert('Echec du panier ' + errorThrown);
+     //            });
+            });
+        }
+	</script>
+
+{% endblock %}

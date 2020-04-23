@@ -1,0 +1,281 @@
+{% extends "adminLayout.html.twig" %}
+{% set breadCrumbPosition = "Vente" %}
+{% set breadcrumbs = ['Nouveau'] %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<style type="text/css">
+		#cltList{
+			/*visibility: hidden;*/
+		}
+	</style>
+{% endblock %}
+
+{% block body %}
+
+
+
+{% if inventaireCourant is not empty %}
+
+	<div class="row">
+		<div class="col-lg-12">
+			  <p>Un inventaire est en cours. Impossible de vendre</p>
+			  <p> <a href="{{ path('enregistrerInventaire',{'id': inventaireCourant.id }) }}" class="btn btn-primary">Ouvrir la page de l'inventaire</a> </p>
+		</div>
+	</div>
+
+{% else %}
+
+
+
+	   {{ form_start(ligne_vente_view, {'attr' : {'class':'', 'id':'add_to_card_form' }}) }}
+
+		
+
+			<input type="hidden" id="add_to_card_form_url" value="{{ path('nouvelle_vente')}}" />
+			<input type="hidden" id="artInCardNumber" value="{{ artInCardNumber }}" />
+
+
+			<div class="row">
+
+				<div class="col-lg-4" id="cltList" >
+
+                	<div class="form-group" id="client-section" >
+                    	<label>Client <button type="button" class="btn btn-xs btn-info" id="newCltBtn">Nouveau client</button> </label> 
+                        {{ form_widget(ligne_vente_view.client, { 'attr' : { 'class': 'form-control select2', 'autocomplete':'off'}}) }}
+                   	</div>
+				</div>
+			
+				<div class="col-lg-4">
+                    <div class="form-group">
+                        <label>Article</label>
+                        {{ form_widget(ligne_vente_view.article, { 'attr' : { 'class': 'form-control select2', 'autocomplete':'off'}}) }}
+                    </div>
+				</div>
+
+				<div class="col-lg-2">
+
+                    <div class="form-group">
+                        <label>Qté</label> 
+                        {{ form_widget(ligne_vente_view.qte, { 'attr' : { 'class': 'form-control', 'autocomplete':'off'}}) }}
+                    </div>
+				</div>
+
+				<div class="col-lg-2">
+					<label for=""> &nbsp; </label>
+                    <div class="form-group">
+                        <input id="add_to_card_form_submit_btn"  type="submit" class="btn btn-primary" value="Valider" />
+                    </div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-lg-12">
+				  <a id="destroy_card_link" class="btn btn-danger" href="{{ path('destroy_card') }}"  > Vider le panier </a>
+				</div>
+			</div>
+
+        {{ form_end(ligne_vente_view) }}
+
+		<br/>
+
+        <div class="row" id="ligne_vente_infos_container">
+
+        	<div class="col-lg-12" id="ligne_vente_infos" data-refresh_url="{{ path('nouvelle_vente') }}">	
+
+
+	   		   {{ form_start(vente_view, {'attr' : {'class':'', 'id':'vente_view_form'}}) }}
+
+
+		
+
+					<input type="hidden" id="nouvelleVenteFormUrl" value="{{ path('nouvelle_vente')}}" />
+
+
+	   		        <div class="row">
+	   		        	
+	   		        
+
+
+						<div class="col-lg-3">
+
+                            <div class="form-group">
+                                <label>Facture totale</label>  <br/>
+                                {{ prix_total_panier | number_format(0, ',', ' ')  }}
+                                {{ form_widget(vente_view.total_ht, { 'attr' : { 'class': 'form-control', 'autocomplete':'off'}}) }}
+                            </div>
+
+						</div>
+
+
+						<div class="col-lg-3">
+
+		                                  <div class="form-group">
+		                                            <label>TVA</label> 
+		                                             {{ form_widget(vente_view.tva, { 'attr' : { 'class': 'form-control', 'autocomplete':'off'}}) }}
+		                                   </div>
+
+						</div>
+
+
+						<div class="col-lg-3">
+
+		                                  <div class="form-group">
+		                                            <label>Remise</label> 
+		                                             {{ form_widget(vente_view.remise, { 'attr' : { 'class': 'form-control', 'autocomplete':'off'}}) }}
+		                                   </div>
+
+						</div>
+
+
+						<div class="col-lg-3">
+									<label for=""> &nbsp; </label>
+		                                  <div class="form-group">
+
+		                                  		<span id="validerVenteBtn" class="btn btn-primary" >Enregistrer vente</span>
+		                                  		
+		                                   </div>
+
+						</div>
+
+
+					</div>
+
+
+					<fieldset  style="display: none" id="newCltZone">
+						<legend>
+								Nouveau client   
+								<button type="button" class="btn btn-xs btn-warning" id="cancelNewCltBtn">Annuler la création du client</button>
+						 </legend>
+					
+						<div class="row jumbotron">
+
+
+								<div class="col-lg-3">
+
+			                                <div class="form-group">
+			                                    <label for="">Nom</label>
+			                                        {{ form_widget(vente_view.nom) }}
+			                                    <span class="text-danger"> {{ form_errors(vente_view.nom) }}</span>    
+			                                </div>
+			                    </div>
+
+			                    <div class="col-lg-3">
+
+			                                <div class="form-group">
+			                                   <label for="">Prénom</label>
+			                                        {{ form_widget(vente_view.prenom) }}
+			                                         <span class="text-danger"> {{ form_errors(vente_view.prenom) }}</span>
+			                                </div>
+			                    </div>
+
+			                    <div class="col-lg-3">
+
+			                                <div class="form-group">
+			                                   <label for="">Raisoc</label>
+			                                        {{ form_widget(vente_view.raisoc) }}
+			                                    <span class="text-danger"> {{ form_errors(vente_view.raisoc) }}</span>
+			                                </div>
+			                    </div>
+			                    
+			                    <div class="col-lg-3">
+
+			                                <div class="form-group">
+			                                   <label for="">Adresse</label>
+			                                        {{ form_widget(vente_view.adresse) }}
+			                                    <span class="text-danger"> {{ form_errors(vente_view.adresse) }}</span>
+			                                </div>
+			                    </div>
+			                    
+			                    <div class="col-lg-3">
+
+			                                <div class="form-group">
+			                                   <label for="">Tél.</label>
+			                                        {{ form_widget(vente_view.telephone) }}
+			                                    <span class="text-danger"> {{ form_errors(vente_view.telephone) }}</span>
+			                                </div>
+			                    </div>
+			                    
+
+			                    <div class="col-lg-3">
+
+			                                <div class="form-group">
+			                                   <label for="">Email</label>
+			                                        {{ form_widget(vente_view.email) }}
+			                                    <span class="text-danger"> {{ form_errors(vente_view.email) }}</span>
+			                                </div>
+			                    </div>
+			                    
+
+							</div>
+					</fieldset>
+
+
+
+        			
+
+       		    {{ form_end(vente_view) }}
+
+
+	        	<div class="col-xs-12">
+
+					<div>
+
+
+						
+				        <table  class="table">
+
+				        	<thead>
+				        		<th> # </th>
+				        		<th> Article </th>
+				        		<th> Qté </th>
+				        		<th> PU </th>
+				        		<th> Prix total </th>
+				        		<th>  </th>
+				        	</thead>
+
+				        	<tbody>
+				        		{% for article in card %}
+					        		<tr>
+					        			<td> {{ article['id_art'] }} </td>
+					        			<td> {{ article['designation'] }} </td>
+					        			<td> {{ article['qte'] | number_format(0, ',', ' ')  }} </td>
+					        			<td> {{ article['pu'] | number_format(0, ',', ' ')  }} </td>
+					        			<td> {{ (article['qte'] * article['pu'] ) | number_format(0, ',', ' ')  }} </td>
+					        			<td> 
+					        				<a class="btn btn-xs btn-danger remove_from_card" href="{{ path('remove_from_card',{id: article['id_art'] }) }}"  > Retirer </a>
+					        			</td>
+					        		</tr>
+					        	{% endfor %}	
+
+				        	</tbody>
+
+				        </table>
+
+					</div>
+
+	        	</div>
+
+
+
+
+
+        	</div>
+
+        </div>
+		<div class="col-xs-12">
+			<a href="#" id="save_vente_link" class="btn btn-primary"> Valider panier </a>
+
+		</div>
+
+{% endif %}
+
+{% endblock %}
+
+
+{% block javascripts %}
+	{{ parent() }}
+
+
+	<script src="{{ asset('my_files/js/vente/nouvelle_vente.js') }}" type="text/javascript"></script>
+{% endblock %}

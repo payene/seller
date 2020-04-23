@@ -1,0 +1,102 @@
+{% extends 'base-shop.html.twig' %}
+
+{% block body %}
+<!-- shortcode content start -->
+	<div class="shortcode-content section-padding">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 col-md-6 col-text-center">
+					<div class="section-title about-title text-center">
+						<h3>Mon compte</h3>
+						<div class="shape">
+							<img src="{{ asset('rideo/img/icon/t-shape.png') }}" alt="Title Shape" />
+						</div>
+					</div>
+				</div>
+			</div>
+		
+			<div class="row">
+				<div class="tab-content">
+					<div class="tab-pane fade in active" id="preview">
+						<div class="col-xs-12">
+							<div class="normal-tab">
+								<div class="tab-menu">
+									<ul>
+										<li class="active">
+											<a data-toggle="tab" href="#des">Mes commandes</a>
+										</li>
+										<li>
+											<a data-toggle="tab" href="#des2">Mon profil</a>
+										</li>
+									</ul>
+								</div>
+								<div class="tab-content" style="border:none;">
+									<div class="tab-pane fade in active " id="des">
+										{% for proforma in orders|reverse %}
+											<div class="des-text" >
+												<div class="table-responsive table-one margin-minus section-padding-bottom" >
+													<table class="">
+														<tbody>
+															<tr>
+																<td colspan="3" class="text-left" style="border-bottom: solid 1px;">
+																	<b> Num&eacute;ro de commande : {{ proforma.id }}</b>
+																	<br/>
+																</td>
+																<td class="text-right" style="vertical-align: top;">
+																	<p class="text-italic"> {{ proforma.dateProformat|date('d/m/Y') }}  </p>
+																</td>
+																<td class="text-right" style="vertical-align: top;"> <a  target="blank" href="{{ path('proforma', {'proforma':proforma.id}) }}"> Proforma </a> </td>
+															</tr>
+															<tr>
+																<td colspan="5"> 
+																	<div class="table-responsive table-one">
+																		<table style="border: none;border-spacing: 0;" class="spacing-table">
+																			<tbody>
+																				{% for order in proforma.lpCollection|reverse %}
+																					<tr id="order-{{ order.article.id }}">
+																						<td class="td-img text-left">
+																							<a href="#">
+																								<img height="100" src="{{ order.article.source1 }}" alt="{{ order.article.designation }}" />
+																							</a>
+																							<div class="items-dsc">
+																								<h3> {{ order.article.designation }} </h3>
+																								{{ order.article.description }}
+																							</div>
+																						</td>
+																							{% set pu = order.prix %} 
+																						<td style="vertical-align: top;"> 
+																							<p> Quantit&eacute; : {{ pu }} </p>
+																							<p> P.U :  {{ pu }} </p>
+																						</td>
+																						<td style="vertical-align: top;"> 
+																							
+																							<b> Total <br/>  {{ pu * order.qte }} </b>
+																						</td>
+																					</tr>
+																				{% endfor %}
+																			</tbody>
+																		</table>
+																	</div>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										{% endfor %}
+									</div>
+									<div class="tab-pane fade in" id="des2">
+										<div class="des-text">
+											<h4> D&eacute;tails de mon compte</h4>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

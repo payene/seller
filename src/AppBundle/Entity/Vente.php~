@@ -1,0 +1,109 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * LigneVente
+ *
+ * @ORM\Table(name="vente")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\VenteRepository")
+ */
+class Vente
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     *
+     * @ORM\ManyToOne(targetEntity="\UserBundle\Entity\User", inversedBy="ventes")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * })
+     */
+    private $createdBy;
+
+    /**
+     * @var \Client
+     *
+     * @ORM\ManyToOne(targetEntity="Client", inversedBy="ventes",cascade={"persist"})
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="client_id", referencedColumnName="id", nullable=true)
+     * })
+     */
+    private $client;
+
+
+      /**
+     * @var int
+     *
+     * @ORM\Column(name="tva", type="integer")
+     */
+    private $tva;
+
+      /**
+     * @var int
+     *
+     * @ORM\Column(name="remise", type="integer")
+     */
+     private $remise;
+
+    /**
+     *
+     * @ORM\Column(name="total_ht", type="integer")
+     */
+     private $total_ht;
+    
+    /**
+     *
+     * @ORM\Column(name="reste_a_payer", type="integer")
+     */
+     private $resteAPayer;
+    
+    /**
+     *
+     * @ORM\Column(name="credit", type="integer")
+     */
+     private $credit;
+
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="createdAt", type="datetime")
+     */
+    private $createdAt;
+
+
+    /**
+    * @ORM\OneToMany(targetEntity="LigneVente", mappedBy="vente")
+    **/
+    private $lignes_vente;
+
+    /**
+    * @ORM\OneToMany(targetEntity="Paiement", mappedBy="vente")
+    **/
+    private $paiements;
+
+
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+   
+}

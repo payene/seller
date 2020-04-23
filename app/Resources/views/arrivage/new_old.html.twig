@@ -1,0 +1,72 @@
+{% extends "adminLayout.html.twig" %}
+{% block body %}
+    <div class="col-lg-5">
+
+        <h1>Nouvel arrivage</h1>
+
+        {{ form_start(form, {'attr' : {'class':'form-horizontal m-t-md'}}) }}
+            {{ form_widget(form) }}
+            <input type="submit" class="btn btn-primary" value="Valider" />
+        {{ form_end(form) }}
+
+    </div>
+    
+    <div class="col-lg-7">
+
+
+        <div class="row">
+            <div class="col-xs-12">
+                 <h2>Rechercher les arrivages</h2>
+                 {{ form_start(arrivage_search_view,  {'attr' : {'class':'form-horizontal m-t-md'} }) }}
+                   {{ form_widget(arrivage_search_view) }}
+                    <input type="submit" class="btn btn-primary" value="Rechercher" />
+                  {{ form_end(arrivage_search_view) }}
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-xs-12">
+
+                    <h1> Historique des arrivages </h1>
+
+                    <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
+                        <thead>
+                        <tr>
+
+                            <th >Designation Art.</th>
+                            <th >Qte. Arrivage</th>
+                            <th >Prix d&apos;achat</th>
+                            <th >Montant TVA</th>
+                            <th >Montant Autres Taxes</th>
+                            <th >Prix de revient</th>
+                            <th >PU. Calcul&eacute;</th>
+                            <th></th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for ligne in addedToday %}
+                                <tr>
+                                    <td> {{ ligne.article.designation }} </td>
+                                    <td> {{ ligne.qte }} </td>
+                                    <td> {{ ligne.prixAchat }} </td>
+                                    <td> {{ ligne.tva }} </td>
+                                    <td> {{ ligne.taxes }} </td>
+                                    <td> {{ ligne.taxes +  ligne.tva + ligne.prixAchat }} </td>
+                                    <td> {{ ligne.stock.punit }} </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                            
+            </div>
+        </div>
+
+        
+
+
+
+    </div>
+
+{% endblock %}

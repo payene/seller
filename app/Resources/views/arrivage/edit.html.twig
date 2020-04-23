@@ -1,0 +1,90 @@
+{% extends "adminLayout.html.twig" %}
+{% set breadCrumbPosition = "Gestion des arrivages" %}
+{% set breadcrumbs = ['Arrivages', 'Modification'] %}
+{% block body %}
+
+    {% set form = edit_form %}
+    <div class="col-lg-12 well">
+        <span class="badge badge"> <h3> Modidfication d'une ligne arrivage </h3> </span>
+        {{ form_start(form, {'attr' : {'class':''}}) }}
+            <div class="row">
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label>Article</label> 
+                    {{ form_widget(form.article, { 'attr' : { 'class': 'form-control select2'}}) }}
+                    <span class="text-danger"> {{ form_errors(form.article) }} </span>
+                   </div>
+                </div>
+                <div class="col-lg-3">
+                  <div class="form-group">
+                    <label>Qté</label> 
+                    {{ form_widget(form.qte, { 'attr' : { 'class': 'form-control'}}) }}
+                    <span class="text-danger"> {{ form_errors(form.qte) }} </span>
+                  </div>
+                </div>
+                <div class="col-lg-3">
+                  <div class="form-group">
+                    <label>Autres Taxe</label> 
+                    {{ form_widget(form.taxes, { 'attr' : { 'class': 'form-control'}}) }}
+                    <span class="text-danger"> {{ form_errors(form.taxes) }} </span>
+                  </div>
+
+                </div> 
+            </div>
+
+
+            <div class="row">
+
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label>TVA</label> 
+                    {{ form_widget(form.tva, { 'attr' : { 'class': 'form-control'}}) }}
+                    <span class="text-danger"> {{ form_errors(form.tva) }} </span>
+                  </div>
+                </div>
+                
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label>Prix d'achat</label> 
+                    {{ form_widget(form.prixAchat, { 'attr' : { 'class': 'form-control'}}) }}
+                    <span class="text-danger"> {{ form_errors(form.prixAchat) }} </span>
+                   </div>
+                </div>
+
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label>Marge</label> 
+                    {{ form_widget(form.marge, { 'attr' : { 'class': 'form-control'}}) }}
+                    <span class="text-danger"> {{ form_errors(form.marge) }} </span>
+                  </div>
+                </div>
+            </div>
+
+             <div class="row">
+
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-warning" value="Enregistrer les modifications" />
+                    </div>
+                </div>
+
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <input type="reset" class="btn btn-info" value="Annuler les modifications" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <a href="{{ path('backoffice_arrivage_new') }}"> Retourner sur la liste </a>
+                    </div>
+                </div>
+            </div>
+        {{ form_end(form) }}
+
+    </div>
+
+   
+{% endblock %}

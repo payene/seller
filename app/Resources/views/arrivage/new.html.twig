@@ -1,0 +1,246 @@
+{% extends "adminLayout.html.twig" %}
+{% set breadCrumbPosition = "Gestion des arrivages" %}
+{% set breadcrumbs = ['Arrivages'] %}
+
+{% block beforBody %}
+  <div class="col-lg-5" >
+      <div class="ibox float-e-margins">
+
+          <div class="ibox-title">
+              <h5> Nouvel arrivage <small class="m-l-sm"> Enregistrez un nouvel arrivage pour un article</small></h5>
+              
+          </div>
+          <div class="ibox-content">
+              {{ form_start(form, {'attr' : {'class':''}}) }}
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label>Article</label> 
+                    {{ form_widget(form.article, { 'attr' : { 'class': 'form-control select2'}}) }}
+                    <span class="text-danger"> {{ form_errors(form.article) }} </span>
+                   </div>
+                </div>
+                <div class="col-lg-5">
+                  <div class="form-group">
+                    <label>Qté</label> 
+                    {{ form_widget(form.qte, { 'attr' : { 'class': 'form-control'}}) }}
+                    <span class="text-danger"> {{ form_errors(form.qte) }} </span>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label>TVA</label> 
+                    {{ form_widget(form.tva, { 'attr' : { 'class': 'form-control'}}) }}
+                    <span class="text-danger"> {{ form_errors(form.tva) }} </span>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label>Prix d'achat</label> 
+                    {{ form_widget(form.prixAchat, { 'attr' : { 'class': 'form-control'}}) }}
+                    <span class="text-danger"> {{ form_errors(form.prixAchat) }} </span>
+                   </div>
+                </div>
+
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label>Marge</label> 
+                    {{ form_widget(form.marge, { 'attr' : { 'class': 'form-control'}}) }}
+                    <span class="text-danger"> {{ form_errors(form.marge) }} </span>
+                  </div>
+                </div>
+
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label>Autres Taxe</label> 
+                    {{ form_widget(form.taxes, { 'attr' : { 'class': 'form-control'}}) }}
+                    <span class="text-danger"> {{ form_errors(form.taxes) }} </span>
+                  </div>
+
+                </div>
+                <div class="col-lg-4">
+                  <div class="form-group"> 
+                    <br/>
+                    <input type="submit" class="btn btn-primary" value="Valider" />
+                  </div>
+                </div>
+              </div>
+              {{ form_end(form) }}
+          </div>
+          
+      </div>
+  </div>
+    
+  <div class="col-lg-7 z-depth-4">
+    <div class="ibox float-e-margins">
+      <div class="ibox-title">
+          <h5> Rechercher un arrivage <small class="m-l-sm"> </small></h5>
+      </div>
+      <div class="ibox-content">
+        {{ form_start(arrivage_search_view,  {'attr' : {'class':''} }) }}
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label>Article</label> 
+                {{ form_widget(arrivage_search_view.article, { 'attr' : { 'class': 'form-control select2'}}) }}
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label>Catégorie</label> 
+                {{ form_widget(arrivage_search_view.category, { 'attr' : { 'class': 'form-control select2'}}) }}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label>Date de début</label> 
+                 <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    {{ form_widget(arrivage_search_view.dateDeb_search, { 'attr' : { 'class': 'form-control datepicker', 'autocomplete':'off'}}) }}
+                </div>
+               </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label>Date de fin</label> 
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                      {{ form_widget(arrivage_search_view.dateFin_search, { 'attr' : { 'class': 'form-control datepicker', 'autocomplete':'off'}}) }}
+                </div>
+               </div>
+            </div>
+          </div>
+          {{ form_widget(arrivage_search_view) }}
+          <div class="row">
+            <div class="col-lg-4">
+              <div class="form-group"> 
+                <br/>
+                <button  id="arrivageSearchFormSubmitBtn" type="submit" class="btn btn-primary" > Rechercher</button>
+              </div>
+            </div>
+          </div>
+        {{ form_end(arrivage_search_view) }} 
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block body %}
+  
+
+
+
+    <div class="row">
+        <div class="col-xs-12">
+
+                <h1> Historique des arrivages </h1>
+
+                <table class="table table-stripped toggle-arrow-tiny table-bordered table-hover dataTables-example" data-page-navigation="#"  data-page-size="15">
+                    <thead>
+                    <tr>
+
+                        <th > Date</th>
+                        <th >Designation Art.</th>
+                        <th > Qte. Arrivage</th>
+                        
+                        <th >Prix d&apos;achat</th>
+                        <th >Montant TVA</th>
+                        <th >Autres Taxes</th>
+                        <th >Marge</th>
+                        <th >P.V. Final</th>
+                        <th >PU. Calculé</th>
+                        <th></th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for arrivage in arrivages %}
+                            <tr>
+                                <td> {{ arrivage.createdAt | date('d/m/Y') }} </td>
+                                <td> {{ arrivage.article.designation }} </td>
+                                <td> {{ arrivage.qte|number_format(0, '', ' ')  }} </td>
+                                
+                                <td> {{ arrivage.prixAchat|number_format(0, '', ' ')  }} </td>
+                                <td> {{ arrivage.tva|number_format(0, '', ' ')  }} </td>
+                                <td> {{ arrivage.taxes|number_format(0, '', ' ')  }} </td>
+                                <td> {{ (arrivage.marge)|number_format(0, '', ' ')  }} </td>
+                                <!-- <td> {{ arrivage.marge|number_format(0, '', ' ')  }} </td> -->
+                                <td> {{ (arrivage.marge + arrivage.taxes +  arrivage.tva + arrivage.prixAchat)|number_format(0, '', ' ')  }} </td>
+                                <td> {{ arrivage.stock.punit|number_format(0, '', ' ')  }} </td>
+                                <td>
+                                    {% if arrivage.stock.qte > 0 %}
+                                      <a href="{{ path('backoffice_arrivage_sortie', {id: arrivage.id })}}" class="btn btn-xs btn-success">Sortie</a>
+                                    {% endif %}
+                                    {% if arrivage.stock.qte is not sameas(arrivage.stock.qteInit) %}
+                                      <a href="#" class="btn disabled btn-xs btn-danger">Supprimer</a>
+                                    {% else %}
+                                      <a href="{{ path('backoffice_arrivage_show', {id: arrivage.id })}}" class="btn btn-xs btn-danger">Supprimer</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+
+
+                
+                        
+        </div>
+    </div>
+
+
+{% endblock %}
+
+
+{% block javascripts %}
+  
+     {{ parent()}}
+
+    <script>
+        $(document).ready(function() {
+
+            $('#arrivageSearchFormSubmitBtn').click(function(e){
+            
+                var art = $("#form_article").val(),
+                    category = $('#form_category').val() ,
+                    dateDeb = $('#form_dateDeb_search').val() ,
+                    dateFin = $('#form_dateFin_search').val(); 
+
+                if(!art && !category && !dateDeb && !dateFin)
+                {
+                   alert("Vous devez choisir au moins un champ de recherche") ;
+                   return false;
+                }
+
+               // if((dateDeb && !dateFin) || (dateFin && !dateDeb) )
+                if(!dateDeb || !dateFin  )
+                {
+                   alert("Vous devez indiquer la date de début et de fin.") ;
+                   return false;
+                }
+                else //les deux dates sont indiquées
+                {
+                  if(dateDeb>dateFin)
+                  {
+                    alert("La date debut doit être inférieure à celle de fin");
+                    return false;
+                  }
+                }
+
+            }); 
+
+
+         
+
+
+        });
+    </script>
+
+
+{% endblock %}

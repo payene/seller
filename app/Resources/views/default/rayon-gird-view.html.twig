@@ -1,0 +1,36 @@
+<section class="product-content">
+	<div class="container-fluid">
+		<div class="row">
+			{% for rayon in categoryArray %}
+				<div class="col-md-3 col-sm-4 col-lg-3 col-xs-12">
+					<div class="a-section acs_tile__content">
+						<a class="a-link-normal acs_tile__title-image aok-block a-text-normal" href="{{ path('shop_by_cat', {'rayon':rayon.id,'cat':rayon.id}) }}">
+								<div class="a-section a-text-center acs_tile__title" style="text-align: left;font-weight: bold;">
+									<span class="a-color-base">
+										{{ rayon.catname }}
+									</span>
+									<img alt="{{ rayon.catname }}" src="{{ rayon.icone }}" style="display: block;clear:both;width:260px;height:180px;margin-bottom: 30px;" class="acs_tile__image">
+								</div>
+						</a>
+					</div>
+					{#
+						<div class="category single-side">
+							<div class="sidebar-title bg-dark">
+								<h3> {{ rayon.catname }}</h3>
+							</div>
+							<ul>
+								{% for subcat in rayon.categories %}
+									<li>
+										<a  href="{{ path('shop_by_cat', {'rayon':subcat.id}) }}"> {{ subcat.catname }} </a>
+									</li>
+								{% endfor %}
+							</ul>
+						</div>
+					#}
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+</section>
+
+

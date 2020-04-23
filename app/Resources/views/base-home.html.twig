@@ -1,0 +1,137 @@
+{% extends 'base.html.twig' %}
+
+
+{% block header %}
+	{{ parent() }}
+{% endblock %}
+
+{% block slider %}
+<!-- MAIN-SLIDER-AREA -->
+<div class="main_slider">
+    <div class="tp-banner-container container-fluid">
+        <div class="tp-banner">
+            <ul>
+                <li data-transition="zoomout" data-slotamount="7" data-masterspeed="1000">
+                    <!-- MAIN IMAGE -->
+                    <img src="{{ asset('ecomshop/images/slider1.png') }}" alt="darkblurbg" data-bgfit="cover" data-bgposition="left top" data-bgrepeat="no-repeat">
+                    <!-- LAYER NR. 1 -->
+                    <div class="tp-caption black_heavy_60 skewfromleftshort tp-resizeme rs-parallaxlevel-0" data-x="50" data-y="133" data-speed="500" data-start="1850" data-easing="Power3.easeInOut" data-splitin="chars" data-splitout="none" data-elementdelay="0.1" data-endelementdelay="0.1" style="color:#fff;z-index: 7; max-width: auto; max-height: auto; white-space: nowrap;"> Demamdez votre devis en ligne
+                    </div>
+                    <!-- LAYER NR. 2 -->
+                    <div class="tp-caption grey_regular_18 customin tp-resizeme rs-parallaxlevel-0" data-x="50" data-y="200" data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;" data-speed="500" data-start="2600" data-easing="Power3.easeInOut" data-splitin="none" data-splitout="none" data-elementdelay="0.05" data-endelementdelay="0.1" style="z-index: 9; max-width: auto; max-height: auto; white-space: nowrap;">
+                        <div style="text-align:left;">{#<br/> <br/> That this group would somehow form a family that's the way we all became the
+                            <br/> Brady Bunch. Love exciting and new. Come aboard were expecting you. Love life's
+                            <br/> sweetest reward Let it flow it floats back to you! #}</div>
+                    </div>
+                    <!-- LAYER NR. 3 -->
+                    <div class="tp-caption green_bold_bg_20 skewfromright randomrotateout  tp-resizeme rs-parallaxlevel-10" data-x="50" data-y="290" data-speed="1000" data-start="3900" data-easing="Power3.easeInOut" data-splitin="none" data-splitout="none" data-elementdelay="0.1" data-endelementdelay="0.1" data-end="10200" data-endspeed="1000" style="z-index: 15; max-width: auto; max-height: auto; white-space: nowrap;">
+                        <a href="#" class="btn btn-default"> Cliquer ici pour commencer </a>
+                    </div>
+                </li>
+                <li data-transition="slidedown" data-slotamount="7" data-masterspeed="1000">
+                    <!-- MAIN IMAGE -->
+                    <img src="{{ asset('ecomshop/images/slider2.png') }}" style='background-color:#b2c4cc' alt="" data-bgfit="cover" data-bgposition="left top" data-bgrepeat="no-repeat">
+                    <div class="tp-caption light_heavy_70_shadowed_ed lfr randomrotateout tp-resizeme rs-parallaxlevel-10" data-x="260" data-y="100" data-speed="1000" data-start="2900" data-easing="Power3.easeInOut" data-splitin="none" data-splitout="none" data-elementdelay="0.1" data-endelementdelay="0.1" data-end="9000" data-endspeed="1000" style="color:#fff;z-index: 7; max-width: auto; max-height: auto; white-space: nowrap;"> T&eacute;l&eacute;chargez votre <br/> devis en pdf </div>
+                    <div class="tp-caption grey_regular_18 customin tp-resizeme rs-parallaxlevel-0" data-x="560" data-y="200" data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;" data-speed="500" data-start="2600" data-easing="Power3.easeInOut" data-splitin="none" data-splitout="none" data-elementdelay="0.05" data-endelementdelay="0.1" style="z-index: 9; max-width: auto; max-height: auto; white-space: nowrap;">
+                        <div style="text-align:left;">{#That this group would somehow form a family that's the way we all became the
+                            <br/> Brady Bunch. Love exciting and new. Come aboard were expecting you. Love life's
+                            <br/> sweetest reward Let it flow it floats back to you! #}</div>
+                    </div>
+                    <div class="tp-caption green_bold_bg_20 skewfromright randomrotateout tp-resizeme rs-parallaxlevel-10" data-x="260" data-y="290" data-speed="1000" data-start="3900" data-easing="Power3.easeInOut" data-splitin="none" data-splitout="none" data-elementdelay="0.1" data-endelementdelay="0.1" data-end="10200" data-endspeed="1000" style="z-index: 15; max-width: auto; max-height: auto; white-space: nowrap;">
+                        <a href="#" class="btn btn-default">   Cliquer ici pour commencer  </a>
+                    </div>
+                </li>
+                
+            </ul>
+            <div class="tp-bannertimer"></div>
+        </div>
+    </div>
+</div>
+<!-- MAIN-SLIDER-AREA END -->
+{% endblock %}
+
+{% block body  %}
+
+    {% if frontItems is defined %}
+        <!-- MEN-CLOTHING-AREA -->
+        <section class="men_clothingcurosel_area section-padding">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="headline">
+                            <h2>Articles vedettes</h2>
+                        </div>
+                        <div class="menclothing-carousel">
+                            {% for item in frontItems %}
+                                <div class="men-single">
+                                    <a href="#"><img src="{{ asset(item.source1) }}" alt="">
+                                    </a>
+                                    <div class="tag new">
+                                        <span>new</span>
+                                    </div>
+                                    <div class="hot-wid-rating">
+                                        <h4><a href="single-product.html">Formal Suit for men</a></h4>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star-half-o"></i>
+                                        <div class="product-wid-price">
+                                            <ins>$260.00</ins> <del>$280.00</del>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}                       
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- MEN-CLOTHING-AREA END -->
+
+        {% else %}
+            <br style="clear: both;" />
+    {% endif %}
+
+
+
+    <!-- NEWSLETTER-AREA -->
+    <section id="newsletter-bg" class="newsletter_area section-padding">
+        <div class="newsletter-overlay">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="subscribe-header">
+                            <h1>Souscrire &agrave; la newsletter </h1>
+                            <div class="n_line"></div>
+                            <p>Abonnez-vous à votre liste de diffusion pour recevoir les nouvelles arrivées, les offres spéciales et autres informations sur les réductions .</p>
+                            <form class="form subscribe-form">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <label for="f-name" class="sr-only">Newsletter</label>
+                                        <input type="text" class="form-control" id="f-name" placeholder="Entez votre adresse email">
+                                        <div class="input_icon">
+                                            <img src="{{ asset('ecomshop/images/news.png') }}" alt="#">
+                                        </div>
+                                        <div class="input-group-addon">
+                                            <button class="" type="submit"> ENVOYER </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- NEWSLETTER-AREA END -->
+
+{% endblock %}
+
+
+{% block javascripts %}
+	{{ parent() }}
+	<!-- Custom js -->
+	<script src="{{ asset('ecomshop/js/main.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "adminLayout.html.twig" %}
+
+
+
+{% block body %}
+    <h1>Arrivages list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Qte</th>
+                <th>Prixachat</th>
+                <th>Tva</th>
+                <th>Taxes</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for arrivage in arrivages %}
+            <tr>
+                <td><a href="{{ path('backoffice_arrivage_show', { 'id': arrivage.id }) }}">{{ arrivage.id }}</a></td>
+                <td>{{ arrivage.qte }}</td>
+                <td>{{ arrivage.prixAchat }}</td>
+                <td>{{ arrivage.tva }}</td>
+                <td>{{ arrivage.taxes }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('backoffice_arrivage_show', { 'id': arrivage.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('backoffice_arrivage_edit', { 'id': arrivage.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('backoffice_arrivage_new') }}">Create a new arrivage</a>
+        </li>
+    </ul>
+{% endblock %}

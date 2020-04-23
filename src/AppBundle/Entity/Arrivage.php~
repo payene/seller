@@ -1,0 +1,126 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+
+/**
+ * Arrivage
+ *
+ * @ORM\Table(name="arrivage")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\ArrivageRepository")
+ */
+class Arrivage
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="qte", type="integer")
+     */
+    private $qte;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="prixAchat", type="integer")
+     */
+    private $prixAchat;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="tva", type="integer")
+     */
+    private $tva;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="taxes", type="integer")
+     */
+    private $taxes;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="marge", type="integer")
+     */
+    private $marge;
+
+    /**
+     * @var \Article
+     *
+     * @ORM\ManyToOne(targetEntity="Article", inversedBy="arvgCollection",cascade={"persist"})
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="article", referencedColumnName="id")
+     * })
+     */
+    private $article;
+
+    /**
+     * One Arrivage has One Stock.
+     * @ORM\OneToOne(targetEntity="Stock", mappedBy="arrivage")
+     */
+    private $stock;
+
+    /**
+     * @ORM\OneToMany(targetEntity="SortieStock", mappedBy="arrivage")
+     */
+    private $sortieCollection;
+   
+    /**
+     * @ORM\OneToMany(targetEntity="MvtStock", mappedBy="arrivage")
+     */
+    private $mvtsCollection;
+   
+    /**
+     * @var \UserBundle\Entity\User
+     *
+     * @ORM\ManyToOne(targetEntity="\UserBundle\Entity\User", inversedBy="arvgCollection")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="user", referencedColumnName="id")
+     * })
+     */
+    private $createdBy;
+
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="createdAt", type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updatedAt", type="datetime", nullable=true)
+     */
+    private $updatedAt;
+
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+  
+
+}

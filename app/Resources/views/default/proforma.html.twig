@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		body {
+		    background: grey;
+		    margin-top: 120px;
+		    margin-bottom: 120px;
+		}
+	</style>
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<!------ Include the above in your HEAD tag ---------->
+</head>
+<body>
+	<div class="container">
+	    <div class="row">
+	        <div class="col-12">
+	            <div class="card">
+	                <div class="card-body p-0">
+	                	<h1> Votre commande a &eacute;t&eacute; enregistr&eacute;e avec succes !</h1>
+	                	<h1> Les petits bras vous remercie!</h1>
+	                    {#<div class="row">
+	                        <div class="col-md-6">
+	                            <img height="100" src="{{ asset('rideo/img/logo.png') }}">
+	                        </div>
+	                        <div class="col-md-6 text-right">
+	                            <p class="font-weight-bold mb-1 text-center"> {{ secteur }} </p>
+	                            <br/>
+	                            <p class="text-muted">
+	                            	Date: 
+	                            	{{ proforma.dateProformat|date('d') }}
+	                            	{{ proforma.dateProformat|date('M') }} 
+	                            	{{ proforma.dateProformat|date('Y') }} 
+	                            	&nbsp;
+	                            </p>
+	                        </div>
+	                    </div>#}
+
+	                    <hr class="my-0">
+
+	                    {#<div class="row pl-5 pr-5 pt-2">
+	                        <div class="col-md-6">
+	                            <p class="mb-1">RCCM : RG-LBV 2017A41479 </p>
+	                            <p class="mb-1">NUM STATISTIQUE : 294 513 D</p>
+	                            <p class="mb-1"> TEL : 07889839</p>
+	                            <p class="mb-1">BP. 13770</p>
+	                            <p class="mb-1"> Libreville - Gabon </p>
+	                        </div>
+
+	                        <div class="col-md-6 text-left">
+	                            <p class="mb-1"><span class="text-muted">Client: </span> 1425782</p>
+	                            <p class="mb-1"><span class="text-muted">Contacts: </span> 10253642</p>
+	                            <p class="mb-1"><span class="text-muted">Ville: </span> Libreville </p>
+	                            <p class="mb-1"><span class="text-muted"> Num CLi: </span> John Doe </p>
+	                        </div>
+	                    </div>#}
+
+	                    <div class="row p-5">
+	                        <div class="col-md-12">
+	                            <table class="table">
+	                                <thead>
+	                                    <tr>
+	                                        <th class="border-0 text-uppercase small font-weight-bold">N&deg;</th>
+	                                        <th class="border-0 text-uppercase small font-weight-bold">Article</th>
+	                                        <th class="border-0 text-uppercase small font-weight-bold">P.U</th>
+	                                        <th class="border-0 text-uppercase small font-weight-bold">Quantit&eacute;</th>
+	                                        <th class="border-0 text-uppercase small font-weight-bold">Total</th>
+	                                    </tr>
+	                                </thead>
+	                                <tbody>
+	                                	{% set i = 1   %}
+	                                	{% for order in proforma.lpCollection|reverse %}
+		                                    <tr>
+		                                        <td> {{ i }} </td>
+		                                        <td> {{ order.article.designation }} </td>
+		                                        <td> {{ order.prix|number_format(0, '.', ' ') }} </td>
+		                                        <td> {{ order.qte }} </td>
+		                                        <td> {{ (order.prix * order.qte)|number_format(0, '.', ' ') }}   </td>
+		                                        {% set i = i +1   %}
+		                                    </tr>
+	                                    {% endfor %}
+	                                </tbody>
+	                            </table>
+	                        </div>
+	                    </div>
+
+	                    <div class="d-flex flex-row-reverse text-white p-2 border" style="background-color: #fff;">
+	                    	<div class="col-md-3 text-dark">
+	                    		<div class="mb-2">Total</div>
+	                            <div class="h2 font-weight-light"> {{ proforma.total|number_format(0, '.', ' ') }} FCFA</div>
+	                    	</div>
+	                    	
+	                        {#
+	                        	<div class="py-3 px-5 text-right">
+	                            <div class="mb-2">Total</div>
+	                            <div class="h2 font-weight-light"> {{ proforma.total|number_format(0, '.', ' ') }} </div>
+	                        </div>
+
+	                        <div class="text-left bg-white">
+	                            <div class="mb-2 text-dark">
+	                             
+	                        </div>
+	                        #}
+	                </div>
+	            </div>
+	        </div>
+	        <a id="back-to-shop" class="btn btn-info text-white font-weight-bold mt-1" href="{{ path('shop') }}">Retourner sur la boutique </a>
+	        <button id="print-btn" class="btn btn-success" onclick="printer();"> Imprimer </button>
+
+	        <br/>
+	        <br/>
+	    </div>
+	</div>
+
+	<script type="text/javascript">
+		function printer(){
+			$('#print-btn').hide();
+			$('#back-to-shop').hide();
+			window.print();
+			$('#print-btn').show();
+			$('#back-to-shop').show();
+		}
+	</script>
+</body>
+</html>
+
+
+

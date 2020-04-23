@@ -1,0 +1,109 @@
+{% extends "adminLayout.html.twig" %}
+{% set breadCrumbPosition = "Facture" %}
+{% set breadcrumbs = ['Apper&ccedil;u'] %}
+
+
+
+{% block body %}
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="wrapper wrapper-content animated fadeInRight">
+                <div class="ibox-content p-xl">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h5>From:</h5>
+                                <address>
+                                    <strong>Inspinia, Inc.</strong><br>
+                                    106 Jorg Avenu, 600/10<br>
+                                    Chicago, VT 32456<br>
+                                    <abbr title="Phone">P:</abbr> (123) 601-4590
+                                </address>
+                            </div>
+
+                            <div class="col-sm-6 text-right">
+                                <h4>Facture No.</h4>
+                                <h4 class="text-navy">{{ vente.getId() }}</h4>
+                                <span>To:</span>
+                                <address>
+                                    <strong>
+                                    	{% if(vente.client) %}
+                                    		{{ vente.client }}
+                                    	{%else %}
+                                    		Non renseigné
+                                    	{% endif %}		
+                                    </strong>
+                                    <br>
+                                    112 Street Avenu, 1080<br>
+                                    Miami, CT 445611<br>
+                                      <abbr title="Téléphone">Tél:</abbr> {{ vente.client.telephone }}
+                                </address>
+                                <p>
+                                    <span><strong> Date:</strong>  {{ vente.getCreatedAt() | date("d/m/Y") }} </span><br/>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive m-t">
+                            <table class="table invoice-table">
+                                <thead>
+                                <tr>
+                                    <th>Article</th>
+                                    <th>Qté</th>
+                                    <th>PU</th>
+                                    <th>Total</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                	{% for ligne_vente in vente.getLignesVente() %}
+	                                    <tr>
+	                                        <td> {{ ligne_vente.getArticle().getDesignation() }} </td>
+	                                        <td> {{ ligne_vente.getQte() }} </td>
+	                                        <td> {{ ligne_vente.getMontant() |number_format(0, ',', ' ')  }} </td>
+	                                        <td> {{ (ligne_vente.getMontant() * ligne_vente.getQte() ) |number_format(0, ',', ' ')  }} </td>
+	                                    </tr>
+                                	{% endfor %}
+                               
+
+                                </tbody>
+                            </table>
+                        </div><!-- /table-responsive -->
+
+                        <table class="table invoice-total">
+                            <tbody>
+                            <tr>
+                                <td><strong> Sous-total :</strong></td>
+                                <td> {{ vente.getTotalHt() |number_format(0, ',', ' ')  }} </td>
+                            </tr>
+                            <tr>
+                                <td><strong>TVA :</strong></td>
+                                <td> {{ vente.getTva()}}  </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Remise :</strong></td>
+                                <td> {{ vente.getRemise() |number_format(0, ',', ' ')  }}  </td>
+                            </tr>
+                            <tr>
+                                <td><strong>TOTAL :</strong></td>
+                                <td>
+                                	{% set total = vente.getTotalHt() + vente.tva - vente.remise %} 
+                                	{{ total |number_format(0, ',', ' ')  }}
+                                </td>
+                                	
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block javascripts %}
+	{{ parent() }}
+
+    <script type="text/javascript">
+        window.print();
+    </script>
+
+{% endblock %}

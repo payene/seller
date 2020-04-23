@@ -1,0 +1,15 @@
+<form action="{{ path('add_to_cart') }}" id="add-to-cart-form" class="ajaxForm" method="POST">
+	{% if article %}
+		<div class="plus-minus">
+			<a class="dec qtybutton">-</a>
+			<input type="text" value="1" name="quantity" class="plus-minus-box">
+			<a class="inc qtybutton">+</a>
+		</div>
+
+		<div class="">
+			<button class="btn btn-default"><i class="fa fa-shopping-cart"></i> Ajouter au panier </button>
+		</div>
+	{% else %}
+		<a class="btn btn-info" href=""> Cliquez ici pour continuer  </a>
+	{% endif %}
+</form>

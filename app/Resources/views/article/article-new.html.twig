@@ -1,0 +1,193 @@
+{% extends "adminLayout.html.twig" %}
+
+
+{% block stylesheets %}
+
+    {{parent()}}
+
+    <link href="{{asset('adminTemplate/css/plugins/summernote/summernote.css')}}" rel="stylesheet">
+    <link href="{{asset('adminTemplate/css/plugins/summernote/summernote-bs3.css')}}" rel="stylesheet">
+
+    <link href="{{asset('adminTemplate/css/plugins/datapicker/datepicker3.css')}}" rel="stylesheet">
+
+    <link href="{{asset('adminTemplate/css/animate.css')}}" rel="stylesheet">
+    <link href="{{asset('adminTemplate/css/style.css')}}" rel="stylesheet">
+
+{% endblock %}
+
+{% set breadCrumbPosition = "Articles" %}
+{% set breadcrumbs = ['Nouveau'] %}
+
+
+
+{% block body %}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-lg-10">
+                <h2>Ajout d'un article</h2>
+                <a href="{{ path('article_list') }}"><i class="fa fa-list"></i>Liste article</a>
+            </div>
+        </div>
+
+        <div class="wrapper wrapper-content animated fadeInRight ecommerce">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="tabs-container">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a data-toggle="tab" href="#tab-1"> Ajout Article</a></li>
+                            </ul>
+                            
+                            <div class="tab-content">
+                                    <div class="panel-body">
+                                        
+                                        {{ form_start(form,{'multipart':'true'}) }}
+                                        <fieldset class="form-horizontal">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">{{ form_label(form.category) }}:</label>
+                                                <div class="col-sm-10">
+                                                    {{ form_widget(form.category, {'attr': {'class' : 'form-control select2'} } ) }}
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">{{ form_label(form.designation) }}:</label>
+                                                <div class="col-sm-10">
+                                                    {{ form_widget(form.designation, {'attr' : {'autocomplete':'OFF'}}) }}
+                                                </div>
+                                            </div>
+                                            <div class="form-group"><label class="col-sm-2 control-label">{{ form_label(form.defaultPrice) }}:</label>
+                                                <div class="col-sm-10">
+                                                    {{ form_widget(form.defaultPrice, {'attr' : {'autocomplete':'OFF'}}) }}
+                                                </div>
+                                            </div>
+                                            <div class="form-group"><label class="col-sm-2 control-label">{{ form_label(form.description) }}:</label>
+                                                <div class="col-sm-10">
+                                                        {{ form_widget(form.description) }}
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group"><label class="col-sm-2 control-label">{{ form_label(form.stock) }}:</label>
+                                                <div class="col-sm-10">
+                                                    {{ form_widget(form.stock, {'attr' : {'autocomplete':'OFF'}}) }}
+                                                </div>
+                                            </div>
+
+                                            {#IMAGE#}
+
+                                            <div class="table-responsive">
+                                            <table class="table table-bordered table-stripped">
+                                                <thead>
+                                                <tr>
+                                                    <th>
+                                                        Apercu image
+                                                    </th>
+                                                   
+                                                    <th>
+                                                        numero d'ordre
+                                                    </th>
+                                                    <th>
+                                                        Action
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <img class="img-responsive rounded" src="{{ asset('photos/point.jpeg') }}" style="width: 100px;height: 100px;">
+                                                    </td>
+                                                    
+                                                    <td>
+                                                        <input type="text" class="form-control" disabled value="1">
+                                                    </td>
+                                                    <td>
+                                                        <input type="file" id="" name="photo1">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img class="img-responsive rounded" src="{{ asset('photos/point.jpeg') }}" style="width: 100px;height: 100px;">
+                                                    </td>
+                                                    
+                                                    <td>
+                                                        <input type="text" class="form-control" disabled value="2">
+                                                    </td>
+                                                    <td>
+                                                        <input type="file" id="" name="photo2">
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        <img class="img-responsive rounded" src="{{ asset('photos/point.jpeg') }}" style="width: 100px;height: 100px;">
+                                                    </td>
+                                                    
+                                                    <td>
+                                                        <input type="text" class="form-control" disabled value="3">
+                                                    </td>
+                                                    <td>
+                                                        <input type="file" id="" name="photo3">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <img class="img-responsive rounded" src="{{ asset('photos/point.jpeg') }}" style="width: 100px;height: 100px;">
+                                                    </td>
+                                                    
+                                                    <td>
+                                                        <input type="text" class="form-control" disabled value="4">
+                                                    </td>
+                                                    <td>
+                                                        <input type="file" id="" name="photo4">
+                                                    </td>
+                                                </tr>
+                                                
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+
+                                            <div class="">
+                                                {{ form_widget(form.save) }}
+                                            </div>
+                                            
+                                        </fieldset>
+                                        {{ form_end(form) }}
+                                    </div>
+                                
+                            </div>
+                            
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+{{parent()}}
+
+<!-- SUMMERNOTE -->
+<script src="{{asset('adminTemplate/js/plugins/summernote/summernote.min.js')}}"></script>
+
+<!-- Data picker -->
+<script src="{{asset('adminTemplate/js/plugins/datapicker/bootstrap-datepicker.js')}}"></script>
+
+<script>
+    $(document).ready(function(){
+
+        $('.summernote').summernote();
+
+        $('.input-group.date').datepicker({
+            todayBtn: "linked",
+            keyboardNavigation: false,
+            forceParse: false,
+            calendarWeeks: true,
+            autoclose: true
+        });
+
+    });
+</script>
+
+{% endblock %}

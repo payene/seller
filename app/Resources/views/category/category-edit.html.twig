@@ -1,0 +1,112 @@
+{% extends "adminLayout.html.twig" %}
+
+
+
+{% set breadCrumbPosition = "Categories" %}
+{% set breadcrumbs = ['Modification'] %}
+
+{% block body %}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-lg-10">
+                <h2>Modification d'une categorie</h2>
+                <a href="{{ path("category_list") }}"><i class="fa fa-list"></i>Liste des categories</a>
+            </div>
+        </div>
+
+        <div class="wrapper wrapper-content animated fadeInRight ecommerce">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="tabs-container">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a data-toggle="tab" href="#tab-1"> Info Categorie</a></li>
+                            </ul>
+                            
+                            <div class="tab-content">
+                                    <div class="panel-body">
+                                        
+                                        {{ form_start(edit_form,{'multipart':'true'}) }}
+                                        <fieldset class="form-horizontal">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">{{ form_label(edit_form.catname) }}:</label>
+                                                <div class="col-sm-10">
+                                                    {{ form_widget(edit_form.catname) }}
+                                                    {{ form_errors(edit_form.catname) }}
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">{{ form_label(edit_form.catdesc) }}:</label>
+                                                <div class="col-sm-10">
+                                                    {{ form_widget(edit_form.catdesc) }}
+                                                    {{ form_errors(edit_form.catdesc) }}
+                                                </div>
+                                            </div>
+                                           <div class="form-group">
+                                                <label class="col-sm-2 control-label">{{ form_label(edit_form.parent) }}:</label>
+                                                <div class="col-sm-10">
+                                                    {{ form_widget(edit_form.parent, {'attr': {'class':'form-control'}}) }}
+                                                    {{ form_errors(edit_form.parent) }}
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label "> Icone de la catégorie </label>
+                                                <div class="col-sm-10">
+                                                    <input type="file" name="icone">
+                                                </div>
+                                            </div>
+
+                                            
+
+                                            <div class="form-group">
+                                                <div class="col-sm-10 offset-sm-2">
+                                                    <img class="img-responsive rounded" src="{{ asset(category.icone) }}" style="width: 100px;height: 100px;">
+                                                </div>
+                                            </div>
+
+
+                                            
+                                            <div class="">
+                                                {{ form_widget(edit_form.save) }}
+                                            </div>
+                                            
+                                        </fieldset>
+                                        {{ form_end(edit_form) }}
+                                    </div>
+                                
+                            </div>
+                            
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+{% endblock %}
+
+{% block javascript %}
+
+<!-- SUMMERNOTE -->
+<script src="{{asset("adminTemplate/js/plugins/summernote/summernote.min.js")}}"></script>
+
+<!-- Data picker -->
+<script src="{{asset("adminTemplate/js/plugins/datapicker/bootstrap-datepicker.js")}}"></script>
+
+<script>
+    $(document).ready(function(){
+
+        $('.summernote').summernote();
+
+        $('.input-group.date').datepicker({
+            todayBtn: "linked",
+            keyboardNavigation: false,
+            forceParse: false,
+            calendarWeeks: true,
+            autoclose: true
+        });
+
+    });
+</script>
+
+{% endblock %}

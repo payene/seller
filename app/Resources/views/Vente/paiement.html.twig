@@ -1,0 +1,306 @@
+{% extends "adminLayout.html.twig" %}
+{% set breadCrumbPosition = "Facture" %}
+{% set breadcrumbs = ['Encaisement'] %}
+
+
+
+{% block body %}
+
+    <h4>Montant restant : {{ resteAPayer |number_format(0, ',', ' ')}} </h4>
+
+	   {{ form_start(paiement_view, {'multipart':'true', 'attr' : {'class':'', 'id':'paiement_form' }}) }}
+
+		
+
+
+			<div class="row">
+
+				{% if(client) %}
+
+				<div class="col-lg-4">
+
+                	<div class="form-group">
+                    	<label>Client</label> 
+                        {{ form_widget(paiement_view.client, { 'attr' : { 'class': 'form-control select2', 'autocomplete':'off'}}) }}
+                   	</div>
+				</div>
+
+				{% endif %}
+
+				<div class="col-lg-4">
+
+                	<div class="form-group">
+                    	<label>Montant</label> 
+                        {{ form_widget(paiement_view.montant, { 'attr' : { 'class': 'form-control', 'autocomplete':'off'}}) }}
+                        <input id="resteAPayer" type="hidden" value="{{ resteAPayer }}" >
+                   	</div>
+
+				</div>
+
+
+				<div class="col-lg-4">
+                    <div class="form-group">
+                        <label>Mode</label>
+                        {{ form_widget(paiement_view.mode, { 'attr' : { 'class': 'form-control select2', 'autocomplete':'off'}}) }}
+                    </div>
+				</div>
+
+
+
+			</div>
+
+
+
+				{% if(client == false) %}
+
+					<fieldset>
+						<legend>Nouveau client</legend>
+					
+						<div class="row">
+
+
+								<div class="col-lg-4">
+
+                                            <div class="form-group">
+                                                <label for="">Nom</label>
+                                                    {{ form_widget(paiement_view.nom) }}
+                                                <span class="text-danger"> {{ form_errors(paiement_view.nom) }}</span>    
+                                            </div>
+                                </div>
+
+                                <div class="col-lg-4">
+
+                                            <div class="form-group">
+                                               <label for="">Prénom</label>
+                                                    {{ form_widget(paiement_view.prenom) }}
+                                                     <span class="text-danger"> {{ form_errors(paiement_view.prenom) }}</span>
+                                            </div>
+                                </div>
+
+                                <div class="col-lg-4">
+
+                                            <div class="form-group">
+                                               <label for="">Raisoc</label>
+                                                    {{ form_widget(paiement_view.raisoc) }}
+                                                <span class="text-danger"> {{ form_errors(paiement_view.raisoc) }}</span>
+                                            </div>
+                                </div>
+                                
+                                <div class="col-lg-4">
+
+                                            <div class="form-group">
+                                               <label for="">Adresse</label>
+                                                    {{ form_widget(paiement_view.adresse) }}
+                                                <span class="text-danger"> {{ form_errors(paiement_view.adresse) }}</span>
+                                            </div>
+                                </div>
+                                
+                                <div class="col-lg-4">
+
+                                            <div class="form-group">
+                                               <label for="">Tél.</label>
+                                                    {{ form_widget(paiement_view.telephone) }}
+                                                <span class="text-danger"> {{ form_errors(paiement_view.telephone) }}</span>
+                                            </div>
+                                </div>
+                                
+
+                                <div class="col-lg-4">
+
+                                            <div class="form-group">
+                                               <label for="">Email</label>
+                                                    {{ form_widget(paiement_view.email) }}
+                                                <span class="text-danger"> {{ form_errors(paiement_view.email) }}</span>
+                                            </div>
+                                </div>
+                                
+
+  						</div>
+					</fieldset>
+
+
+				{% endif %}
+
+
+			<div class="row">
+
+
+				<div class="col-lg-2">
+
+                    <div class="form-group">
+                        <input id="paiement_form_submit_btn"  type="submit" class="btn btn-primary" value="Valider" />
+
+                    </div>
+
+				</div>
+
+
+                <div class="col-lg-2">
+
+                    <div class="form-group">
+                        <a href="{{ path('facture_vente', {'id' : vente.id} )}}" class="btn btn-default">Retourner à la facture</a>
+
+                    </div>
+
+                </div>
+
+
+			</div>	
+
+
+        {{ form_end(paiement_view) }}
+
+        
+
+
+        <div class="row">
+        		<div class="col-lg-12">
+        				<h2>Facture</h2>
+        		</div>
+        	
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="wrapper wrapper-content animated fadeInRight">
+                    <div class="ibox-content p-xl">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h5>De:</h5>
+                                    <address>
+                                        <strong>Petit Budget</strong><br>
+                                        Rue Sergent Aniko Palako<br>
+                                        Libreville, VT 32456<br>
+                                        <abbr title="Phone">Tel:</abbr> (123) 601-4590
+                                    </address>
+                                </div>
+
+                                <div class="col-sm-6 text-right">
+                                    <h4>Facture No.</h4>
+                                    <h4 class="text-navy">{{ vente.getId() }}</h4>
+                                    <span>Doit:</span>
+                                    <address>
+                                        <strong>
+                                            {% if(vente.client) %}
+                                                {{ vente.client }}
+                                            {%else %}
+                                                Inconnu
+                                            {% endif %}     
+                                        </strong>
+                                        <br/>
+                                        {{ vente.client.adresse }}
+                                        <br/>
+                                        <abbr title="Téléphone">Tel:</abbr> {{ vente.client.telephone }}
+                                    </address>
+                                    <p>
+                                        <span><strong> Date:</strong>  {{ vente.createdAt | date("d/m/Y   H:i") }} </span><br/>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="table-responsive m-t">
+                                <table class="table invoice-table">
+                                    <thead>
+                                    <tr>
+                                        <th>Article</th>
+                                        <th>Qté</th>
+                                        <th>PU</th>
+                                        <th>Total</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    	{% for ligne_vente in vente.getLignesVente() %}
+		                                    <tr>
+		                                        <td> {{ ligne_vente.getArticle().getDesignation() }} </td>
+		                                        <td> {{ ligne_vente.getQte() }} </td>
+		                                        <td> {{ ligne_vente.getMontant() |number_format(0, ',', ' ')  }} </td>
+		                                        <td> {{ (ligne_vente.getMontant() * ligne_vente.getQte() ) |number_format(0, ',', ' ')  }} </td>
+		                                    </tr>
+                                    	{% endfor %}
+                                   
+
+                                    </tbody>
+                                </table>
+                            </div><!-- /table-responsive -->
+
+                            <table class="table invoice-total">
+                                <tbody>
+                                <tr>
+                                    <td><strong> Sous-total :</strong></td>
+                                    <td> {{ vente.getTotalHt() |number_format(0, ',', ' ')  }} </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>TVA :</strong></td>
+                                    <td> {{ vente.getTva()  |number_format(0, ',', ' ')  }}  </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Remise :</strong></td>
+                                    <td> {{ vente.getRemise() |number_format(0, ',', ' ')  }}  </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>TOTAL :</strong></td>
+                                    <td>
+                                    	{% set total = vente.getTotalHt() + vente.tva - vente.remise %} 
+                                    	{{ total |number_format(0, ',', ' ')  }}
+                                    </td>
+                                    	
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="text-right">
+                                <button class="btn btn-primary"><i class="fa fa-print"></i> Imprimer</button>
+                            </div>
+
+                        </div>
+                </div>
+            </div>
+        </div>
+     
+{% endblock %}
+
+
+{% block javascripts %}
+	{{ parent() }}
+
+
+    <script src='{{asset("adminTemplate/js/plugins/footable/footable.all.min.js")}}'></script>
+
+    <script>
+        $(document).ready(function() {
+
+            $('.footable').footable();
+
+            //modification du client choisi
+            $('#form_client').on('select2:selecting', function (e) {
+                alert("Impossible de modifier le client.");
+                return false;
+            });
+
+            var montantPaye = parseInt( $('#form_montant').val() );
+            var montantRestant = parseInt( $('#resteAPayer').val() );
+
+            $('#paiement_form_submit_btn').click(function(e){
+
+                if( montantPaye < 1 )
+                {
+                    alert("Le montant doit être supérieur à 0");
+                    return false;
+                }
+
+                if( montantPaye  > montantRestant )
+                {
+                    alert("Le montant à payer est supérieur au montant restant ");
+                    return false;
+                }
+
+
+                if(!confirm("Procéder au paiement ?"))
+                    return false;
+
+            })
+
+
+        });
+
+    </script>
+{% endblock %}

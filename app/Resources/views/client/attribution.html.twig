@@ -1,0 +1,116 @@
+{% extends "adminLayout.html.twig" %}
+{% set breadCrumbPosition = "Clients" %}
+{% set breadcrumbs = ['Offres spéciales '] %}
+
+
+{% block stylesheets %}
+
+    {{parent()}}
+
+    <link href="{{asset('adminTemplate/css/plugins/summernote/summernote.css')}}" rel="stylesheet">
+    <link href="{{asset('adminTemplate/css/plugins/summernote/summernote-bs3.css')}}" rel="stylesheet">
+
+    <link href="{{asset('adminTemplate/css/plugins/datapicker/datepicker3.css')}}" rel="stylesheet">
+
+    <link href="{{asset('adminTemplate/css/animate.css')}}" rel="stylesheet">
+    <link href="{{asset('adminTemplate/css/style.css')}}" rel="stylesheet">
+
+{% endblock %}
+
+{% block body %}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-lg-10">
+                <h2>Attribution de prix à un client</h2>
+                <a href="{{ path('client_list') }}"><i class="fa fa-list"></i>Liste client</a>
+            </div>
+        </div>
+
+        <div class="wrapper wrapper-content animated fadeInRight ecommerce">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="tabs-container">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a data-toggle="tab" href="#tab-1"> Ajout client</a></li>
+                            </ul>
+                            
+                            <div class="tab-content">
+                                    <div class="panel-body">
+                                        
+                                        {{ form_start(form) }}
+                                        <fieldset class="form-horizontal">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">{{ form_label(form.montant) }}:</label>
+                                                <div class="col-sm-10">
+                                                    {{ form_widget(form.montant) }}
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">{{ form_label(form.dateDebut) }}:</label>
+                                                <div class="col-sm-10">
+                                                    {{ form_widget(form.dateDebut, {'attr':{'class': 'form-control datepicker'}}) }}
+                                                </div>
+                                            </div>
+                                            <div class="form-group"><label class="col-sm-2 control-label">{{ form_label(form.dateFin) }}:</label>
+                                                <div class="col-sm-10">
+                                                    {{ form_widget(form.dateFin,  {'attr':{'class': 'form-control datepicker'}}) }}
+                                                </div>
+                                            </div>
+                                            <div class="form-group"><label class="col-sm-2 control-label">{{ form_label(form.article) }}:</label>
+                                                <div class="col-sm-10">
+                                                        {{ form_widget(form.article, {'attr': {'class':'select2 form-control'}}) }}
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group"><label class="col-sm-2 control-label">{{ form_label(form.client) }}:</label>
+                                                <div class="col-sm-10">
+                                                    {{ form_widget(form.client, {'attr': {'class':'form-control select2'}}) }}
+                                                </div>
+                                            </div>
+
+                                            <div class="">
+                                                {{ form_widget(form.save) }}
+                                            </div>
+                                            
+                                        </fieldset>
+                                        {{ form_end(form) }}
+                                    </div>
+                                
+                            </div>
+                            
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+{{parent()}}
+
+<!-- SUMMERNOTE -->
+<script src="{{asset('adminTemplate/js/plugins/summernote/summernote.min.js')}}"></script>
+
+<!-- Data picker -->
+<script src="{{asset('adminTemplate/js/plugins/datapicker/bootstrap-datepicker.js')}}"></script>
+
+<script>
+    $(document).ready(function(){
+
+        $('.summernote').summernote();
+
+        $('.input-group.date').datepicker({
+            todayBtn: "linked",
+            keyboardNavigation: false,
+            forceParse: false,
+            calendarWeeks: true,
+            autoclose: true
+        });
+
+    });
+</script>
+
+{% endblock %}
