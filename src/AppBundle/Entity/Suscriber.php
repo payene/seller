@@ -44,6 +44,11 @@ class Suscriber
     private $client;
 
 
+    //constructeur pour datetime
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+    }
 
     /**
      * Get id

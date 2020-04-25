@@ -29,16 +29,35 @@ class Suscriber
     private $createdAt;
 
     /**
+     * @ORM\OneToOne(targetEntity="\UserBundle\Entity\User", mappedBy="suscriber")
+     */
+    private $account;
+
+    /**
      * @var \Client
      *
-     * @ORM\ManyToOne(targetEntity="Client", inversedBy="members")
+     * @ORM\ManyToOne(targetEntity="Client", inversedBy="members",cascade={"persist"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="client", referencedColumnName="id")
      * })
      */
     private $client;
 
+    /**
+     * @var \DeliveryAdress
+     *
+     * @ORM\ManyToOne(targetEntity="DeliveryAdress", cascade={"persist"})
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="last_delivery_adress", referencedColumnName="id", nullable=true)
+     * })
+     */
+    private $lastDeliveryAdress;
 
+    //constructeur pour datetime
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+    }
 
     /**
      * Get id
@@ -75,6 +94,30 @@ class Suscriber
     public function getCreatedAt()
     {
         return $this->createdAt;
+    }
+
+    /**
+     * Set account
+     *
+     * @param \UserBundle\Entity\User $account
+     *
+     * @return Suscriber
+     */
+    public function setAccount(\UserBundle\Entity\User $account = null)
+    {
+        $this->account = $account;
+
+        return $this;
+    }
+
+    /**
+     * Get account
+     *
+     * @return \UserBundle\Entity\User
+     */
+    public function getAccount()
+    {
+        return $this->account;
     }
 
     /**

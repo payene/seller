@@ -24,7 +24,7 @@ class Client
     /**
      * @var string
      *
-     * @ORM\Column(name="nom", type="string", length=255)
+     * @ORM\Column(name="nom", type="string", length=255,  nullable=true)
      */
     private $nom;
 
@@ -38,14 +38,14 @@ class Client
     /**
      * @var string
      *
-     * @ORM\Column(name="raisoc", type="string", length=255)
+     * @ORM\Column(name="raisoc", type="string", length=255,  nullable=true)
      */
     private $raisoc;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="adresse", type="string", length=255)
+     * @ORM\Column(name="adresse", type="string", length=255,  nullable=true)
      */
     private $adresse;
 
@@ -78,15 +78,12 @@ class Client
      */
     private $members;
 
+
+
     /**
-     * @var \UserBundle\Entity\User
-     *
-     * @ORM\ManyToOne(targetEntity="\UserBundle\Entity\User", inversedBy="clients")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="user", referencedColumnName="id")
-     * })
-     */
-    private $user;
+    * @ORM\OneToMany(targetEntity="Vente", mappedBy="client")
+    **/
+    private $ventes;
 
 
     /**
@@ -320,7 +317,10 @@ class Client
     }
     public function __toString()
     {
-        return $this->nom . "  " . $this->prenom;
+        if( isset($this->nom) || isset($this->prenom)   )
+            return $this->nom . "  " . $this->prenom;
+        else
+            return $this->telephone;
     }
 
     /**
@@ -357,27 +357,42 @@ class Client
         return $this->members;
     }
 
+    
+    public function setVentes($ventes)
+    {
+        $this->ventes = $ventes;
+
+        return $this;
+    }
+
+    public function getVentes()
+    {
+        return $this->ventes;
+    }
+
+
+
     /**
-     * Set user
+     * Add vente
      *
-     * @param \UserBundle\Entity\User $user
+     * @param \AppBundle\Entity\Vente $vente
      *
      * @return Client
      */
-    public function setUser(\UserBundle\Entity\User $user = null)
+    public function addVente(\AppBundle\Entity\Vente $vente)
     {
-        $this->user = $user;
+        $this->ventes[] = $vente;
 
         return $this;
     }
 
     /**
-     * Get user
+     * Remove vente
      *
-     * @return \UserBundle\Entity\User
+     * @param \AppBundle\Entity\Vente $vente
      */
-    public function getUser()
+    public function removeVente(\AppBundle\Entity\Vente $vente)
     {
-        return $this->user;
+        $this->ventes->removeElement($vente);
     }
 }

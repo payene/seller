@@ -23,9 +23,7 @@ class ClientType extends AbstractType
             ->add('raisoc', TextareaType::class, array('label'=>'Raisoc','attr'=>array('class'=>'form-control','placeholder'=>'Raison ')))
             ->add('adresse', TextareaType::class, array('label'=>'Adresse','attr'=>array('class'=>'form-control','placeholder'=>'Adresse client')))
             ->add('telephone', TextType::class, array('label'=>'Telephone','attr'=>array('class'=>'form-control','placeholder'=>'Telephone client')))
-            ->add('email', TextType::class, array('label'=>'E-mail','attr'=>array('class'=>'form-control','placeholder'=>'E-mail client')))
-            
-            ->add('save', SubmitType::class, array('label'=>'Valider','attr'=>array('class'=>'btn btn-md btn-primary pull-right m-t-n-xs')))
+            /*->add('email', TextType::class, array('label'=>'E-mail','attr'=>array('class'=>'form-control','placeholder'=>'E-mail client')))*/
             ;
     }/**
      * {@inheritdoc}

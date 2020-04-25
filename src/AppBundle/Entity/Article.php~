@@ -142,7 +142,7 @@ class Article
     }
 
     public function __toString(){
-        return $this->designation;
+        return $this->designation ;
     }
 
     /**

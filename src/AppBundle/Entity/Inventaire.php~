@@ -98,5 +98,45 @@ class Inventaire
     {
         return $this->dateFin;
     }
-}
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->inventairesArticles = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
+    /**
+     * Add inventairesArticle
+     *
+     * @param \AppBundle\Entity\InventaireArticle $inventairesArticle
+     *
+     * @return Inventaire
+     */
+    public function addInventairesArticle(\AppBundle\Entity\InventaireArticle $inventairesArticle)
+    {
+        $this->inventairesArticles[] = $inventairesArticle;
+
+        return $this;
+    }
+
+    /**
+     * Remove inventairesArticle
+     *
+     * @param \AppBundle\Entity\InventaireArticle $inventairesArticle
+     */
+    public function removeInventairesArticle(\AppBundle\Entity\InventaireArticle $inventairesArticle)
+    {
+        $this->inventairesArticles->removeElement($inventairesArticle);
+    }
+
+    /**
+     * Get inventairesArticles
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getInventairesArticles()
+    {
+        return $this->inventairesArticles;
+    }
+}

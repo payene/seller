@@ -192,4 +192,28 @@ class Paiement
     {
         return $this->vente;
     }
+
+    /**
+     * Set resteAPayer
+     *
+     * @param integer $resteAPayer
+     *
+     * @return Paiement
+     */
+    public function setResteAPayer($resteAPayer)
+    {
+        $this->resteAPayer = $resteAPayer;
+
+        return $this;
+    }
+
+    /**
+     * Get resteAPayer
+     *
+     * @return integer
+     */
+    public function getResteAPayer()
+    {
+        return $this->resteAPayer;
+    }
 }

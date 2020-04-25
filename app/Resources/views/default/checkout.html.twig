@@ -1,0 +1,231 @@
+{% extends 'base-shop.html.twig' %}
+
+
+
+{% block header %}
+		<!-- Purple Header -->
+	<div class="edge-header deep-purple"></div>
+
+	<!-- Main Container -->
+	<div class="container free-bird">
+	  	<div class="row">
+		    <div class="col-md-12 col-lg-12 mx-auto float-none white z-depth-1 py-2 px-2">
+
+				<!--Naked Form-->
+				<div class="card-body">
+					<h2 class="h2-responsive"><strong> Caisse  </strong></h2>
+				</div>
+				<!--Naked Form-->
+		    </div>
+	  	</div>
+	</div>
+<!-- /.Main Container -->
+
+{% endblock %}
+
+{% block body %}
+
+ <!--Main layout-->
+  <main class="mt-5 pt-0">
+    <div class="container-fluid">
+
+      <!-- Heading -->
+
+      <!--Grid row-->
+      <div class="row">
+
+		<!--Grid column-->
+		<div class="col-md-12 mb-4">
+			<!--Card-->
+			<div class="card">
+				<!--Card content-->
+				<div class="card-body">
+					<div class="col-xs-12">
+						<div class="row">
+						<form method="post" action="{{ path('proceed_proforma') }}" id="deliver_form">{{ form_widget(form._token, { "attr" : {"form" : "deliver_form"} }) }}</form>
+							<div class="col-md-8">
+									<!--Grid row-->
+								<div class="row">
+									<div class="col-md-12" style="border: 1px solid gray;">
+										<label>Informations du compte</label>
+										<br>
+										<div class="row">
+											<div class="col-md-6 mb-4">
+												<label>Nom d'utilisateur</label>
+												<input type="text" class="form-control" disabled value="{{ app.user.username }}" />
+											</div>
+											<div class="col-md-6 mb-2">
+												<label>Email</label>
+												<input type="text" class="form-control mb-4" disabled value="{{ app.user.email }}" />
+											</div>
+										</div>
+									</div>
+									<hr />
+									<div class="col-md-6 mb-4">
+										<!--Username-->
+										{{form_label(form.username, "Nom d'utilisateur") }}
+										{{form_widget(form.username, { "attr" : {"class" : "form-control py-0", "form" : "deliver_form"} }) }}
+									</div>
+									<div class="col-md-6 mb-2">
+										<!--email-->
+										{{form_label(form.email, "Email") }}
+										{{form_widget(form.email, { "attr" : {"class" : "form-control mb-4", "placeholder":"youremail@example.com", "form" : "deliver_form"} }) }}
+									</div>
+									<!--Grid column-->
+									<!--Grid column-->
+									<div class="col-md-6 mb-2">
+										<!--lastName-->
+										{{form_label(form.lastname, "Nom") }}
+										{{form_widget(form.lastname, { "attr" : {"class" : "form-control", "form" : "deliver_form"} }) }}
+									</div>
+									<!--Grid column-->
+									<div class="col-md-6 mb-4">
+										<!--firstName-->
+										{{form_label(form.firstname, "Prénom") }}
+										{{form_widget(form.firstname, { "attr" : {"class" : "form-control", "form" : "deliver_form"} }) }}
+									</div>
+									<!--Grid column-->
+
+									<div class=" col-md-12 mb-4">
+										<!--address-->
+										{{form_label(form.phone, "Téléphone") }}
+										{{form_widget(form.phone, { "attr" : {"class" : "form-control", "form" : "deliver_form"} }) }}
+										
+										{{form_label(form.quartier, "Quartier") }}
+										{{form_widget(form.quartier, { "attr" : {"class" : "form-control", "form" : "deliver_form"} }) }}
+										
+										{{ form_label(form.address, "Adresse") }}
+										{{ form_widget(form.address, { "attr" : {"class" : "form-control", "form" : "deliver_form"} }) }}
+										<hr>
+										<div class="mb-1 ml-4">
+											<input type="checkbox" required class="form-check-input" form="deliver_form" id="chekboxRules">
+											<label class="form-check-label" for="chekboxRules">J'accepte les termes et conditions</label>
+										</div>
+										<br>
+										<!--div class="mb-1 ml-4">
+											<input type="checkbox" class="form-check-input" form="deliver_form" name="save" id="safeTheInfo">
+											<label class="form-check-label" for="safeTheInfo">Sauvegarder cette information pour les prochaines commandes</label>
+										</div-->
+										<hr>
+										
+										<button class="btn btn-primary btn-lg btn-block" form="deliver_form" type="submit">Valider la commande</button>
+									</div>
+								</div>
+								<!--Grid column-->
+							</div>
+							<!--Grid column-->
+							<div class="col-md-4 mb-4">
+
+								<button class="btn btn-primary btn-lg btn-block" type="submit" form="deliver_form">Valider la commande</button>
+
+								<!--Card-->
+								<div class="card z-depth-0 border border-light rounded-0">
+
+								<!--Card content-->
+								<div class="card-body">
+									<h4 class="mb-4 mt-1 h5 text-center font-weight-bold">Votre commande</h4>
+
+									<hr>
+
+									{% for order in cart|reverse %}
+									<hr>
+									<dl class="row">
+										<dd class="col-sm-2">
+											<img style="width: 100%;" src="{{ order.article.source1 }}" alt="#" />
+										</dd>
+										<dd class="col-sm-6">
+											{{ order.article.designation }} - {{ order.article.description }} 
+										</dd>
+										<dd class="col-sm-4">
+											{% if order.price is defined %}
+											{% set pu = order.price %} 
+											{% else %} 
+												{% set pu = order.article.defaultPrice %} 
+											{% endif %}
+											{{ pu * order.nbr }}  ({{ order.nbr ~ " unité(s)" }})
+										</dd>
+									</dl>
+									{% endfor %}
+									<hr>
+
+									<dl class="row">
+										<dt class="col-sm-8">
+											Total
+										</dt>
+										<dt class="col-sm-4">
+											{{ cartAmount }}
+										</dt>
+									</dl>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--/.Card-->
+
+        </div>
+        <!--Grid column-->
+
+      </div>
+      <!--Grid row-->
+
+    </div>
+  </main>
+  <!--Main layout-->
+
+{% endblock %}
+
+
+{% block javascripts %}
+	{{ parent() }}
+
+	<script type="text/javascript">
+		initAjaxForm();
+		function initAjaxForm()
+        {
+            $('body').on('submit', '.ajaxForm', function (e) {
+                e.preventDefault();
+                $.ajax({
+                    type: $(this).attr('method'),
+                    url: $(this).attr('action'),
+                    data: $(this).serialize()
+                })
+                .done(function (data) {
+                	console.log(data);
+                    if (typeof data !== 'undefined') {
+                    	if (typeof data['article'] !== 'undefined') {
+                        	$('#order-nbr-' + data['article'] ).val(data['nbrOrder']);
+                        	$('#span-order-nbr-' + data['article'] ).html(data['nbrOrder']);
+                        	$('#cart-length').html(data['nbrCart']);
+                        	$('#total-order-' + data['article']).html( data['orderAmount'] );
+                        	$('#invoice-nbr-aticles').html( data['nbrCart'] );
+                        	$('#invoice-amount').html( data['cartAmount'] );
+                    	}
+                    }
+                });
+            });
+
+            $('body').on('submit', '.removeOderForm', function (e) {
+                e.preventDefault();
+                $.ajax({
+                    type: $(this).attr('method'),
+                    url: $(this).attr('action'),
+                    data: $(this).serialize()
+                })
+                .done(function (data) {
+                	console.log(data);
+                    if (typeof data !== 'undefined') {
+                    	if (typeof data['article'] !== 'undefined') {
+                        	$('#order-' + data['article'] ).remove();
+                        	$('#cart-length').html(data['nbrCart']);
+                    	}
+                    }
+                });
+            });
+        }
+	</script>
+
+{% endblock %}

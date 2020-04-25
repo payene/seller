@@ -103,4 +103,45 @@ class MotifSortieStock
     public function __toString(){
         return $this->motif;
     }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->sortieCollection = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add sortieCollection
+     *
+     * @param \AppBundle\Entity\SortieStock $sortieCollection
+     *
+     * @return MotifSortieStock
+     */
+    public function addSortieCollection(\AppBundle\Entity\SortieStock $sortieCollection)
+    {
+        $this->sortieCollection[] = $sortieCollection;
+
+        return $this;
+    }
+
+    /**
+     * Remove sortieCollection
+     *
+     * @param \AppBundle\Entity\SortieStock $sortieCollection
+     */
+    public function removeSortieCollection(\AppBundle\Entity\SortieStock $sortieCollection)
+    {
+        $this->sortieCollection->removeElement($sortieCollection);
+    }
+
+    /**
+     * Get sortieCollection
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSortieCollection()
+    {
+        return $this->sortieCollection;
+    }
 }

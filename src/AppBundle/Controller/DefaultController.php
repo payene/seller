@@ -8,6 +8,8 @@ use AppBundle\Entity\Category;
 use AppBundle\Entity\Article;
 use AppBundle\Entity\Proformat;
 use AppBundle\Entity\LigneProformat;
+use AppBundle\Entity\DeliveryAdress;
+use UserBundle\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -23,6 +25,9 @@ use FOS\UserBundle\FOSUserEvents;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 // +use Symfony\Component\Routing\Annotation\Route;
 
 
@@ -459,6 +464,134 @@ class DefaultController extends Controller
 
 
     /**
+     * @Route("/proforma/checkout", name="proforma_checkout")
+    **/
+    public function checkoutAction(Request $request, SessionInterface $session)
+    {
+        $user = $this->getUSer();
+        $cart = $session->get('cart');
+        $nbrCart = $session->get('nbrCart');
+        $cartAmount = $session->get('cartAmount');
+        if( $user == null ){
+            //Formulaire de création d'utilisateur
+            $user = new User();
+            $form = $this->createForm('UserBundle\Form\UserType', $user);
+            //l'utilisateur se connecte ou s'enregistre avant de continuer
+            return $this->render('default/login_checkout.html.twig', [
+                'cart' => $cart,
+                'nbrCart' => $nbrCart,
+                'cartAmount' => $cartAmount,
+                "form" => $form->createView(),
+            ]);
+        }
+        
+        
+        $deliveryAdress = new DeliveryAdress();
+        $deliveryAdress->setEmail( $user->getEmail() );
+        $deliveryAdress->setUsername( $user->getUsername() );
+        $form = $this->createForm('AppBundle\Form\DeliveryAdressType', $deliveryAdress);
+
+        return $this->render('default/checkout.html.twig', [
+            'cart' => $cart,
+            'nbrCart' => $nbrCart,
+            'cartAmount' => $cartAmount,
+            'form' => $form->createView(),
+        ]);
+    }
+
+
+    /**
+     * @Route("/proforma/checkout/login", name="proforma_checkout_login")
+    **/
+    public function checkoutLoginAction(Request $request)
+    {
+        $_username = $request->request->get("_username");
+        $_password = $request->request->get("_password");
+        
+        $factory = $this->get('security.encoder_factory');
+        // recupération de l'utilisateur par son nul ou email
+        $user_manager = $this->get('fos_user.user_manager');
+        $user = $user_manager->findUserByUsernameOrEmail($_username);
+        if ($user == null){
+            $this->addFlash("user_checkout_error", "Ce nom d'utilisateur n'existe pas");
+            return $this->redirectToRoute("proforma_checkout");
+        }
+        else{
+            //Vérification du mot de passe
+            $encoder = $factory->getEncoder($user);
+            $salt = $user->getSalt();
+            if(!$encoder->isPasswordValid($user->getPassword(), $_password, $salt)) {
+                $this->addFlash("password_checkout_error", "Nom d'utilisateur ou mot de passe incorrect");
+                return $this->redirectToRoute("proforma_checkout");
+            }
+        }
+        //Connexion de l'utilisateur
+        $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
+        $this->get('security.token_storage')->setToken($token);
+        $this->get('session')->set('_security_main', serialize($token));
+        $event = new InteractiveLoginEvent($request, $token);
+        $this->get("event_dispatcher")->dispatch("security.interactive_login", $event);
+        //Utilisateur connecté! Etape suivante
+        return $this->redirectToRoute("proforma_checkout");
+        
+    }
+
+    /**
+     * @Route("/proforma/checkout/register", name="proforma_checkout_register")
+    **/
+    public function checkoutRegisterAction(Request $request)
+    {
+        $user = new User();
+        $user->setEnabled(True);
+        $form = $this->createForm('UserBundle\Form\UserType', $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $userRepo = $em->getRepository("UserBundle:User");
+            $autre = $userRepo->findByUsername($user->getUsername());
+            $autre2 = $userRepo->findByEmail( $user->getEmail() );
+            //dump( $autre ); exit();
+            if( $autre  != null ){
+                $this->addFlash("register_username_error", "Ce nom d'utiisateur existe déjà");
+            }
+            else if( $autre2 != null ){
+                $this->addFlash("register_email_error", "Cet email existe déjà");
+            }
+            else{
+                $suscriber = $user->getSuscriber();
+                $client = $suscriber->getClient();
+                $client->setEmail($user);
+
+                $autreClient = $em->getRepository("AppBundle:Client")->findByTelephone($client->getTelephone());
+                if($autreClient != null){
+                    $this->addFlash("telephone_error", "Ce numéro de téléphone est déjoà utilisé");
+                    return $this->redirectToRoute("proforma_checkout");
+                }
+
+                $em->persist($user);
+                $em->persist($suscriber);
+                $em->persist($client);
+                $em->flush();
+                //login de l'utilisatuer
+                $token = new UsernamePasswordToken($user, $user->getPassword(), "public", $user->getRoles());
+                $this->get("security.token_storage")->setToken($token);
+                $event = new InteractiveLoginEvent($request, $token);
+                $this->get("event_dispatcher")->dispatch("security.interactive_login", $event);
+            }
+        }
+        else {
+            //Mots de passe incorrect
+            $this->addFlash("register_password_error", "Les mots de passe doivent être identiques");
+        }
+        
+
+        //Utilisateur connecté! Etape suivante
+        return $this->redirectToRoute("proforma_checkout");
+        
+    }
+
+    /**
      * @Route("/proforma/{proforma}", name="proforma")
     **/
     public function proformaAction(Request $request, Proformat $proforma)
@@ -482,52 +615,70 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
         $loggedUser = $this->getUser();
         // dump($cart); exit;
-        $proforma = new Proformat();
-        $proforma->setDateproformat(new \DateTime());
-        $suscriber = $this->getUser()->getSuscriber();
-        if(!empty($suscriber)){
-            $client = $suscriber->getClient();
+        
+        $deliveryAdress = new DeliveryAdress();
+        $form = $this->createForm('AppBundle\Form\DeliveryAdressType', $deliveryAdress);
+        
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager(); 
+            $em->persist($deliveryAdress);
+            $em->flush();
+            $suscriber = $loggedUser->getSuscriber();
+            /*if( $request->request->get("save") != false ){//le bouton sauvegarder les informations est coché
+                $suscriber->setLastDeliveryAdress($deliveryAdress);
+                $em->persist($suscriber);
+                $em->flush();
+            }*/
+
+            $proforma = new Proformat();
+            $proforma->setDateproformat(new \DateTime());
+            $proforma->setDeliveryAdress($deliveryAdress);
+            if(!empty($suscriber)){
+                $client = $suscriber->getClient();
+                $proforma->setClient($client);
+            }
+            else{
+                throw new \Exception("Error Processing Request", 1);
+            }
+
             $proforma->setClient($client);
+            $totalProforma = 0;
+            $proforma->setTotal($totalProforma);
+            $em->persist($proforma);
+            $em->flush();
+            if(empty($cart)){
+                exit;
+            }
+            foreach ($cart as $key => $order) {
+                $item = $order['article'];
+                $qty = $order['nbr'];
+                // dump($loggedUser); exit;
+                $item = $em->getRepository('AppBundle:Article')->findOneById($item->getid());
+                $unityPrice = $this->getUniPrice($item);
+                $totalProforma += $unityPrice * $qty;
+                $ligneProforma = new LigneProformat();
+                $ligneProforma->setArticle($item);
+                $ligneProforma->setPrix($unityPrice);
+                $ligneProforma->setQte($qty);
+                $ligneProforma->setProformat($proforma);
+                $em->persist($ligneProforma);
+            }
+            $proforma->setTotal($totalProforma);
+            $em->persist($proforma);
+            $em->flush();
+            // exit;
+            $session->set('cart', null);
+            $session->set('nbrCart', null);
+
+            return $this->redirectToRoute('proforma', array('proforma' => $proforma->getId()));
         }
         else{
-            throw new Exception("Error Processing Request", 1);
+            $this->addFlash("error", "Formulaire invalide");
+            return $this->redirectToRoute('proforma_checkout', array('proforma' => $proforma->getId()));
         }
-
-        $proforma->setClient($client);
-        $totalProforma = 0;
-        $proforma->setTotal($totalProforma);
-        $em->persist($proforma);
-        $em->flush();
-        if(empty($cart)){
-            exit;
-        }
-        foreach ($cart as $key => $order) {
-            $item = $order['article'];
-            $qty = $order['nbr'];
-            // dump($loggedUser); exit;
-            $item = $em->getRepository('AppBundle:Article')->findOneById($item->getid());
-            $unityPrice = $this->getUniPrice($item);
-            $totalProforma += $unityPrice * $qty;
-            $ligneProforma = new LigneProformat();
-            $ligneProforma->setArticle($item);
-            $ligneProforma->setPrix($unityPrice);
-            $ligneProforma->setQte($qty);
-            $ligneProforma->setProformat($proforma);
-            $em->persist($ligneProforma);
-        }
-        $proforma->setTotal($totalProforma);
-        $em->persist($proforma);
-        $em->flush();
-        // exit;
-        $session->set('cart', null);
-        $session->set('nbrCart', null);
-
-        return $this->redirectToRoute('proforma', array('proforma' => $proforma->getId()));
-
-
-        return $this->render('default/proforma.html.twig', [
-            'secteur' => $secteur
-        ]);
     }
 
     public function getUniPrice($article, $loggedUser = null){

@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+
 class SuscriberType extends AbstractType
 {
     /**
@@ -14,10 +15,7 @@ class SuscriberType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('phone')
-            ->add('email')
-            ->add('ville')
-            ->add('pays')
+            ->add("client", ClientType::class)
             // ->add('createdAt')
             // ->add('account')
         ;

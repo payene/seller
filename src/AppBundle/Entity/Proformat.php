@@ -38,7 +38,7 @@ class Proformat
     /**
      * @var \Client
      *
-     * @ORM\ManyToOne(targetEntity="Client", inversedBy="devis")
+     * @ORM\ManyToOne(targetEntity="Client", inversedBy="devis", cascade={"persist"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="client", referencedColumnName="id")
      * })
@@ -50,6 +50,15 @@ class Proformat
      */
     private $lpCollection;
 
+    /**
+     * @var \DeliveryAdress
+     *
+     * @ORM\ManyToOne(targetEntity="DeliveryAdress")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="delivery_adress", referencedColumnName="id", nullable=true)
+     * })
+     */
+    private $deliveryAdress;
 
 
     /**
@@ -173,5 +182,29 @@ class Proformat
     public function getTotal()
     {
         return $this->total;
+    }
+
+    /**
+     * Set deliveryAdress
+     *
+     * @param \AppBundle\Entity\DeliveryAdress $deliveryAdress
+     *
+     * @return Proformat
+     */
+    public function setDeliveryAdress(\AppBundle\Entity\DeliveryAdress $deliveryAdress = null)
+    {
+        $this->deliveryAdress = $deliveryAdress;
+
+        return $this;
+    }
+
+    /**
+     * Get deliveryAdress
+     *
+     * @return \AppBundle\Entity\DeliveryAdress
+     */
+    public function getDeliveryAdress()
+    {
+        return $this->deliveryAdress;
     }
 }

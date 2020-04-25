@@ -309,4 +309,38 @@ class User extends BaseUser
     {
         return $this->mvtsCollection;
     }
+
+    /**
+     * Add sortieCollection
+     *
+     * @param \AppBundle\Entity\SortieStock $sortieCollection
+     *
+     * @return User
+     */
+    public function addSortieCollection(\AppBundle\Entity\SortieStock $sortieCollection)
+    {
+        $this->sortieCollection[] = $sortieCollection;
+
+        return $this;
+    }
+
+    /**
+     * Remove sortieCollection
+     *
+     * @param \AppBundle\Entity\SortieStock $sortieCollection
+     */
+    public function removeSortieCollection(\AppBundle\Entity\SortieStock $sortieCollection)
+    {
+        $this->sortieCollection->removeElement($sortieCollection);
+    }
+
+    /**
+     * Get sortieCollection
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSortieCollection()
+    {
+        return $this->sortieCollection;
+    }
 }

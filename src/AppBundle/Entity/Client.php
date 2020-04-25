@@ -371,4 +371,28 @@ class Client
     }
 
 
+
+    /**
+     * Add vente
+     *
+     * @param \AppBundle\Entity\Vente $vente
+     *
+     * @return Client
+     */
+    public function addVente(\AppBundle\Entity\Vente $vente)
+    {
+        $this->ventes[] = $vente;
+
+        return $this;
+    }
+
+    /**
+     * Remove vente
+     *
+     * @param \AppBundle\Entity\Vente $vente
+     */
+    public function removeVente(\AppBundle\Entity\Vente $vente)
+    {
+        $this->ventes->removeElement($vente);
+    }
 }

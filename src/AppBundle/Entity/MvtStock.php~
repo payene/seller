@@ -305,4 +305,28 @@ class MvtStock
     {
         return $this->createdBy;
     }
+
+    /**
+     * Set stockArvg
+     *
+     * @param integer $stockArvg
+     *
+     * @return MvtStock
+     */
+    public function setStockArvg($stockArvg)
+    {
+        $this->stockArvg = $stockArvg;
+
+        return $this;
+    }
+
+    /**
+     * Get stockArvg
+     *
+     * @return integer
+     */
+    public function getStockArvg()
+    {
+        return $this->stockArvg;
+    }
 }

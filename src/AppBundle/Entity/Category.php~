@@ -227,4 +227,28 @@ class Category
     {
         return $this->categories;
     }
+
+    /**
+     * Set icone
+     *
+     * @param string $icone
+     *
+     * @return Category
+     */
+    public function setIcone($icone)
+    {
+        $this->icone = $icone;
+
+        return $this;
+    }
+
+    /**
+     * Get icone
+     *
+     * @return string
+     */
+    public function getIcone()
+    {
+        return $this->icone;
+    }
 }

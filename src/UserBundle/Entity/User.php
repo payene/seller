@@ -26,7 +26,7 @@ class User extends BaseUser
     /**
     * @var \AppBundle\Entity\Suscriber
     *
-    * @ORM\OneToOne(targetEntity="\AppBundle\Entity\Suscriber",  inversedBy="account",cascade={"persist"})
+    * @ORM\OneToOne(targetEntity="\AppBundle\Entity\Suscriber",  inversedBy="account", cascade={"persist"})
     * @ORM\JoinColumn(name="suscriber", referencedColumnName="id", nullable=true)
     */
     private $suscriber;
