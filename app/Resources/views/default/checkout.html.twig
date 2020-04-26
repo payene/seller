@@ -46,8 +46,8 @@
 							<div class="col-md-8">
 									<!--Grid row-->
 								<div class="row">
-									<div class="col-md-12" style="border: 1px solid gray;">
-										<label>Informations du compte</label>
+									<div class="col-md-12" style="border: 1px solid gray; border-radius: 5px;">
+										<label class="badge badge-primary">Informations du compte</label>
 										<br>
 										<div class="row">
 											<div class="col-md-6 mb-4">
@@ -61,54 +61,55 @@
 										</div>
 									</div>
 									<hr />
-									<div class="col-md-6 mb-4">
-										<!--Username-->
-										{{form_label(form.username, "Nom d'utilisateur") }}
-										{{form_widget(form.username, { "attr" : {"class" : "form-control py-0", "form" : "deliver_form"} }) }}
-									</div>
-									<div class="col-md-6 mb-2">
-										<!--email-->
-										{{form_label(form.email, "Email") }}
-										{{form_widget(form.email, { "attr" : {"class" : "form-control mb-4", "placeholder":"youremail@example.com", "form" : "deliver_form"} }) }}
-									</div>
-									<!--Grid column-->
-									<!--Grid column-->
-									<div class="col-md-6 mb-2">
-										<!--lastName-->
-										{{form_label(form.lastname, "Nom") }}
-										{{form_widget(form.lastname, { "attr" : {"class" : "form-control", "form" : "deliver_form"} }) }}
-									</div>
-									<!--Grid column-->
-									<div class="col-md-6 mb-4">
-										<!--firstName-->
-										{{form_label(form.firstname, "Prénom") }}
-										{{form_widget(form.firstname, { "attr" : {"class" : "form-control", "form" : "deliver_form"} }) }}
-									</div>
-									<!--Grid column-->
-
-									<div class=" col-md-12 mb-4">
-										<!--address-->
-										{{form_label(form.phone, "Téléphone") }}
-										{{form_widget(form.phone, { "attr" : {"class" : "form-control", "form" : "deliver_form"} }) }}
-										
-										{{form_label(form.quartier, "Quartier") }}
-										{{form_widget(form.quartier, { "attr" : {"class" : "form-control", "form" : "deliver_form"} }) }}
-										
-										{{ form_label(form.address, "Adresse") }}
-										{{ form_widget(form.address, { "attr" : {"class" : "form-control", "form" : "deliver_form"} }) }}
-										<hr>
-										<div class="mb-1 ml-4">
-											<input type="checkbox" required class="form-check-input" form="deliver_form" id="chekboxRules">
-											<label class="form-check-label" for="chekboxRules">J'accepte les termes et conditions</label>
-										</div>
+									<div class="col-md-12 mt-5" style="border: 1px solid gray; border-radius: 5px;">
+										<label class="badge badge-success">Adresse de facturation</label>
 										<br>
-										<!--div class="mb-1 ml-4">
-											<input type="checkbox" class="form-check-input" form="deliver_form" name="save" id="safeTheInfo">
-											<label class="form-check-label" for="safeTheInfo">Sauvegarder cette information pour les prochaines commandes</label>
-										</div-->
-										<hr>
-										
-										<button class="btn btn-primary btn-lg btn-block" form="deliver_form" type="submit">Valider la commande</button>
+										<div class = "row">
+											<!--Grid column-->
+											<div class="col-md-6 mb-2">
+												<!--lastName-->
+												{{form_label(form.lastname, "Nom") }}
+												{{form_widget(form.lastname, { "attr" : {"class" : "form-control", "form" : "deliver_form"} }) }}
+											</div>
+											<!--Grid column-->
+											<div class="col-md-6 mb-4">
+												<!--firstName-->
+												{{form_label(form.firstname, "Prénom") }}
+												{{form_widget(form.firstname, { "attr" : {"class" : "form-control", "form" : "deliver_form"} }) }}
+											</div>
+											<!--Grid column-->
+											<div class="col-md-6 mb-2">
+												<!--email-->
+												{{form_label(form.email, "Email") }}
+												{{form_widget(form.email, { "attr" : {"class" : "form-control mb-4", "placeholder":"youremail@example.com", "form" : "deliver_form"} }) }}
+											</div>
+											<!--Grid column-->
+											<div class="col-md-6 mb-2">
+												{{form_label(form.phone, "Téléphone") }}
+												{{form_widget(form.phone, { "attr" : {"class" : "form-control", "form" : "deliver_form"} }) }}
+											</div>
+											<div class=" col-md-12 mb-4">
+												<!--address-->
+												{{form_label(form.quartier, "Quartier") }}
+												{{form_widget(form.quartier, { "attr" : {"class" : "form-control", "form" : "deliver_form"} }) }}
+												
+												{{ form_label(form.address, "Adresse") }}
+												{{ form_widget(form.address, { "attr" : {"class" : "form-control", "form" : "deliver_form"} }) }}
+												<hr>
+												<div class="mb-1 ml-4">
+													<input type="checkbox" required class="form-check-input" form="deliver_form" id="chekboxRules">
+													<label class="form-check-label" for="chekboxRules">J'accepte les termes et conditions</label>
+												</div>
+												<br>
+												<div class="mb-1 ml-4">
+													<input type="checkbox" class="form-check-input" form="deliver_form" name="save" id="safeTheInfo">
+													<label class="form-check-label" for="safeTheInfo">Sauvegarder cette information pour les prochaines commandes</label>
+												</div>
+												<hr>
+												
+												<button class="btn btn-primary btn-lg btn-block" form="deliver_form" type="submit">Valider la commande</button>
+											</div>
+										</div>
 									</div>
 								</div>
 								<!--Grid column-->

@@ -92,23 +92,38 @@
 										</td>
 										
 										<td>
-											<form action="{{ path('remove_from_cart', {'article':order.article.id}) }}" class="ajaxForm" method="POST">
+											<form style="display: none;" action="{{ path('remove_from_cart', {'article':order.article.id}) }}" class="ajaxForm" method="POST">
 												<div class="plus-minus">
-													<button class="dec qtybutton btn btn-warning p-1 btn-ghost phantom" type="submit">
+													<button id="moins-button" class="dec qtybutton btn btn-warning p-1 btn-ghost phantom" type="submit">
 														<i class="fas fa-times"></i>
 													</button>
 												</div>
 											</form>
-											
-											<span id="span-order-nbr-{{ order.article.id }}"> {{ order.nbr }} </span>
-
-											<form action="{{ path('add_to_cart', {'article':order.article.id}) }}" class="ajaxForm" method="POST">
+											<span id="span-order-nbr-{{ order.article.id }}" style="display:none"> {{ order.nbr }} </span>{# version originale #}
+											<form style="display: none;" action="{{ path('add_to_cart', {'article':order.article.id}) }}" class="ajaxForm" method="POST">
 												<div class="plus-minus">
-													<button class="inc qtybutton btn btn-default p-1 btn-ghost phantom" type="submit">
+													<button id="plus-button" class="inc qtybutton btn btn-default p-1 btn-ghost phantom" type="submit">
 														<i class="fas fa-plus"></i>
 													</button>
 												</div>
 											</form>
+											<div class="form-group w-50">
+												<div class="input-group mb-3">
+													<div class="input-group-prepend">
+														<span class="input-group-text btn-warning" onclick="$('#moins-button').click();">
+															<i class="fas fa-minus"></i>
+														</span>
+													</div>
+													<input type="text" id ="input-{{ order.article.id }}" value="{{ order.nbr }}" class="form-control text-center" disabled />
+													<div class="input-group-append">
+														<span class="input-group-text btn-default" onclick="$('#plus-button').click();">
+															<i class="fas fa-plus"></i>
+														</span>
+													</div>
+												</div>
+											</div>
+
+											
 										</td>
 										<td > <span id="total-order-{{ order.article.id }}"> {{ (order.nbr * pu)|number_format(0, '.', ' ') }} FCFA</span>  
 											<form action="{{ path('remove_order', {'article':order.article.id}) }}" class="removeOderForm" method="POST">
@@ -191,6 +206,7 @@
                     if (typeof data !== 'undefined') {
                     	if (typeof data['article'] !== 'undefined') {
                         	$('#order-nbr-' + data['article'] ).val(data['nbrOrder']);
+                        	$('#input-' + data['article'] ).val(data['nbrOrder']);
                         	$('#span-order-nbr-' + data['article'] ).html(data['nbrOrder']);
                         	$('#cart-length').html(data['nbrCart']);
                         	$('#total-order-' + data['article']).html( data['orderAmount'] );

@@ -1,0 +1,260 @@
+
+{% extends "base-shop.html.twig" %}
+
+
+{% block header %}
+	<!-- Purple Header -->
+	<div class="edge-header deep-purple"></div>
+
+	<!-- Main Container -->
+	<div class="container free-bird">
+	  <div class="row">
+	    <div class="col-md-12 col-lg-12 mx-auto float-none white z-depth-1 py-2 px-2">
+
+	      <!--Naked Form-->
+	      <div class="card-body">
+	        <h2 class="h2-responsive"><strong> Résultat de recherche correspondant à: {{ nom }} </strong></h2>
+
+	        <div class="my-2">
+				{% for cat in cats %}
+					<a class="text-dark edge-menu-item badge badge-info p-2" style='font-size: 14px;font-weight: normal;text-transform: uppercase;font-family:OpenSans,"Open sans","PingFang SC","Microsoft YaHei","Helvetica Neue",Tahoma,Arial,Helvetica;' href="{{ path('shop_by_cat', {'rayon':cat.categorie.id, 'cat':cat.categorie.id}) }}">  {{ cat.categorie.catname }} <label class="badge badge-primary">({{ cat.nb|length }})</label>  </a>
+				{%  endfor %}
+				
+	        </div>
+
+	      </div>
+	      <!--Naked Form-->
+
+	    </div>
+	  </div>
+	</div>
+<!-- /.Main Container -->
+
+{% endblock %}
+
+{% block categories %}
+
+{% endblock %}
+
+{% block body %}
+	
+
+<!--Main layout-->
+  <main class="mt-4">
+    <div class="container">
+
+
+      <!--Section: Products v.3-->
+      <section class="text-center mb-4">
+
+        <!--Grid row-->
+        <div class="row">
+        	{% if articles is defined  %}
+				{% set products = articles %}
+					{% set i = 0 %}
+					{% for prod in products %}
+						{% set i = i+1 %}
+
+						  <!--Grid column-->
+							<div class="col-lg-3 col-md-6 mb-4">
+
+								<!--Card-->
+								<div class="card">
+
+								  <!--Card image-->
+								  <div class="view overlay">
+								    <img src="{{ prod.item.source1 }}" class="card-img-top" alt="">
+								    <a>
+								      <div class="mask rgba-white-slight"></div>
+								    </a>
+								  </div>
+								  <!--Card image-->
+
+								  <!--Card content-->
+								  <div class="card-body text-center">
+								    <!--Category & Title-->
+								   
+									<small> {{ prod.item.category }} </small>
+								    <h5>
+								    	<strong>
+
+									        <a href="" class="dark-grey-text">{{ prod.item.designation }} </a>
+								    	</strong>
+								    </h5>
+
+								    <h4 class="font-weight-bold blue-text">
+								     	
+								      	{% if prod.price is defined %}
+											{% set theAmount = prod.price %}
+										{% else %}
+											{% set theAmount = prod.item.defaultPrice %}
+										{% endif  %}
+
+										 <strong> {{ theAmount }} </strong>
+										<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#centralModalSm-{{ loop.index }}">
+											Commander
+										</button>
+								    </h4>
+
+
+
+								  </div>
+								  <!--Card content-->
+
+								</div>
+								<!--Card-->
+
+							</div>
+							<!--Grid column-->
+
+							    <!-- Button trigger modal -->
+							
+
+							<!-- Central Modal Small -->
+							<div class="modal fade" id="centralModalSm-{{ loop.index }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel-{{ loop.index }}"
+							  aria-hidden="true">
+
+								<!-- Change class .modal-sm to change the size of the modal -->
+								<div class="modal-dialog modal-lg" role="document">
+									<div class="modal-content">
+										<div class="modal-body">
+									      <!--Grid row-->
+									     	<div class="row wow">
+
+										        <!--Grid column-->
+										        <div class="col-md-6 mb-4">
+
+										          <img src="{{ prod.item.source1 }}" class="img-fluid" alt="">
+
+										        </div>
+										        <!--Grid column-->
+
+										        <!--Grid column-->
+										        <div class="col-md-6 mb-2">
+
+										          <!--Content-->
+										          <div class="p-4">
+
+										            <div class="mb-3">
+										              <a href="javascript:void(0);">
+										                <span class="badge purple mr-1">  {#{ currentRayon.catname }} / {{ prod.item.category }#}Mierda de Mierda </span>
+										              </a>
+										            </div>
+
+										            <p class="lead">
+										              	{#<span class="mr-1">
+										                	<del>$200</del>
+										              	</span>#}
+										              <span> {{ theAmount }} </span>
+										            </p>
+
+										            <p class="lead font-weight-bold">Description</p>
+
+										            <p> {{ prod.item.description }} </p>
+
+													<form action="{{ path('add_to_cart', {'article':prod.item.id}) }}"  class="ajaxForm d-flex justify-content-left" method="POST">
+														<div class="mt-1">
+
+															<button id="btn-add-card-{{ loop.index }}" onclick="addCardNotif({{ loop.index }})" class="btn btn-primary btn-lg my-0 p" type="submit"> Ajouter au panier
+										                <i class="fas fa-shopping-cart ml-1"></i>
+														</div>
+													</form>
+
+	
+													<!-- closeShopModal -->
+
+													<!-- <i class="fas fa-camera fa-10x"></i> -->
+													<label id="notif-add-card-{{ loop.index }}" class="hide mt-4" style="display: none;">
+														Article ajout&eacute; au panier avec succ&egrave;s
+														<i class="far fa-check-circle green-text fa-10x"></i>
+													</label>
+		
+										          </div>
+										          <!--Content-->
+
+										        </div>
+										        <!--Grid column-->
+
+									    	</div>
+									      <!--Grid row-->
+								    	</div>
+										<div class="modal-footer">
+									        <button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal">  Continuer mes achats </button>
+									        <a type="button" href="{{ path('cart') }}" class="btn btn-primary btn-lg"> Voir mon panier</a>
+									    </div>
+							    	</div>
+									
+
+							   
+								</div>
+							</div>
+							<!-- Central Modal Small -->
+						
+					{% endfor %}
+				{% endif %}
+
+        </div>
+        <!--Grid row-->
+
+     
+
+      </section>
+      <!--Section: Products v.3-->
+
+   
+
+    </div>
+	
+  </main>
+  <!--Main layout-->
+
+{% endblock %}
+
+
+{% block javascripts %}
+	{{ parent() }}
+
+	<script type="text/javascript">
+		initAjaxForm();
+		function initAjaxForm()
+        {
+            $('body').on('submit', '.ajaxForm', function (e) {
+         
+                e.preventDefault();
+                jQuery.ajax({
+                    type: $(this).attr('method'),
+                    url: $(this).attr('action'),
+                    data: $(this).serialize()
+                })
+                .done(function (data) {
+                	console.log(data);
+                    if (typeof data !== 'undefined') {
+                    	if (typeof data['nbrCart'] !== 'undefined') {
+                        	$('#cart-length').html(data['nbrCart']);
+                        	//$('#cart-length').html(data['nbrCart']);
+                        	//alert('article ajoute au panier avec success');
+                    	}
+                    }
+                });
+     //            .fail(function (jqXHR, textStatus, errorThrown) {
+					// alert('Echec du panier ' + errorThrown);
+     //            });
+            });
+        }
+
+       	function closeShopModal(index){
+       		$('#centralModalSm-' + index).modal('hide');
+
+       	}
+
+       	function addCardNotif(index){
+       		$('#notif-add-card-'+index).show();
+       		$('#btn-add-card-'+index).hide();
+       	}
+
+	</script>
+
+	
+
+
+{% endblock %}

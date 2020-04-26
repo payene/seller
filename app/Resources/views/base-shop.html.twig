@@ -77,9 +77,21 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link waves-effect" href="{{ path('homepage') }}" target="_blank"></a>
+              <a class="nav-link waves-effect" href="{{ path('homepage') }}" target="_blank"></a>
           </li>
-          
+          <li class="nav-item">
+            <form method="get" action="{{ path('shop_article_search') }}" id="article-search-form">
+              <div class="md-form input-group ml-5 m-0">
+                <input type="text" class="form-control" name="nom" id="article-search-input" placeholder="Rechercher un article" aria-label="Recipient's username"
+                  aria-describedby="material-addon2">
+                <div class="input-group-append">
+                  <span class="input-group-text btn md-addon" id="material-addon2" onclick="rechercherArticle();">
+                    <i class="fas fa-search"></i>
+                  </span>
+                </div>
+              </div>
+            </form>
+          </li>
           
         </ul>
 
@@ -198,7 +210,14 @@
   <script type="text/javascript">
     // Animations initialization
     new WOW().init();
-
+  
+  </script>
+  <script type="text/javascript">
+    function rechercherArticle(){
+      if($('#article-search-input').val() != ""){
+          $('#article-search-form').submit();
+      }
+    }
   </script>
 {% endblock %}
 </body>

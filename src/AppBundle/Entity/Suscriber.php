@@ -32,6 +32,11 @@ class Suscriber
      * @ORM\OneToOne(targetEntity="\UserBundle\Entity\User", mappedBy="suscriber")
      */
     private $account;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="DeliveryAdress", mappedBy="suscriber")
+     */
+    private $deliveryAdresses;
 
     /**
      * @var \Client
@@ -133,5 +138,63 @@ class Suscriber
     public function getClient()
     {
         return $this->client;
+    }
+
+    /**
+     * Set lastDeliveryAdress
+     *
+     * @param \AppBundle\Entity\DeliveryAdress $lastDeliveryAdress
+     *
+     * @return Suscriber
+     */
+    public function setLastDeliveryAdress(\AppBundle\Entity\DeliveryAdress $lastDeliveryAdress = null)
+    {
+        $this->lastDeliveryAdress = $lastDeliveryAdress;
+
+        return $this;
+    }
+
+    /**
+     * Get lastDeliveryAdress
+     *
+     * @return \AppBundle\Entity\DeliveryAdress
+     */
+    public function getLastDeliveryAdress()
+    {
+        return $this->lastDeliveryAdress;
+    }
+
+    /**
+     * Add deliveryAdress
+     *
+     * @param \AppBundle\Entity\DeliveryAdress $deliveryAdress
+     *
+     * @return Suscriber
+     */
+    public function addDeliveryAdress(\AppBundle\Entity\DeliveryAdress $deliveryAdress)
+    {
+        $this->deliveryAdresses[] = $deliveryAdress;
+
+        return $this;
+    }
+
+    /**
+     * Remove deliveryAdress
+     *
+     * @param \AppBundle\Entity\DeliveryAdress $deliveryAdress
+     */
+    public function removeDeliveryAdress(\AppBundle\Entity\DeliveryAdress $deliveryAdress)
+    {
+        $this->deliveryAdresses->removeElement($deliveryAdress);
+    }
+
+    /**
+     * Get deliveryAdresses
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDeliveryAdresses()
+    {
+        return $this->deliveryAdresses;
     }
 }

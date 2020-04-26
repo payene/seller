@@ -32,6 +32,11 @@ class Suscriber
      * @ORM\OneToOne(targetEntity="\UserBundle\Entity\User", mappedBy="suscriber")
      */
     private $account;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="DeliveryAdress", mappedBy="suscriber")
+     */
+    private $deliveryAdresses;
 
     /**
      * @var \Client
@@ -43,15 +48,6 @@ class Suscriber
      */
     private $client;
 
-    /**
-     * @var \DeliveryAdress
-     *
-     * @ORM\ManyToOne(targetEntity="DeliveryAdress", cascade={"persist"})
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="last_delivery_adress", referencedColumnName="id", nullable=true)
-     * })
-     */
-    private $lastDeliveryAdress;
 
     //constructeur pour datetime
     public function __construct()
@@ -142,5 +138,29 @@ class Suscriber
     public function getClient()
     {
         return $this->client;
+    }
+
+    /**
+     * Set lastDeliveryAdress
+     *
+     * @param \AppBundle\Entity\DeliveryAdress $lastDeliveryAdress
+     *
+     * @return Suscriber
+     */
+    public function setLastDeliveryAdress(\AppBundle\Entity\DeliveryAdress $lastDeliveryAdress = null)
+    {
+        $this->lastDeliveryAdress = $lastDeliveryAdress;
+
+        return $this;
+    }
+
+    /**
+     * Get lastDeliveryAdress
+     *
+     * @return \AppBundle\Entity\DeliveryAdress
+     */
+    public function getLastDeliveryAdress()
+    {
+        return $this->lastDeliveryAdress;
     }
 }

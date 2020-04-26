@@ -170,7 +170,117 @@ class DefaultController extends Controller
             'pagination' => $pagination,
         ]);
     }
-   
+
+    
+    /**
+     * @Route("/shop/search/", name="shop_article_search")
+     **/
+    public function searchArticleAction(Request $request, $page = 1, SessionInterface $session)
+    {
+        
+        $em = $this->getDoctrine()->getManager();            
+        $maxArticles = 100;
+
+        $nom = $request->get("nom");
+
+        $mots = explode(" ", $nom);
+        $cart = $session->get('cart');
+
+        $qb = $em->createQueryBuilder()
+                ->select('a')
+                ->from('AppBundle:Article', 'a');
+                $i = 0;
+        foreach($mots as $mot){
+            if($i == 0){ //Première importance
+                $qb->where('a.designation like :mot or a.description like :mot')
+                ->setParameter('mot', "%".$mot."%");
+            }
+            else{
+                $qb->orWhere('a.designation like :mot or a.description like :mot')
+                    ->setParameter('mot', "%".$mot);
+            }
+            $i++;
+        }
+
+        $articles = $qb->getQuery()->getResult();
+        
+        //Recherche des catégories
+        $cats = [];
+        $ids = [];
+        foreach($articles as $article){
+            $categorie = $article->getCategory();
+            if( !in_array($categorie->getId(), $ids) ){
+                $cats[$categorie->getId()] = [ "categorie" => $categorie, "nb" => 1];
+                $ids[] = $categorie->getId();
+            }
+            else{
+                $cats[$categorie->getId()]["nb"] = $cats[$categorie->getId()]["nb"] + 1;
+            }
+        }
+
+        $loggedUser = $this->getUser();
+        // exit;
+        $shop = [];
+        $nbrCart = $session->get('nbrCart');
+        if(!empty($loggedUser)){
+            $suscriber = $loggedUser->getSuscriber();
+            // dump($suscriber);
+            if(!empty($suscriber)){
+                $client = $suscriber->getClient();
+                // dump($articles); 
+                foreach ($articles as $key => $article) {
+                    $price = $em->getRepository('AppBundle:Prix')->findBy(['client' => $client->getId()]);
+
+                    $query = $em->createQueryBuilder();
+                    $price = $query
+                        ->select('p')
+                        ->from('AppBundle:Prix', 'p')
+                        ->join('p.client', 'c')
+                        ->join('p.article', 'a') 
+                        ->andwhere(":today BETWEEN p.dateDebut AND p.dateFin ")
+                        ->andwhere("p.client = :clientId ")
+                        ->andwhere("p.article = :articleId ")
+                        ->setParameter('today', new \DateTime())
+                        ->setParameter('clientId', $client->getId())
+                        ->setParameter('articleId', $article->getId())
+                        ->orderBy('p.id', 'DESC')
+                        ->setMaxResults(1)
+                        ->getQuery()
+                        ->getOneOrNullResult()
+                    ;
+                    // dump($price);
+                    // exit;
+                    $medias = $em->getRepository('AppBundle:Media')->findBy(['article' => $article->getId()]);
+                    $shop[] = array('item' => $article, 'medias' => $medias, 'client' => $client, 'price' => $price );
+                }
+            // dump($categoryArray);
+
+
+                // replace this example code with whatever you need
+                return $this->render('default/shop-by-article.html.twig', [
+                    'cart' => $cart,
+                    'nbrCart' => $nbrCart,
+                    'articles' => $shop,
+                    //'categoryArray' => $categoryArray,
+                    'cats' => $cats,
+                ]);
+            }
+        }
+        
+        $shop = [];
+        foreach ($articles as $key => $article) {
+            $shop[] = array('item' => $article );
+        }
+        // replace this example code with whatever you need
+        return $this->render('default/shop-by-article.html.twig', [
+            'cart' => $cart,
+            'nbrCart' => $nbrCart,
+            'articles' => $shop,
+            'cats' => $cats,
+            "nom" => $nom,
+        ]);
+    }
+
     /**
      * @Route("/account", name="account")
     **/
@@ -488,7 +598,13 @@ class DefaultController extends Controller
         
         $deliveryAdress = new DeliveryAdress();
         $deliveryAdress->setEmail( $user->getEmail() );
-        $deliveryAdress->setUsername( $user->getUsername() );
+        $em = $this->getDoctrine()->getManager();
+        $suscriber = $user->getSuscriber();
+        $lastDeliveryAdress = $em->getRepository("AppBundle:DeliveryAdress")->findOneBy(["suscriber" => $suscriber], ["id" => "desc"]);
+        if( $lastDeliveryAdress != null ){//Dernière adresse sauvegardée
+            $deliveryAdress->copy($lastDeliveryAdress); //Initialisation des valeur des champs
+        }
+
         $form = $this->createForm('AppBundle\Form\DeliveryAdressType', $deliveryAdress);
 
         return $this->render('default/checkout.html.twig', [
@@ -624,14 +740,14 @@ class DefaultController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager(); 
+            $suscriber = $loggedUser->getSuscriber();
+            
+            if( $request->request->get("save") != false ){//le bouton "sauvegarder les informations" est coché
+                $deliveryAdress->setSuscriber($suscriber);
+            }
+
             $em->persist($deliveryAdress);
             $em->flush();
-            $suscriber = $loggedUser->getSuscriber();
-            /*if( $request->request->get("save") != false ){//le bouton sauvegarder les informations est coché
-                $suscriber->setLastDeliveryAdress($deliveryAdress);
-                $em->persist($suscriber);
-                $em->flush();
-            }*/
 
             $proforma = new Proformat();
             $proforma->setDateproformat(new \DateTime());

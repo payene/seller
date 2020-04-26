@@ -38,13 +38,6 @@ class DeliveryAdress
     /**
      * @var string
      *
-     * @ORM\Column(name="username", type="string", length=255)
-     */
-    private $username;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="email", type="string", length=255)
      */
     private $email;
@@ -70,6 +63,11 @@ class DeliveryAdress
      */
     private $address;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Suscriber", inversedBy="deliveryAdresses")
+     * @ORM\JoinColumn(name="suscriber_id", referencedColumnName="id", nullable=true)
+     */
+    private $suscriber;
 
     /**
      * Get id
@@ -136,30 +134,6 @@ class DeliveryAdress
     public function getLastname()
     {
         return $this->lastname;
-    }
-
-    /**
-     * Set username
-     *
-     * @param string $username
-     *
-     * @return DeliveryAdress
-     */
-    public function setUsername($username)
-    {
-        $this->username = $username;
-
-        return $this;
-    }
-
-    /**
-     * Get username
-     *
-     * @return string
-     */
-    public function getUsername()
-    {
-        return $this->username;
     }
 
     /**
@@ -256,5 +230,29 @@ class DeliveryAdress
     public function getAddress()
     {
         return $this->address;
+    }
+
+    /**
+     * Set suscriber
+     *
+     * @param \AppBundle\Entity\Suscriber $suscriber
+     *
+     * @return DeliveryAdress
+     */
+    public function setSuscriber(\AppBundle\Entity\Suscriber $suscriber = null)
+    {
+        $this->suscriber = $suscriber;
+
+        return $this;
+    }
+
+    /**
+     * Get suscriber
+     *
+     * @return \AppBundle\Entity\Suscriber
+     */
+    public function getSuscriber()
+    {
+        return $this->suscriber;
     }
 }
