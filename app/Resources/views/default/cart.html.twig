@@ -94,7 +94,7 @@
 										<td>
 											<form style="display: none;" action="{{ path('remove_from_cart', {'article':order.article.id}) }}" class="ajaxForm" method="POST">
 												<div class="plus-minus">
-													<button id="moins-button" class="dec qtybutton btn btn-warning p-1 btn-ghost phantom" type="submit">
+													<button id="moins-button-{{ order.article.id }}" class="dec qtybutton btn btn-warning p-1 btn-ghost phantom" type="submit">
 														<i class="fas fa-times"></i>
 													</button>
 												</div>
@@ -102,7 +102,7 @@
 											<span id="span-order-nbr-{{ order.article.id }}" style="display:none"> {{ order.nbr }} </span>{# version originale #}
 											<form style="display: none;" action="{{ path('add_to_cart', {'article':order.article.id}) }}" class="ajaxForm" method="POST">
 												<div class="plus-minus">
-													<button id="plus-button" class="inc qtybutton btn btn-default p-1 btn-ghost phantom" type="submit">
+													<button id="plus-button-{{ order.article.id }}" class="inc qtybutton btn btn-default p-1 btn-ghost phantom" type="submit">
 														<i class="fas fa-plus"></i>
 													</button>
 												</div>
@@ -110,13 +110,13 @@
 											<div class="form-group w-50">
 												<div class="input-group mb-3">
 													<div class="input-group-prepend">
-														<span class="input-group-text btn-warning" onclick="$('#moins-button').click();">
+														<span class="input-group-text btn-warning" onclick="$('#moins-button-{{ order.article.id }}').click();">
 															<i class="fas fa-minus"></i>
 														</span>
 													</div>
 													<input type="text" id ="input-{{ order.article.id }}" value="{{ order.nbr }}" class="form-control text-center" disabled />
 													<div class="input-group-append">
-														<span class="input-group-text btn-default" onclick="$('#plus-button').click();">
+														<span class="input-group-text btn-default" onclick="$('#plus-button-{{ order.article.id }}').click();">
 															<i class="fas fa-plus"></i>
 														</span>
 													</div>
