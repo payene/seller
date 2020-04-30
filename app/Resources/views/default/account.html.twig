@@ -96,6 +96,7 @@
 												<tr>
 													<th class="border-0 text-uppercase small font-weight-bold">Date Commande</th>
 													<th class="border-0 text-uppercase small font-weight-bold">Montant</th>
+													<th class="border-0 text-uppercase small font-weight-bold">Mode de livraison</th>
 													<th class="border-0 text-uppercase small font-weight-bold">Action</th>
 												</tr>
 											</thead>
@@ -104,6 +105,14 @@
 												<tr>
 													<td> <h6>{{ proforma.dateProformat|date("d/m/Y") }}</h6> </td>
 													<td> <h6>{{ proforma.total }}</h6> </td>
+													<td> <h6>
+															{% if proforma.livraisonDomicile %}
+															Livraison à domicile
+															{% else %}
+															Livraison en magasin
+															{% endif %}
+														</h6>
+													</td>
 													<td> <h6><a href="{{ path("proforma", { "proforma": proforma.id }) }}" class="btn-success">Détails</a></h6> </td>
 												</tr>
 												{% else %}
@@ -111,6 +120,9 @@
 													<td class="text-center" colspan="2">Toutes les commandes sont payées et/ou livrées</td>
 												</tr>
 											{% endfor %}
+												<tr>
+													<td class="text-center" colspan="2">Toutes les commandes sont payées et/ou livrées</td>
+												</tr>
 											</tbody>
 										</table>
 									</div>

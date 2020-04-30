@@ -1,3 +1,1 @@
-ALTER TABLE suscriber ADD delivery_adress INT DEFAULT NULL;
-ALTER TABLE suscriber ADD CONSTRAINT FK_B0995892C7440455 FOREIGN KEY (client) REFERENCES client (id);
-ALTER TABLE suscriber ADD CONSTRAINT FK_B099589242FD3E30 FOREIGN KEY (delivery_adress) REFERENCES delivery_adress (id);
+ALTER TABLE proformat ADD livraison_domicile TINYINT(1) NOT NULL;

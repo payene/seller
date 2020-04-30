@@ -1,5 +1,16 @@
 {% extends 'base-shop.html.twig' %}
 
+{#  Personnalisation du field choicetype livraisonDomicile #}
+{% form_theme form _self %}
+
+{% block choice_widget_expanded %}
+    <div class="text-center">
+    {%- for child in form %}
+        {{ form_widget(child, { "attr" : {"form" : "deliver_form"} }) }} &nbsp;
+        {{ form_label(child, null, {translation_domain: choice_translation_domain}) }}&nbsp;&nbsp;&nbsp;&nbsp;
+    {% endfor %}
+    </div>
+{% endblock choice_widget_expanded %}
 
 
 {% block header %}
@@ -95,6 +106,9 @@
 												
 												{{ form_label(form.address, "Adresse") }}
 												{{ form_widget(form.address, { "attr" : {"class" : "form-control", "form" : "deliver_form"} }) }}
+
+												<br/>
+												{{ form_widget(form.livraisonDomicile) }}
 												<hr>
 												<div class="mb-1 ml-4">
 													<input type="checkbox" required class="form-check-input" form="deliver_form" id="chekboxRules">

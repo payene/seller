@@ -231,4 +231,28 @@ class DeliveryAdress
     {
         return $this->address;
     }
+
+    /**
+     * Set suscriber
+     *
+     * @param \AppBundle\Entity\Suscriber $suscriber
+     *
+     * @return DeliveryAdress
+     */
+    public function setSuscriber(\AppBundle\Entity\Suscriber $suscriber = null)
+    {
+        $this->suscriber = $suscriber;
+
+        return $this;
+    }
+
+    /**
+     * Get suscriber
+     *
+     * @return \AppBundle\Entity\Suscriber
+     */
+    public function getSuscriber()
+    {
+        return $this->suscriber;
+    }
 }

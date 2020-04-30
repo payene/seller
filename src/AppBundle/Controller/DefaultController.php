@@ -795,7 +795,9 @@ class DefaultController extends Controller
             $em->persist($deliveryAdress);
             $em->flush();
 
+            $livraisonDomicile = $form["livraisonDomicile"]->getData();
             $proforma = new Proformat();
+            $proforma->setLivraisonDomicile($livraisonDomicile);
             $proforma->setDateproformat(new \DateTime());
             $proforma->setDeliveryAdress($deliveryAdress);
             if(!empty($suscriber)){
@@ -832,6 +834,7 @@ class DefaultController extends Controller
             $em->persist($proforma);
             $em->flush();
             // exit;
+            $lpCollection = $em->getRepository("AppBundle:LigneProformat")->findByProformat($proforma);
             //Envoi de mail
             $message = (new \Swift_Message('Votre commande a été enregistrée avec succes !'))
             ->setFrom(['no-reply@lespetitsbras-com.mon.world' => "Les petits bras"])
@@ -839,7 +842,10 @@ class DefaultController extends Controller
             ->setBody(
                 $this->renderView(
                     'email/confirm.html.twig',
-                    ['proforma' => $proforma]
+                    [
+                        'proforma' => $proforma,
+                        'lpCollection' => $lpCollection,
+                    ]
                 ),
                 'text/html'
             );

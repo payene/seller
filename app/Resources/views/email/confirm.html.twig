@@ -46,7 +46,7 @@
         <thead>
             <tr>
                 <th>N&deg;</th>
-                <th>Article</th>
+                <th>Article({{ lpCollection|length }})</th>
                 <th>P.U</th>
                 <th>Quantit&eacute;</th>
                 <th>Total</th>
@@ -54,7 +54,7 @@
         </thead>
         <tbody>
             {% set i = 1   %}
-            {% for order in proforma.lpCollection|reverse %}
+            {% for order in lpCollection|reverse %}
                 <tr>
                     <td> {{ i }} </td>
                     <td> <h6>{{ order.article.designation }}</h6> </td>
@@ -67,6 +67,16 @@
                 <tr>
                     <td colspan="4" class="total"><h5><b>Total</b></h5></td>
                     <td><h5><b>{{ proforma.total|number_format(0, '.', ' ') }} FCFA</b></h5></td>									
+                </tr>
+                <tr>
+                    <td colspan="4" class="text-left"><h5><b>Mode de livraison</b></h5></td>
+                    <td><h5><b>
+                    {% if proforma.livraisonDomicile %}
+                    Livraison à domicile
+                    {% else %}
+                    Livraison en magasin
+                    {% endif %}
+                    </b></h5></td>									
                 </tr>
         </tbody>
     </table>

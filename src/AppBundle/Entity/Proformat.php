@@ -74,6 +74,12 @@ class Proformat
      */
     private $deliveryAdress;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="livraison_domicile", type="boolean")
+     */
+    private $livraisonDomicile = false;
 
     /**
      * Get id
@@ -220,5 +226,77 @@ class Proformat
     public function getDeliveryAdress()
     {
         return $this->deliveryAdress;
+    }
+
+    /**
+     * Set payer
+     *
+     * @param boolean $payer
+     *
+     * @return Proformat
+     */
+    public function setPayer($payer)
+    {
+        $this->payer = $payer;
+
+        return $this;
+    }
+
+    /**
+     * Get payer
+     *
+     * @return boolean
+     */
+    public function getPayer()
+    {
+        return $this->payer;
+    }
+
+    /**
+     * Set livrer
+     *
+     * @param boolean $livrer
+     *
+     * @return Proformat
+     */
+    public function setLivrer($livrer)
+    {
+        $this->livrer = $livrer;
+
+        return $this;
+    }
+
+    /**
+     * Get livrer
+     *
+     * @return boolean
+     */
+    public function getLivrer()
+    {
+        return $this->livrer;
+    }
+
+    /**
+     * Set livraisonDomicile
+     *
+     * @param boolean $livraisonDomicile
+     *
+     * @return Proformat
+     */
+    public function setLivraisonDomicile($livraisonDomicile)
+    {
+        $this->livraisonDomicile = $livraisonDomicile;
+
+        return $this;
+    }
+
+    /**
+     * Get livraisonDomicile
+     *
+     * @return boolean
+     */
+    public function getLivraisonDomicile()
+    {
+        return $this->livraisonDomicile;
     }
 }
