@@ -128,8 +128,6 @@
 					<!--Grid column-->
 					<div class="col-md-4 mb-4">
 
-						<button class="btn btn-primary btn-lg btn-block" type="submit">Continuer</button>
-
 						<!--Card-->
 						<div class="card z-depth-0 border border-light rounded-0">
 
@@ -152,7 +150,8 @@
 									{% else %} 
 										{% set pu = order.article.defaultPrice %} 
 									{% endif %}
-									{{ pu * order.nbr }}  ({{ order.nbr ~ " unité(s)" }})
+									Qte:&nbsp;{{ order.nbr }} pcs<br>
+									Prix:&nbsp;{{ pu * order.nbr }}
 								</dd>
 							</dl>
 							{% endfor %}

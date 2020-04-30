@@ -17,7 +17,7 @@
 
 	        <div class="my-2">
 				{% for cat in cats %}
-					<a class="text-dark edge-menu-item badge badge-info p-2" style='font-size: 14px;font-weight: normal;text-transform: uppercase;font-family:OpenSans,"Open sans","PingFang SC","Microsoft YaHei","Helvetica Neue",Tahoma,Arial,Helvetica;' href="{{ path('shop_by_cat', {'rayon':cat.categorie.id, 'cat':cat.categorie.id}) }}">  {{ cat.categorie.catname }} <label class="badge badge-primary">({{ cat.nb|length }})</label>  </a>
+					<a class="text-dark edge-menu-item badge badge-info p-2" style='font-size: 14px;font-weight: normal;text-transform: uppercase;font-family:OpenSans,"Open sans","PingFang SC","Microsoft YaHei","Helvetica Neue",Tahoma,Arial,Helvetica;' href="{{ path('shop_by_cat', {'rayon':cat.id, 'cat':cat.id}) }}">  {{ cat.catname }} <label class="badge badge-primary">({{ cat.articles|length }})</label>  </a>
 				{%  endfor %}
 				
 	        </div>

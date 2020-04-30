@@ -45,6 +45,20 @@ class Proformat
      */
     private $client;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="payer", type="boolean")
+     */
+    private $payer = false;
+    
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="livrer", type="boolean")
+     */
+    private $livrer = false;
+
      /**
      * @ORM\OneToMany(targetEntity="LigneProformat", mappedBy="proformat")
      */

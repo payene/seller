@@ -20,7 +20,7 @@ class ClientType extends AbstractType
         $builder
         ->add('nom', TextType::class, array('label'=>'Nom','attr'=>array('class'=>'form-control','placeholder'=>'Nom du client')))
             ->add('prenom', TextType::class, array('label'=>'Prenom','attr'=>array('class'=>'form-control','placeholder'=>'Prenom du client')))
-            ->add('raisoc', TextareaType::class, array('label'=>'Raisoc','attr'=>array('class'=>'form-control','placeholder'=>'Raison ')))
+            ->add('raisoc', TextareaType::class, array('label'=>'Raisoc', 'required' => false, 'attr'=>array('class'=>'form-control','placeholder'=>'Raison')))
             ->add('adresse', TextareaType::class, array('label'=>'Adresse','attr'=>array('class'=>'form-control','placeholder'=>'Adresse client')))
             ->add('telephone', TextType::class, array('label'=>'Telephone','attr'=>array('class'=>'form-control','placeholder'=>'Telephone client')))
             /*->add('email', TextType::class, array('label'=>'E-mail','attr'=>array('class'=>'form-control','placeholder'=>'E-mail client')))*/

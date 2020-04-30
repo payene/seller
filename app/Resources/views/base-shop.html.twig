@@ -80,15 +80,13 @@
               <a class="nav-link waves-effect" href="{{ path('homepage') }}" target="_blank"></a>
           </li>
           <li class="nav-item">
-            <form method="get" action="{{ path('shop_article_search') }}" id="article-search-form">
-              <div class="md-form input-group ml-5 m-0">
-                <input type="text" class="form-control" name="nom" id="article-search-input" placeholder="Rechercher un article" aria-label="Recipient's username"
+            <form method="GET" action="{{ path('shop_article_search') }}" id="article-search-form">
+              <div class="input-group ml-5 m-0">
+                <input type="text" class="form-control mr-sm-2" name="article" id="article-search-input" placeholder="Rechercher un article" aria-label="search"
                   aria-describedby="material-addon2">
-                <div class="input-group-append">
-                  <span class="input-group-text btn md-addon" id="material-addon2" onclick="rechercherArticle();">
-                    <i class="fas fa-search"></i>
-                  </span>
-                </div>
+                  <div class="input-group-append">
+                    <span class="input-group-text" title="rechercher" id="material-addon2" onclick="rechercherArticle();" id="basic-addon2"><i class="fas fa-search"></i></span>
+                  </div>
               </div>
             </form>
           </li>

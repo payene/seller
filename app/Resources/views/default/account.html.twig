@@ -3,8 +3,8 @@
 
 
 {% block header %}
-		<!-- Purple Header -->
-	<div class="edge-header deep-purple"></div>
+	<!-- Purple Header -->
+	<div class="edge-header deep-purple" style="height: 200px;"></div>
 
 	<!-- Main Container -->
 	<div class="container free-bird">
@@ -13,7 +13,11 @@
 
 				<!--Naked Form-->
 				<div class="card-body">
-					<h2 class="h2-responsive"> <strong> Mon compte / R&eacute;capitulatif de la commande  </strong> </h2>
+					<h2 class="h2-responsive"> <strong> Mon compte</strong> </h2>
+					{% for message in app.flashes("success") %}
+					<div class="alert alert-success"><h4>{{ message }}</h4></div>
+					{% endfor %}
+					
 				</div>
 				<!--Naked Form-->
 		    </div>
@@ -23,3 +27,163 @@
 
 {% endblock %}
 
+{% block body %}
+
+ <!--Main layout-->
+  <main class="mt-5 pt-0">
+    <div class="container-fluid">
+
+      <!-- Heading -->
+
+      <!--Grid row-->
+      <div class="row">
+
+		<!--Grid column-->
+		<div class="col-md-10 offset-md-1 mb-4">
+			<div class="row">
+				<div class="col-md-4 mb-4">
+					<div class="card">
+						<!--Card content-->
+						<div class="card-body">
+							<div class="col-xs-12">
+								<h5><center><i class="fas fa-user"></i>&nbsp;Vos Informations</center></h5>
+								<div class="text-center">
+									<dl>
+										<dt>{{ app.user.username }}</dt>
+										<dt>{{ app.user.email }}</dt>
+										<dt>{{ app.user.suscriber.client.nom }}</dt>
+										<dt>{{ app.user.suscriber.client.prenom }}</dt>
+										<dt>{{ app.user.suscriber.client.raisoc }}</dt>
+										<dt>{{ app.user.suscriber.client.adresse }}</dt>
+										<dt>{{ app.user.suscriber.client.telephone }}</dt>
+										<dt><br/>
+											<a href="{{ path('account_password') }}" class="btn btn-success btn-block">Modifier mot de passe</a>
+										</dt>
+										<dt><br/>
+											<a href="{{ path('fos_user_security_logout') }}" class="btn btn-danger btn-block">Déconnexion</a>
+										</dt>
+									</dl>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-8">
+					<div class="card">
+						<!--Card content-->
+						<div class="card-body">
+							<div class="col-xs-12">	
+								<ul class="nav md-pills nav-justified pills-primary font-weight-bold">
+									<li class="nav-item">
+										<a class="nav-link btn {% if app.request.get('type') == "" or app.request.get('type') == "all" %}btn-primary{% endif %}" href="{{ path("account", { "type" : "all"}) }}" role="tab">Tous</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link btn {% if app.request.get('type') == "non_p" %}btn-primary{% endif %}" href="{{ path("account", { "type" : "non_p"}) }}" role="tab">Non payées</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link btn {% if app.request.get('type') == "non_l" %}btn-primary{% endif %}" href="{{ path("account", { "type" : "non_l"}) }}" role="tab">Non livrées</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link btn {% if app.request.get('type') == "l" %}btn-primary{% endif %}" href="{{ path("account", { "type" : "l"}) }}" role="tab">Livrées </a>
+									</li>
+								</ul>
+		
+								<!--Grid row-->
+								<div class="row">
+									<div class="table-responsive table-one margin-minus section-padding-bottom">
+										<table class="table text-center">
+											<thead>
+												<tr>
+													<th class="border-0 text-uppercase small font-weight-bold">Date Commande</th>
+													<th class="border-0 text-uppercase small font-weight-bold">Montant</th>
+													<th class="border-0 text-uppercase small font-weight-bold">Action</th>
+												</tr>
+											</thead>
+											<tbody>
+											{% for proforma in orders|reverse %}
+												<tr>
+													<td> <h6>{{ proforma.dateProformat|date("d/m/Y") }}</h6> </td>
+													<td> <h6>{{ proforma.total }}</h6> </td>
+													<td> <h6><a href="{{ path("proforma", { "proforma": proforma.id }) }}" class="btn-success">Détails</a></h6> </td>
+												</tr>
+												{% else %}
+												<tr>
+													<td class="text-center" colspan="2">Toutes les commandes sont payées et/ou livrées</td>
+												</tr>
+											{% endfor %}
+											</tbody>
+										</table>
+									</div>
+								</div>
+								<!--Grid column-->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--/.Card-->
+
+        </div>
+        <!--Grid column-->
+
+      </div>
+      <!--Grid row-->
+
+    </div>
+  </main>
+  <!--Main layout-->
+
+{% endblock %}
+
+
+{% block javascripts %}
+	{{ parent() }}
+
+	<script type="text/javascript">
+		initAjaxForm();
+		function initAjaxForm()
+        {
+            $('body').on('submit', '.ajaxForm', function (e) {
+                e.preventDefault();
+                $.ajax({
+                    type: $(this).attr('method'),
+                    url: $(this).attr('action'),
+                    data: $(this).serialize()
+                })
+                .done(function (data) {
+                	console.log(data);
+                    if (typeof data !== 'undefined') {
+                    	if (typeof data['article'] !== 'undefined') {
+                        	$('#order-nbr-' + data['article'] ).val(data['nbrOrder']);
+                        	$('#span-order-nbr-' + data['article'] ).html(data['nbrOrder']);
+                        	$('#cart-length').html(data['nbrCart']);
+                        	$('#total-order-' + data['article']).html( data['orderAmount'] );
+                        	$('#invoice-nbr-aticles').html( data['nbrCart'] );
+                        	$('#invoice-amount').html( data['cartAmount'] );
+                    	}
+                    }
+                });
+            });
+
+            $('body').on('submit', '.removeOderForm', function (e) {
+                e.preventDefault();
+                $.ajax({
+                    type: $(this).attr('method'),
+                    url: $(this).attr('action'),
+                    data: $(this).serialize()
+                })
+                .done(function (data) {
+                	console.log(data);
+                    if (typeof data !== 'undefined') {
+                    	if (typeof data['article'] !== 'undefined') {
+                        	$('#order-' + data['article'] ).remove();
+                        	$('#cart-length').html(data['nbrCart']);
+                    	}
+                    }
+                });
+            });
+        }
+	</script>
+
+{% endblock %}

@@ -181,23 +181,30 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();            
         $maxArticles = 100;
 
-        $nom = $request->get("nom");
-
+        $nom = $request->get("article");
+//dump($nom);
         $mots = explode(" ", $nom);
         $cart = $session->get('cart');
 
         $qb = $em->createQueryBuilder()
                 ->select('a')
-                ->from('AppBundle:Article', 'a');
+                ->from('AppBundle:Article', 'a')
+                ->join('a.category', 'c')
+                ;
                 $i = 0;
         foreach($mots as $mot){
             if($i == 0){ //Première importance
-                $qb->where('a.designation like :mot or a.description like :mot')
-                ->setParameter('mot', "%".$mot."%");
+                $qb->where('a.designation like :mot'.$i)
+                   ->orWhere('a.description like :mot'.$i)
+                   ->orWhere('c.catname like :mot'.$i)
+                   ->orWhere('c.catdesc like :mot'.$i)
+                ->setParameter('mot'.$i, "%".$mot."%");
             }
             else{
-                $qb->orWhere('a.designation like :mot or a.description like :mot')
-                    ->setParameter('mot', "%".$mot);
+                $qb->orWhere('a.designation like :mot'.$i)
+                    ->orWhere('c.catname like :mot'.$i)
+                    ->orWhere('c.catdesc like :mot'.$i)
+                    ->setParameter('mot'.$i, "%".$mot.'%');
             }
             $i++;
         }
@@ -210,11 +217,8 @@ class DefaultController extends Controller
         foreach($articles as $article){
             $categorie = $article->getCategory();
             if( !in_array($categorie->getId(), $ids) ){
-                $cats[$categorie->getId()] = [ "categorie" => $categorie, "nb" => 1];
+                $cats[] =$categorie;
                 $ids[] = $categorie->getId();
-            }
-            else{
-                $cats[$categorie->getId()]["nb"] = $cats[$categorie->getId()]["nb"] + 1;
             }
         }
 
@@ -261,7 +265,7 @@ class DefaultController extends Controller
                     'cart' => $cart,
                     'nbrCart' => $nbrCart,
                     'articles' => $shop,
-                    //'categoryArray' => $categoryArray,
+                    "nom" => $nom,
                     'cats' => $cats,
                 ]);
             }
@@ -286,25 +290,67 @@ class DefaultController extends Controller
     **/
     public function accountAction(Request $request)
     {
-        $session = $this->container->get('session'); 
+        $type = $request->query->get("type");
         $em = $this->getDoctrine()->getManager();   
-        $cart = $session->get('cart');
-        $nbrCart = $session->get('nbrCart');
-
-        $suscriber = $this->getUser()->getSuscriber();
+        $user = $this->getUser();
+        $suscriber = $user->getSuscriber();
         $client = $suscriber->getClient();
-        $orders = $em->getRepository('AppBundle:Proformat')->findBy(['client' => $client]);
+        $orders = $em->getRepository('AppBundle:Proformat');
+        switch($type){
+            case "non_p":
+                $orders = $orders->findBy(['client' => $client, "payer" => false]);
+                break;
+            case "non_l":
+                $orders = $orders->findBy(['client' => $client, "payer" => true, "livrer" => false]);
+                break;
+            case "l":
+                $orders = $orders->findBy(['client' => $client, "payer" => true, "livrer" => true]);
+                break;
+            default:
+                $orders = $orders->findBy(['client' => $client]);
+        }
+
         // dump($cart);
-        dump($orders);
+        //dump($orders);
         // replace this example code with whatever you need
         return $this->render('default/account.html.twig', [
-            'cart' => $cart,
-            'nbrCart' => $nbrCart,
-            'orders' => $orders
-
+            'orders' => $orders,
         ]);
     }
 
+    /**
+     * Displays a form to change password of an existing User entity.
+     * @Route("/account/change/password/", name="account_password")
+     * @Method({"GET", "POST"})
+    */
+    public function changePasswordAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+
+            if (!$user) {
+                throw $this->createNotFoundException('Compte non identifié.');
+            }
+
+            $formFactory = $this->container->get('fos_user.change_password.form.factory');
+
+            $form = $formFactory->createForm();
+            $form->setData($user);
+
+            $form->handleRequest($request);
+            if ($form->isValid()) {
+                $userManager = $this->container->get('fos_user.user_manager');
+                $userManager->updateUser($user);
+
+                $this->addFlash("success", "Mot de passe modifié avec succès");
+                return $this->redirectToRoute('account');
+            }
+
+            return $this->render("default/change_password.html.twig", array(
+                            'user'      => $user,
+                            'form'   => $form->createView(),
+                ));
+    }
 
     /**
      * @Route("/newsletter/{email}", name="newsletter")
@@ -722,7 +768,7 @@ class DefaultController extends Controller
     /**
      * @Route("/proceed/proforma", name="proceed_proforma")
     **/
-    public function proceedProformaAction(Request $request)
+    public function proceedProformaAction(Request $request, \Swift_Mailer $mailer)
     {
         //convertir le panier en proforma
         $session = $this->container->get('session'); 
@@ -786,6 +832,20 @@ class DefaultController extends Controller
             $em->persist($proforma);
             $em->flush();
             // exit;
+            //Envoi de mail
+            $message = (new \Swift_Message('Votre commande a été enregistrée avec succes !'))
+            ->setFrom(['no-reply@lespetitsbras-com.mon.world' => "Les petits bras"])
+            ->setTo($loggedUser->getEmail())
+            ->setBody(
+                $this->renderView(
+                    'email/confirm.html.twig',
+                    ['proforma' => $proforma]
+                ),
+                'text/html'
+            );
+            $mailer->send($message);
+
+
             $session->set('cart', null);
             $session->set('nbrCart', null);
 
