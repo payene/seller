@@ -766,6 +766,16 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/account/detail/{proforma}", name="detail_proforma")
+    **/
+    public function detailProformaAction(Request $request, Proformat $proforma)
+    {
+        return $this->render('default/detail_commande.html.twig', [
+            'proforma' => $proforma
+        ]);
+    }
+
+    /**
      * @Route("/proceed/proforma", name="proceed_proforma")
     **/
     public function proceedProformaAction(Request $request, \Swift_Mailer $mailer)

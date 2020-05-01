@@ -13,10 +13,12 @@
 
 				<!--Naked Form-->
 				<div class="card-body">
+					{% block compte_titre %}
 					<h2 class="h2-responsive"> <strong> Mon compte</strong> </h2>
 					{% for message in app.flashes("success") %}
 					<div class="alert alert-success"><h4>{{ message }}</h4></div>
 					{% endfor %}
+					{% endblock %}
 					
 				</div>
 				<!--Naked Form-->
@@ -73,7 +75,8 @@
 						<!--Card content-->
 						<div class="card-body">
 							<div class="col-xs-12">	
-								<ul class="nav md-pills nav-justified pills-primary font-weight-bold">
+								{% block zone_tableau %}
+								<ul class="nav nav-tabs font-weight-bold">
 									<li class="nav-item">
 										<a class="nav-link btn {% if app.request.get('type') == "" or app.request.get('type') == "all" %}btn-primary{% endif %}" href="{{ path("account", { "type" : "all"}) }}" role="tab">Tous</a>
 									</li>
@@ -87,7 +90,8 @@
 										<a class="nav-link btn {% if app.request.get('type') == "l" %}btn-primary{% endif %}" href="{{ path("account", { "type" : "l"}) }}" role="tab">Livrées </a>
 									</li>
 								</ul>
-		
+								<br/>
+
 								<!--Grid row-->
 								<div class="row">
 									<div class="table-responsive table-one margin-minus section-padding-bottom">
@@ -113,21 +117,23 @@
 															{% endif %}
 														</h6>
 													</td>
-													<td> <h6><a href="{{ path("proforma", { "proforma": proforma.id }) }}" class="btn-success">Détails</a></h6> </td>
+													<td> <h6><a href="{{ path("detail_proforma", { "proforma": proforma.id }) }}" class="btn-success">Détails</a></h6> </td>
 												</tr>
 												{% else %}
-												<tr>
-													<td class="text-center" colspan="2">Toutes les commandes sont payées et/ou livrées</td>
-												</tr>
+												
+													{% if app.request.get('type') == "non_p" %}
+													<tr>
+														<td class="text-center" colspan="2">Toutes les commandes sont payées et/ou livrées</td>
+													</tr>
+													{% endif %}
+
 											{% endfor %}
-												<tr>
-													<td class="text-center" colspan="2">Toutes les commandes sont payées et/ou livrées</td>
-												</tr>
 											</tbody>
 										</table>
 									</div>
 								</div>
 								<!--Grid column-->
+								{% endblock %}
 							</div>
 						</div>
 					</div>

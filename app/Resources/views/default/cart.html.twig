@@ -13,7 +13,13 @@
 
 				<!--Naked Form-->
 				<div class="card-body">
-					<h2 class="h2-responsive"><strong> Mon panier / R&eacute;capitulatif de la commande  </strong></h2>
+					<h2 class="h2-responsive"><strong> 
+						{% if cart|length > 0 %}
+						Mon panier / R&eacute;capitulatif de la commande  
+						{% else %}
+						Votre panier est vide cliquez ici pour faire vos achats <a href="{{ path("shop") }}" class="btn btn-success">Boutique</a>
+						{% endif %}
+					</strong></h2>
 				</div>
 				<!--Naked Form-->
 		    </div>
@@ -34,9 +40,10 @@
       <!--Grid row-->
       <div class="row">
 
+		{% if cart|length > 0 %}
         <!--Grid column-->
         <div class="col-md-10 mb-4">
-
+		
           <!--Card-->
           <div class="card">
 
@@ -45,11 +52,7 @@
 
 				<div class="col-xs-12">
 
-					{% if not app.user %}
-					<!-- <h5> Veuillez vous connecter pour générer la proforma <a target="_blank" href="{{ path('proceed_proforma') }}"> Connexion </a> </h5>  -->
-					{% endif %}
 					<div class="table-responsive table-one margin-minus section-padding-bottom">
-
 
 						<table class="table text-center">
 							<thead>
@@ -158,7 +161,7 @@
 	            <span id="invoice-amount" class="badge badge-secondary badge-pill">{{ cartAmount }} </span>
 	        </h4>
           	<!-- Heading -->
-			<h4 class="d-flex justify-content-between align-items-center mb-3">
+			<h4 class="justify-content-between align-items-center mb-3">
 				<a href="{{ path('proforma_checkout') }}" class="btn btn-info btn-lg"> commander	 </a>
 
 			</h4>
@@ -168,7 +171,7 @@
 
       </div>
       <!--Grid row-->
-
+		{% endif %}
     </div>
   </main>
   <!--Main layout-->
