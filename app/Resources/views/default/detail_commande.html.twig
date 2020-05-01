@@ -1,7 +1,18 @@
 {% extends 'default/account.html.twig' %}
 
 {% block compte_titre %}
+    {% for message in app.session.flashbag.get("success") %}
+    <div class="alert alert-success">
+        {{ message }}
+    </div>
+    {% endfor %}
     <h2 class="h2-responsive"> <strong> Mon compte/ Détails de la commande </strong> </h2>
+{% endblock %}
+
+{% block lien_commande %}
+<dt><br/>
+    <a href="{{ path('account') }}" class="btn btn-primary btn-block">Mes commandes</a>
+</dt>
 {% endblock %}
 
  {% block zone_tableau %}

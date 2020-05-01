@@ -58,6 +58,8 @@
 										<dt>{{ app.user.suscriber.client.raisoc }}</dt>
 										<dt>{{ app.user.suscriber.client.adresse }}</dt>
 										<dt>{{ app.user.suscriber.client.telephone }}</dt>
+										{% block lien_commande %}
+										{% endblock %}
 										<dt><br/>
 											<a href="{{ path('account_password') }}" class="btn btn-success btn-block">Modifier mot de passe</a>
 										</dt>
@@ -78,16 +80,19 @@
 								{% block zone_tableau %}
 								<ul class="nav nav-tabs font-weight-bold">
 									<li class="nav-item">
-										<a class="nav-link btn {% if app.request.get('type') == "" or app.request.get('type') == "all" %}btn-primary{% endif %}" href="{{ path("account", { "type" : "all"}) }}" role="tab">Tous</a>
+										<a class="nav-link {% if app.request.get('type') == "" or app.request.get('type') == "all" %}btn-primary{% endif %}" href="{{ path("account", { "type" : "all"}) }}" role="tab">Tous</a>
 									</li>
 									<li class="nav-item">
-										<a class="nav-link btn {% if app.request.get('type') == "non_p" %}btn-primary{% endif %}" href="{{ path("account", { "type" : "non_p"}) }}" role="tab">Non payées</a>
+										<a class="nav-link {% if app.request.get('type') == "non_p" %}btn-primary{% endif %}" href="{{ path("account", { "type" : "non_p"}) }}" role="tab">Non payées</a>
 									</li>
 									<li class="nav-item">
-										<a class="nav-link btn {% if app.request.get('type') == "non_l" %}btn-primary{% endif %}" href="{{ path("account", { "type" : "non_l"}) }}" role="tab">Non livrées</a>
+										<a class="nav-link {% if app.request.get('type') == "p" %}btn-primary{% endif %}" href="{{ path("account", { "type" : "p"}) }}" role="tab">payées</a>
 									</li>
 									<li class="nav-item">
-										<a class="nav-link btn {% if app.request.get('type') == "l" %}btn-primary{% endif %}" href="{{ path("account", { "type" : "l"}) }}" role="tab">Livrées </a>
+										<a class="nav-link {% if app.request.get('type') == "non_l" %}btn-primary{% endif %}" href="{{ path("account", { "type" : "non_l"}) }}" role="tab">Non livrées</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link {% if app.request.get('type') == "l" %}btn-primary{% endif %}" href="{{ path("account", { "type" : "l"}) }}" role="tab">Livrées </a>
 									</li>
 								</ul>
 								<br/>
@@ -114,6 +119,13 @@
 															Livraison à domicile
 															{% else %}
 															Livraison en magasin
+															{% endif %}
+															{% if app.request.get('type') == "p" %}
+																{% if proforma.livrer %}
+																<span class="badge badge-success">Livré</span>
+																{% else %}
+																<span class="badge badge-danger">Non livré</span>
+																{% endif %}
 															{% endif %}
 														</h6>
 													</td>

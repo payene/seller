@@ -300,11 +300,14 @@ class DefaultController extends Controller
             case "non_p":
                 $orders = $orders->findBy(['client' => $client, "payer" => false]);
                 break;
+            case "p":
+                $orders = $orders->findBy(['client' => $client, "payer" => true]);
+                break;
             case "non_l":
-                $orders = $orders->findBy(['client' => $client, "payer" => true, "livrer" => false]);
+                $orders = $orders->findBy(['client' => $client, "livrer" => false]);
                 break;
             case "l":
-                $orders = $orders->findBy(['client' => $client, "payer" => true, "livrer" => true]);
+                $orders = $orders->findBy(['client' => $client,"livrer" => true]);
                 break;
             default:
                 $orders = $orders->findBy(['client' => $client]);
@@ -860,12 +863,12 @@ class DefaultController extends Controller
                 'text/html'
             );
             $mailer->send($message);
-
+            $this->addFlash("success", 'Votre commande a été enregistrée avec succès !');
 
             $session->set('cart', null);
             $session->set('nbrCart', null);
 
-            return $this->redirectToRoute('proforma', array('proforma' => $proforma->getId()));
+            return $this->redirectToRoute('detail_proforma', array('proforma' => $proforma->getId()));
         }
         else{
             $this->addFlash("error", "Formulaire invalide");
