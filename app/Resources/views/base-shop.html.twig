@@ -82,7 +82,7 @@
           <li class="nav-item">
             <form method="GET" action="{{ path('shop_article_search') }}" id="article-search-form">
               <div class="input-group ml-5 m-0">
-                <input type="text" class="form-control mr-sm-2" name="article" id="article-search-input" placeholder="Rechercher un article" aria-label="search"
+                <input type="text" class="form-control mr-sm-2" value="{{ app.request.get('article') }}" name="article" id="article-search-input" placeholder="Rechercher un article" aria-label="search"
                   aria-describedby="material-addon2">
                   <div class="input-group-append">
                     <span class="input-group-text" title="rechercher" id="material-addon2" onclick="rechercherArticle();" id="basic-addon2"><i class="fas fa-search"></i></span>

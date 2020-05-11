@@ -90,12 +90,8 @@
 
 								    <h4 class="font-weight-bold blue-text">
 								     	
-								      	{% if prod.price is defined %}
-											{% set theAmount = prod.price %}
-										{% else %}
-											{% set theAmount = prod.item.defaultPrice %}
-										{% endif  %}
-
+										{% set theAmount = prod.item.defaultPrice %}
+										
 										 <strong> {{ theAmount }} </strong>
 										<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#centralModalSm-{{ loop.index }}">
 											Commander
@@ -130,7 +126,7 @@
 										        <!--Grid column-->
 										        <div class="col-md-6 mb-4">
 
-										          <img src="{{ prod.item.source1 }}" class="img-fluid" alt="">
+										          <img src="{{ prod.item.source1 }}" id="img-{{ prod.item.id }}" class="img-fluid" alt="">
 
 										        </div>
 										        <!--Grid column-->
@@ -151,18 +147,33 @@
 										              	{#<span class="mr-1">
 										                	<del>$200</del>
 										              	</span>#}
-										              <span> {{ theAmount }} </span>
+										              <span id="amount-{{ prod.item.id }}"> {{ theAmount }} </span>
 										            </p>
 
-										            <p class="lead font-weight-bold">Description</p>
-
-										            <p> {{ prod.item.description }} </p>
-
-													<form action="{{ path('add_to_cart', {'article':prod.item.id}) }}"  class="ajaxForm d-flex justify-content-left" method="POST">
+													<form action="{{ path('add_to_cart') }}" default-image="{{ prod.item.source1 }}"  class="ajaxForm d-flex justify-content-left" id="form-{{ prod.item.id }}" method="POST">
 														<div class="mt-1">
-
-															<button id="btn-add-card-{{ loop.index }}" onclick="addCardNotif({{ loop.index }})" class="btn btn-primary btn-lg my-0 p" type="submit"> Ajouter au panier
-										                <i class="fas fa-shopping-cart ml-1"></i>
+															{% for option in prod.options %}
+															<div class="form-group">
+																<label>{{ option.caracteristique.libelle }}</label>
+																<select class="mylabel" data-caracteristique-id="{{ option.caracteristique.id }}" onchange="chargerArticle({{ prod.item.id }});">
+																	<option value="" selected></option>
+																	{% for valeur in option.valeurs %}
+																	<option value="{{ valeur }}">{{ valeur }}</option>
+																	{% endfor %}
+																</select>
+															</div>
+															{% endfor %}
+															<div class="form-group form-qte-{{ prod.item.id }}" style="display: none;">
+																<label>quantité</label>
+																<select name="qte" class="mylabel" id="qte-{{ prod.item.id }}">
+																</select>
+															</div>
+															<p id="designation-{{ prod.item.id }}"></p>
+															<p id="description-{{ prod.item.id }}"></p>
+															<input type="hidden" name="article-id" id="article-id-{{ prod.item.id }}" />
+															<button id="btn-add-card-{{ loop.index }}" disabled onclick="addCardNotif({{ loop.index }})" class="btn btn-primary btn-lg my-0 p add-button-{{ prod.item.id }}" type="submit"> Ajouter au panier
+										                	<i class="fas fa-shopping-cart ml-1"></i>
+															</button>
 														</div>
 													</form>
 
@@ -238,7 +249,13 @@
 
 {% block javascripts %}
 	{{ parent() }}
-
+	<style>
+		.mylabel {
+			display: inline-block;
+			width: 100px;
+			text-align: right;
+		}​
+	</style>
 	<script type="text/javascript">
 		initAjaxForm();
 		function initAjaxForm()
@@ -276,6 +293,66 @@
        		$('#notif-add-card-'+index).show();
        		$('#btn-add-card-'+index).hide();
        	}
+
+		function chargerArticle(id){
+			var initialiser = false;
+			var valeurs = {"type-id" : id};
+			$("#form-"+id+" select").each(function(){
+				var caracteristique = $(this).attr("data-caracteristique-id");
+				valeurs[caracteristique] = $(this).val();
+			});
+
+			$.ajax({
+				url: "{{ path('select_article')|escape('js') }}",
+				method: "post",
+				datatype: "json",
+				data: valeurs,
+				success: function(data){
+					if(data.length != 0){
+						$.each(data, function(index, value){
+							//console.log(value);
+							$("#img-"+id).val( value.article.a_source1 );
+							if(value.price != null){
+								//console.log(value.price);
+								$("#amount-"+id).text(value.price);
+							}
+							else{
+								$("#amount-"+id).text(value.article.a_defaultPrice);
+							}
+							
+							$("#article-id-"+id).val(value.article.a_id);
+							$("#designation-"+id).html("<h3><b>" + value.article.a_designation + "</b></h3>");
+							$("#description-"+id).html(value.article.a_description);
+							$(".add-button-"+id).prop("disabled", false);
+
+							/* les quantités */
+							$(".form-qte-"+id).css("display", "");
+							$("#qte-"+id).empty();
+							var qte = parseInt(value.article.a_stock);
+							for(var i=1; i<=qte; i++){
+								option = $("<option value='"+i+"'>"+i+"</option>");
+								$("#qte-"+id).append(option);
+							}
+						});
+					}
+					else{
+						$("#img-"+id).val( $('#form-'+id).attr("default-image") );
+						$("#amount-"+id).text("");
+						$("#designation-"+id).html("<span style='color:red;'>Aucun article disponible correspondant!</span>");
+						$("#description-"+id).html("");
+						$(".add-button-"+id).prop("disabled", true);
+						$(".form-qte-"+id).css("display", "none");
+					}
+				},
+				error: function(){
+					//console.log("error");
+					$("#designation-"+id).html("<span style='color:red;'>Erreur de chargement, veuillez vérifier votre connexion internet</span>");
+					$("#description-"+id).html("");
+					$(".add-button-"+id).prop("disabled", true);
+					$(".form-qte-"+id).css("display", "none");
+				}
+			});
+		}
 
 	</script>
 

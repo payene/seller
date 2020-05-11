@@ -51,6 +51,85 @@ class DefaultController extends Controller
         return $this->redirectToRoute('shop');
     }
 
+    /**
+     * @Route("/shop/article/select", name="select_article")
+    **/
+    public function selectArticleAction(Request $request)
+    {
+        $typeId = $request->request->get("type-id");
+        $em = $this->getDoctrine()->getManager(); 
+        $typeArticle = $em->getRepository("AppBundle:TypeArticle")->find($typeId);
+        $caracteristiques = $typeArticle->getCaracteristiques();
+        $q = "select a " . 
+                 "from AppBundle:Article a " .
+                 "join a.typeArticle t " .
+                 "where t.id = :typeId";
+        foreach(  $caracteristiques as $caracteristique ){
+            $q .= " and a.id in ( " . 
+                                "select art".$caracteristique->getId().".id " .
+                                "from AppBundle:Valeur v".$caracteristique->getId()." " .
+                                "join v".$caracteristique->getId().".caracteristique c".$caracteristique->getId()." " .
+                                "join v".$caracteristique->getId().".article art".$caracteristique->getId()." " .
+                                "join art".$caracteristique->getId().".typeArticle t".$caracteristique->getId()." " .
+                                "where c".$caracteristique->getId().".id = :cid" . $caracteristique->getId() . " " .
+                                "and v".$caracteristique->getId().".valeurCaracteristique = :valeur" . $caracteristique->getId() . " " .
+                                "and t".$caracteristique->getId().".id = :typeId " .
+                            " )";
+        }
+        $query = $em->createQuery($q)
+                    ->setParameter("typeId", $typeId);
+
+        foreach(  $caracteristiques as $caracteristique ){
+            $valeur = $request->request->get($caracteristique->getId());
+            $query->setParameter("cid" . $caracteristique->getId(), $caracteristique->getId());
+            $query->setParameter("valeur" . $caracteristique->getId(), $valeur);
+        }
+
+        $shop = [];
+        $articles = $query->getScalarResult(); //Sous forme de liste
+        $loggedUser = $this->getUser();
+        $personnaliser = false;
+        foreach ($articles as $key => $article) {
+            if(!empty($loggedUser)){
+                $suscriber = $loggedUser->getSuscriber();
+                // dump($suscriber);
+                if(!empty($suscriber)){
+                    $client = $suscriber->getClient();
+                    $price = $em->getRepository('AppBundle:Prix')->findBy(['client' => $client->getId()]);
+
+                    $query = $em->createQueryBuilder();
+                    $price = $query
+                        ->select('p')
+                        ->from('AppBundle:Prix', 'p')
+                        ->join('p.client', 'c')
+                        ->join('p.article', 'a') 
+                        ->andwhere(":today BETWEEN p.dateDebut AND p.dateFin ")
+                        ->andwhere("p.client = :clientId ")
+                        ->andwhere("p.article = :articleId ")
+                        ->setParameter('today', new \DateTime())
+                        ->setParameter('clientId', $client->getId())
+                        ->setParameter('articleId', $article["a_id"])
+                        ->orderBy('p.id', 'DESC')
+                        ->setMaxResults(1)
+                        ->getQuery()
+                        ->getOneOrNullResult()
+                    ;
+                    // dump($price);
+                    // exit;
+                    //$medias = $em->getRepository('AppBundle:Media')->findBy(['article' => $article->getId()]);
+                    $shop[] = array('article' => $article, 'client' => $client, 'price' => $price==null?null:$price->getMontant() );
+                    $personnaliser = true;                
+                }
+            }
+
+            if($personnaliser == false){
+                $shop[] = array('article' => $article);
+            }
+        }
+
+        return new JsonResponse($shop);
+    }
+
     // defaults={"cat"=20000}
 
      /**
@@ -81,7 +160,7 @@ class DefaultController extends Controller
         $cart = $session->get('cart');
         // dump($session->get('logged'));
         $articles_count = $this->getDoctrine()
-                ->getRepository('AppBundle:Article')
+                ->getRepository('AppBundle:TypeArticle')
                 ->countArticlesTotal();
         
         $pagination = NULL;
@@ -101,14 +180,14 @@ class DefaultController extends Controller
                         ->getQuery()
                         ->getResult()
                     ;
-        
-        $articles = $em->getRepository('AppBundle:Article')
+        /* les variables articles ici références les types d'article */
+        $articles = $em->getRepository('AppBundle:TypeArticle')
                 ->getListByCat($page, $maxArticles, $cat);
         $loggedUser = $this->getUser();
         // exit;
         $shop = [];
         $nbrCart = $session->get('nbrCart');
-        if(!empty($loggedUser)){
+        /* if(!empty($loggedUser)){
             $suscriber = $loggedUser->getSuscriber();
             // dump($suscriber);
             if(!empty($suscriber)){
@@ -153,11 +232,34 @@ class DefaultController extends Controller
                     'pagination' => $pagination,
                 ]);
             }
-        }
+        } */
         
         $shop = [];
-        foreach ($articles as $key => $article) {
-            $shop[] = array('item' => $article );
+        foreach ($articles as $key => $typeArticle) {
+            $option = [];
+            $caracteristiques = $typeArticle->getCaracteristiques();
+            foreach( $caracteristiques as $caracteristique ){
+                $valeurs = $em->createQueryBuilder()
+                            ->select("v")
+                            ->from("AppBundle:Valeur", "v")
+                            ->join("v.caracteristique", "c")
+                            ->join("v.article", "a")
+                            ->join("a.typeArticle", "t")
+                            ->where("t.id = :id")
+                            ->andWhere("c.id = :c_id")
+                            ->setParameter("id", $typeArticle->getId())
+                            ->setParameter("c_id", $caracteristique->getId())
+                            ->getQuery()
+                            ->getResult();
+                $valeurPossibles = [];
+                foreach($valeurs as $valeur){
+                    if( !in_array($valeur->getValeurCaracteristique(), $valeurPossibles) ){
+                        $valeurPossibles[] = $valeur->getValeurCaracteristique();
+                    }
+                }
+                $option[] = [ "caracteristique" => $caracteristique, "valeurs" => $valeurPossibles ];
+            }
+            $shop[] = array('item' => $typeArticle, "options" => $option );
         }
         // replace this example code with whatever you need
         return $this->render('default/shop-by-cat.html.twig', [
@@ -188,7 +290,7 @@ class DefaultController extends Controller
 
         $qb = $em->createQueryBuilder()
                 ->select('a')
-                ->from('AppBundle:Article', 'a')
+                ->from('AppBundle:TypeArticle', 'a')
                 ->join('a.category', 'c')
                 ;
                 $i = 0;
@@ -226,7 +328,7 @@ class DefaultController extends Controller
         // exit;
         $shop = [];
         $nbrCart = $session->get('nbrCart');
-        if(!empty($loggedUser)){
+        /* if(!empty($loggedUser)){
             $suscriber = $loggedUser->getSuscriber();
             // dump($suscriber);
             if(!empty($suscriber)){
@@ -269,11 +371,34 @@ class DefaultController extends Controller
                     'cats' => $cats,
                 ]);
             }
-        }
+        } */
         
         $shop = [];
-        foreach ($articles as $key => $article) {
-            $shop[] = array('item' => $article );
+        foreach ($articles as $key => $typeArticle) {
+            $option = [];
+            $caracteristiques = $typeArticle->getCaracteristiques();
+            foreach( $caracteristiques as $caracteristique ){
+                $valeurs = $em->createQueryBuilder()
+                            ->select("v")
+                            ->from("AppBundle:Valeur", "v")
+                            ->join("v.caracteristique", "c")
+                            ->join("v.article", "a")
+                            ->join("a.typeArticle", "t")
+                            ->where("t.id = :id")
+                            ->andWhere("c.id = :c_id")
+                            ->setParameter("id", $typeArticle->getId())
+                            ->setParameter("c_id", $caracteristique->getId())
+                            ->getQuery()
+                            ->getResult();
+                $valeurPossibles = [];
+                foreach($valeurs as $valeur){
+                    if( !in_array($valeur->getValeurCaracteristique(), $valeurPossibles) ){
+                        $valeurPossibles[] = $valeur->getValeurCaracteristique();
+                    }
+                }
+                $option[] = [ "caracteristique" => $caracteristique, "valeurs" => $valeurPossibles ];
+            }
+            $shop[] = array('item' => $typeArticle, "options" => $option );
         }
         // replace this example code with whatever you need
         return $this->render('default/shop-by-article.html.twig', [
@@ -415,16 +540,19 @@ class DefaultController extends Controller
    
     
     /**
-     * @Route("/shop/add/to/cart/{article}", name="add_to_cart")
+     * @Route("/shop/add/to/cart", name="add_to_cart")
      * * @Method({"POST","GET"})
     **/
-    public function addToCartAction(Request $request, Article $article)
+    public function addToCartAction(Request $request)
     {
-        
+        //dump($request); exit();
         if (!$request->isXmlHttpRequest()) {
             // return new JsonResponse(array('message' => 'You can\'t access this by this way!'), 400);
         }
+        
         $em = $this->getDoctrine()->getManager();           
+        $article = $em->getRepository("AppBundle:Article")->find( $request->request->get("article-id") );
+        $qte = $request->request->get("qte");
         $session = $this->container->get('session'); 
         $nbrCart = $session->get('nbrCart');
         $cartAmount = $session->get('cartAmount');
@@ -438,17 +566,16 @@ class DefaultController extends Controller
         // dump($order);
         if(empty($order)){
             // $order = array('article' => $article, 'nbr' => 1);
-            $currNbr = 1;
+            $currNbr = $qte;
         }
         else{
-            $currNbr = $order['nbr'] + 1;
+            $currNbr = $order['nbr'] + $qte;
         }
         $nbrCart++;
         $unityPrice = $this->getUniPrice($article, $loggedUser);
         $order = array('article' => $article, 'nbr' => $currNbr, 'price' =>$unityPrice);
         $cart[$article->getId()] = $order;
         
-
 
         $orderAmount = $unityPrice * $currNbr;
 

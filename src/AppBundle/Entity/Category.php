@@ -41,6 +41,11 @@ class Category
     private $articles;
 
     /**
+     * @ORM\OneToMany(targetEntity="TypeArticle", mappedBy="category")
+     */
+    private $typeArticles;
+
+    /**
      * @var \Category
      *
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="categories",cascade={"persist"}, fetch="EAGER")
@@ -250,5 +255,39 @@ class Category
     public function getIcone()
     {
         return $this->icone;
+    }
+
+    /**
+     * Add typeArticle
+     *
+     * @param \AppBundle\Entity\TypeArticle $typeArticle
+     *
+     * @return Category
+     */
+    public function addTypeArticle(\AppBundle\Entity\TypeArticle $typeArticle)
+    {
+        $this->typeArticles[] = $typeArticle;
+
+        return $this;
+    }
+
+    /**
+     * Remove typeArticle
+     *
+     * @param \AppBundle\Entity\TypeArticle $typeArticle
+     */
+    public function removeTypeArticle(\AppBundle\Entity\TypeArticle $typeArticle)
+    {
+        $this->typeArticles->removeElement($typeArticle);
+    }
+
+    /**
+     * Get typeArticles
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTypeArticles()
+    {
+        return $this->typeArticles;
     }
 }

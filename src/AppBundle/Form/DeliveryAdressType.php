@@ -23,7 +23,7 @@ class DeliveryAdressType extends AbstractType
                 ->add('address')
                 ->add('livraisonDomicile', ChoiceType::class, [
                     "mapped" => false,
-                    "data" => false,
+                    "data" => true,
                     'choices'  => [
                         'livraison à domicile' => true,
                         'Livraison en magasin' => false,

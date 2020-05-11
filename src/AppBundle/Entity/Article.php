@@ -91,6 +91,16 @@ class Article
     private $category;
 
     /**
+     * @var \TypeArticle
+     *
+     * @ORM\ManyToOne(targetEntity="TypeArticle", inversedBy="articles")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="type_article", referencedColumnName="id", nullable=true)
+     * })
+     */
+    private $typeArticle;
+
+    /**
      * @ORM\OneToMany(targetEntity="LigneProformat", mappedBy="article")
      */
     private $lpCollection; 
@@ -612,4 +622,28 @@ class Article
     }
 
    
+
+    /**
+     * Set typeArticle
+     *
+     * @param \AppBundle\Entity\TypeArticle $typeArticle
+     *
+     * @return Article
+     */
+    public function setTypeArticle(\AppBundle\Entity\TypeArticle $typeArticle = null)
+    {
+        $this->typeArticle = $typeArticle;
+
+        return $this;
+    }
+
+    /**
+     * Get typeArticle
+     *
+     * @return \AppBundle\Entity\TypeArticle
+     */
+    public function getTypeArticle()
+    {
+        return $this->typeArticle;
+    }
 }

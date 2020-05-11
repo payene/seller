@@ -72,10 +72,16 @@
 										</div>
 									</div>
 									<hr />
+									<div class="col-md-12">
+										<br/>
+										<br/>
+										{{ form_widget(form.livraisonDomicile) }}
+									</div>
+									<hr />
 									<div class="col-md-12 mt-5" style="border: 1px solid gray; border-radius: 5px;">
-										<label class="badge badge-success">Adresse de facturation</label>
-										<br>
-										<div class = "row">
+										<label class="badge badge-success adresse-facturation">Adresse de facturation</label>
+										<br/>
+										<div class="row adresse-facturation">
 											<!--Grid column-->
 											<div class="col-md-6 mb-2">
 												<!--lastName-->
@@ -106,24 +112,25 @@
 												
 												{{ form_label(form.address, "Adresse") }}
 												{{ form_widget(form.address, { "attr" : {"class" : "form-control", "form" : "deliver_form"} }) }}
-
-												<br/>
-												{{ form_widget(form.livraisonDomicile) }}
-												<hr>
-												<div class="mb-1 ml-4">
-													<input type="checkbox" required class="form-check-input" form="deliver_form" id="chekboxRules">
-													<label class="form-check-label" for="chekboxRules">J'accepte les termes et conditions</label>
-												</div>
-												<br/>
+												<br />
 												<div class="mb-1 ml-4">
 													<input type="checkbox" class="form-check-input" form="deliver_form" name="save" id="safeTheInfo">
 													<label class="form-check-label" for="safeTheInfo">Sauvegarder cette information pour les prochaines commandes</label>
 												</div>
-												<hr>
-												
-												<button class="btn btn-primary btn-lg btn-block" form="deliver_form" type="submit">Valider la commande</button>
 											</div>
 										</div>
+										<div class="row">
+											<div class="col-md-12">
+												<div class="mb-1 ml-4">
+													<input type="checkbox" required class="form-check-input" form="deliver_form" id="chekboxRules">
+													<label class="form-check-label" for="chekboxRules">J'accepte les termes et conditions</label>
+												</div>
+												<br />
+												<button class="btn btn-primary btn-lg btn-block" form="deliver_form" type="submit">Valider la commande</button>
+												<br/>
+											</div>
+										</div>
+
 									</div>
 								</div>
 								<!--Grid column-->
@@ -199,49 +206,25 @@
 	{{ parent() }}
 
 	<script type="text/javascript">
-		initAjaxForm();
-		function initAjaxForm()
-        {
-            $('body').on('submit', '.ajaxForm', function (e) {
-                e.preventDefault();
-                $.ajax({
-                    type: $(this).attr('method'),
-                    url: $(this).attr('action'),
-                    data: $(this).serialize()
-                })
-                .done(function (data) {
-                	console.log(data);
-                    if (typeof data !== 'undefined') {
-                    	if (typeof data['article'] !== 'undefined') {
-                        	$('#order-nbr-' + data['article'] ).val(data['nbrOrder']);
-                        	$('#span-order-nbr-' + data['article'] ).html(data['nbrOrder']);
-                        	$('#cart-length').html(data['nbrCart']);
-                        	$('#total-order-' + data['article']).html( data['orderAmount'] );
-                        	$('#invoice-nbr-aticles').html( data['nbrCart'] );
-                        	$('#invoice-amount').html( data['cartAmount'] );
-                    	}
-                    }
-                });
-            });
 
-            $('body').on('submit', '.removeOderForm', function (e) {
-                e.preventDefault();
-                $.ajax({
-                    type: $(this).attr('method'),
-                    url: $(this).attr('action'),
-                    data: $(this).serialize()
-                })
-                .done(function (data) {
-                	console.log(data);
-                    if (typeof data !== 'undefined') {
-                    	if (typeof data['article'] !== 'undefined') {
-                        	$('#order-' + data['article'] ).remove();
-                        	$('#cart-length').html(data['nbrCart']);
-                    	}
-                    }
-                });
-            });
-        }
+		$("input[type=radio]").on("change", function(){
+			if( $(this).prop("selected", true) ){
+				displayAdresse($(this).val());
+			}
+			//alert();
+		});
+
+		function displayAdresse(value)
+        {
+
+			if(value == 0){
+				$('.adresse-facturation').css("display", "none");
+			}
+			else{
+				$('.adresse-facturation').css("display", "");
+			}
+			
+		}
 	</script>
 
 {% endblock %}
