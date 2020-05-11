@@ -43,7 +43,7 @@ class Valeur
      *
      * @ORM\ManyToOne(targetEntity="Caracteristique", inversedBy="valeurs")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="article", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="caracteristique", referencedColumnName="id")
      * })
      */
     private $caracteristique;

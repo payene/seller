@@ -936,8 +936,10 @@ class DefaultController extends Controller
             $em->flush();
 
             $livraisonDomicile = $form["livraisonDomicile"]->getData();
+            $dureeLivraison = $form["dureeLivraison"]->getData();
             $proforma = new Proformat();
             $proforma->setLivraisonDomicile($livraisonDomicile);
+            $proforma->setDureeLivraison($dureeLivraison);
             $proforma->setDateproformat(new \DateTime());
             $proforma->setDeliveryAdress($deliveryAdress);
             if(!empty($suscriber)){

@@ -87,9 +87,6 @@ class TypeArticle
 
     /**
      * @ORM\ManyToMany(targetEntity="Caracteristique", cascade={"persist"})
-     * @ORM\JoinTable(name="type_article_caracteristique",
-     *  joinColumns={@ORM\JoinColumn(name="type_article" ,referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="caracteristique", referencedColumnName="id")})
      */
     private $caracteristiques;
     /**

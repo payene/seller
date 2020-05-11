@@ -62,6 +62,14 @@
                     {% endif %}
                     </b></h5></td>									
                 </tr>
+                <tr>
+                    <td colspan="4" class="text-left"><h5><b>Duree de livraison</b></h5></td>
+                    <td><h5><b>
+                    {% if proforma.dureeLivraison is not null %}
+                        {{ proforma.dureeLivraison.libelle }}
+                    {% endif %}
+                    </b></h5></td>									
+                </tr>
             </tbody>
         </table>
     </div>

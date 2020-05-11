@@ -82,6 +82,13 @@ class Proformat
     private $livraisonDomicile = false;
 
     /**
+     * @ORM\ManyToOne(targetEntity="DureeLivraison", inversedBy="proformats")
+     * @ORM\JoinColumn(name="duree_livraison_id", referencedColumnName="id", nullable=true)
+     */
+    private $dureeLivraison;
+
+
+    /**
      * Get id
      *
      * @return int
@@ -298,5 +305,29 @@ class Proformat
     public function getLivraisonDomicile()
     {
         return $this->livraisonDomicile;
+    }
+
+    /**
+     * Set dureeLivraison
+     *
+     * @param \AppBundle\Entity\DureeLivraison $dureeLivraison
+     *
+     * @return Proformat
+     */
+    public function setDureeLivraison(\AppBundle\Entity\DureeLivraison $dureeLivraison = null)
+    {
+        $this->dureeLivraison = $dureeLivraison;
+
+        return $this;
+    }
+
+    /**
+     * Get dureeLivraison
+     *
+     * @return \AppBundle\Entity\DureeLivraison
+     */
+    public function getDureeLivraison()
+    {
+        return $this->dureeLivraison;
     }
 }
