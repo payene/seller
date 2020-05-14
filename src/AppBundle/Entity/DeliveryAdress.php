@@ -24,42 +24,42 @@ class DeliveryAdress
     /**
      * @var string
      *
-     * @ORM\Column(name="firstname", type="string", length=255)
+     * @ORM\Column(name="firstname", type="string", length=255, nullable=true)
      */
     private $firstname;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="lastname", type="string", length=255)
+     * @ORM\Column(name="lastname", type="string", length=255, nullable=true)
      */
     private $lastname;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=255)
+     * @ORM\Column(name="email", type="string", length=255, nullable=true)
      */
     private $email;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="phone", type="string", length=255)
+     * @ORM\Column(name="phone", type="string", length=255, nullable=true)
      */
     private $phone;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="quartier", type="string", length=255)
+     * @ORM\Column(name="quartier", type="string", length=255, nullable=true)
      */
     private $quartier;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="address", type="text")
+     * @ORM\Column(name="address", type="text", nullable=true)
      */
     private $address;
 
@@ -68,6 +68,12 @@ class DeliveryAdress
      * @ORM\JoinColumn(name="suscriber_id", referencedColumnName="id", nullable=true)
      */
     private $suscriber;
+
+
+    /**
+    * @ORM\OneToMany(targetEntity="Proformat", mappedBy="deliveryAdress")
+    */
+    private $proformats;
 
     /**
      * Get id
@@ -254,5 +260,46 @@ class DeliveryAdress
     public function getSuscriber()
     {
         return $this->suscriber;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->proformats = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add proformat
+     *
+     * @param \AppBundle\Entity\Proformat $proformat
+     *
+     * @return DeliveryAdress
+     */
+    public function addProformat(\AppBundle\Entity\Proformat $proformat)
+    {
+        $this->proformats[] = $proformat;
+
+        return $this;
+    }
+
+    /**
+     * Remove proformat
+     *
+     * @param \AppBundle\Entity\Proformat $proformat
+     */
+    public function removeProformat(\AppBundle\Entity\Proformat $proformat)
+    {
+        $this->proformats->removeElement($proformat);
+    }
+
+    /**
+     * Get proformats
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProformats()
+    {
+        return $this->proformats;
     }
 }

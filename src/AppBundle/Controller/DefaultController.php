@@ -54,7 +54,7 @@ class DefaultController extends Controller
     /**
      * @Route("/shop/article/select", name="select_article")
     **/
-    public function selectArticleAction(Request $request)
+    public function selectArticleAction(Request $request, SessionInterface $session)
     {
         $typeId = $request->request->get("type-id");
         $em = $this->getDoctrine()->getManager(); 
@@ -84,7 +84,7 @@ class DefaultController extends Controller
             $query->setParameter("cid" . $caracteristique->getId(), $caracteristique->getId());
             $query->setParameter("valeur" . $caracteristique->getId(), $valeur);
         }
-
+        $cart = $session->get("cart");
         $shop = [];
         $articles = $query->getScalarResult(); //Sous forme de liste
         $loggedUser = $this->getUser();
@@ -114,16 +114,19 @@ class DefaultController extends Controller
                         ->getQuery()
                         ->getOneOrNullResult()
                     ;
+                    
                     // dump($price);
                     // exit;
                     //$medias = $em->getRepository('AppBundle:Media')->findBy(['article' => $article->getId()]);
+                    $qtePanier = isset($cart[$article["a_id"]])?$cart[$article["a_id"]]["nbr"]:0;
                     $shop[] = array('article' => $article, 'client' => $client, 'price' => $price==null?null:$price->getMontant() );
                     $personnaliser = true;                
                 }
             }
 
             if($personnaliser == false){
-                $shop[] = array('article' => $article);
+                $qtePanier = isset($cart[$article["a_id"]])?$cart[$article["a_id"]]["nbr"]:0;
+                $shop[] = array('article' => $article, "qtePanier" => $qtePanier);
             }
         }
 
@@ -552,10 +555,11 @@ class DefaultController extends Controller
         
         $em = $this->getDoctrine()->getManager();           
         $article = $em->getRepository("AppBundle:Article")->find( $request->request->get("article-id") );
-        $qte = $request->request->get("qte");
+        $type=$article->getTypeArticle();
+        $qte = $request->request->get("qte", 1);
         $session = $this->container->get('session'); 
         $nbrCart = $session->get('nbrCart');
-        $cartAmount = $session->get('cartAmount');
+        $cartAmount = $session->get('cartAmount', 0);
         $cart = $session->get('cart');
         $loggedUser = $this->getUser();
         // dump( json_encode($cart));
@@ -571,7 +575,15 @@ class DefaultController extends Controller
         else{
             $currNbr = $order['nbr'] + $qte;
         }
-        $nbrCart++;
+        
+        if( !isset($cart[$article->getId()]) ){
+            $nbrCart++;
+        }
+        
+        $rest = $article->getStock() - $currNbr;
+        
+        if($rest < 0) exit();
+
         $unityPrice = $this->getUniPrice($article, $loggedUser);
         $order = array('article' => $article, 'nbr' => $currNbr, 'price' =>$unityPrice);
         $cart[$article->getId()] = $order;
@@ -579,10 +591,14 @@ class DefaultController extends Controller
 
         $orderAmount = $unityPrice * $currNbr;
 
-        $cartAmount = intval($cartAmount);
+        /*$cartAmount = intval($cartAmount);
         if($cartAmount >= 0){
-            $cartAmount+= $unityPrice;
-        }
+            $cartAmount+= ($unityPrice*$qte);
+        }*/
+        
+        $cartAmount = ($cartAmount<0)?0: $cartAmount ;
+        //dump($cartAmount);
+        $cartAmount= $cartAmount + ($unityPrice*$qte);
 
         $session->set('cartAmount', $cartAmount);
         $orderAmount = number_format($orderAmount, 0, ',', ' ');
@@ -590,8 +606,7 @@ class DefaultController extends Controller
         $session->set('cart', $cart);
         // dump($cart);
         // exit;
-        return new JsonResponse(array('nbrCart' => $nbrCart,  'article' => $article->getId(), 'nbrOrder' => $currNbr, 'orderAmount' => $orderAmount , 'cartAmount' => $cartAmount )); exit;
-        
+        return new JsonResponse(array('nbrCart' => $nbrCart,  'article' => $article->getId(), 'nbrOrder' => $currNbr, 'orderAmount' => $orderAmount , 'cartAmount' => $cartAmount, 'type_id' => $type->getId() )); exit;
     }
 
     /**
@@ -618,7 +633,8 @@ class DefaultController extends Controller
         else{
             $currNbr = $order['nbr'] - 1;
             if($currNbr <= 0 ){
-                $currNbr = 1;
+                //$currNbr = 1;
+                exit();
             }
             else{
                 $nbrCart--;

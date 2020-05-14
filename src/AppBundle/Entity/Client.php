@@ -78,8 +78,6 @@ class Client
      */
     private $members;
 
-
-
     /**
     * @ORM\OneToMany(targetEntity="Vente", mappedBy="client")
     **/

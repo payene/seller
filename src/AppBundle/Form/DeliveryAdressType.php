@@ -16,12 +16,12 @@ class DeliveryAdressType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('firstname')
-                ->add('lastname')
-                ->add('email')
-                ->add('phone')
-                ->add('quartier')
-                ->add('address')
+        $builder->add('firstname', null, array("required" => false))
+                ->add('lastname', null, array("required" => false))
+                ->add('email', null, array("required" => false))
+                ->add('phone', null, array("required" => false))
+                ->add('quartier', null, array("required" => false))
+                ->add('address', null, array("required" => false))
                 ->add('livraisonDomicile', ChoiceType::class, [
                     "mapped" => false,
                     "data" => true,

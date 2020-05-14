@@ -104,6 +104,7 @@
 											</form>
 											<span id="span-order-nbr-{{ order.article.id }}" style="display:none"> {{ order.nbr }} </span>{# version originale #}
 											<form style="display: none;" action="{{ path('add_to_cart', {'article':order.article.id}) }}" class="ajaxForm" method="POST">
+												<input type="hidden" name="article-id" value="{{ order.article.id }}" />
 												<div class="plus-minus">
 													<button id="plus-button-{{ order.article.id }}" class="inc qtybutton btn btn-default p-1 btn-ghost phantom" type="submit">
 														<i class="fas fa-plus"></i>
@@ -215,6 +216,12 @@
                         	$('#total-order-' + data['article']).html( data['orderAmount'] );
                         	$('#invoice-nbr-aticles').html( data['nbrCart'] );
                         	$('#invoice-amount').html( data['cartAmount'] );
+							if(data.rest <= 0){
+								$('#plus-button-'+ data.article).prop("disabled", true);
+							}
+							else{
+								$('#plus-button-'+ data.article).prop("disabled", false);
+							}
                     	}
                     }
                 });

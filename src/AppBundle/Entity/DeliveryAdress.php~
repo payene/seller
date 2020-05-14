@@ -64,10 +64,16 @@ class DeliveryAdress
     private $address;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Suscriber", inversedBy="deliveryAdresses")
+     * @ORM\ManyToOne(targetEntity="Suscriber", inversedBy="deliveryAdresses", fetch="EAGER")
      * @ORM\JoinColumn(name="suscriber_id", referencedColumnName="id", nullable=true)
      */
     private $suscriber;
+
+
+    /**
+    * @ORM\OneToMany(targetEntity="Proformat", mappedBy="deliveryAdress")
+    */
+    private $proformats;
 
     /**
      * Get id

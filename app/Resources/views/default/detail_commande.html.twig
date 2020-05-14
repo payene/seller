@@ -38,7 +38,7 @@
             </thead>
             <tbody>
             {% set i = 1   %}
-            {% for order in proforma.lpCollection|reverse %}
+            {#% for order in proforma.lpCollection|reverse %}
                 <tr>
                     <td> {{ i }} </td>
                     <td> <h6>{{ order.article.designation }}</h6> </td>
@@ -63,13 +63,13 @@
                     </b></h5></td>									
                 </tr>
                 <tr>
-                    <td colspan="4" class="text-left"><h5><b>Duree de livraison</b></h5></td>
+                    <td colspan="4" class="text-left"><h5><b>Durée de livraison</b></h5></td>
                     <td><h5><b>
                     {% if proforma.dureeLivraison is not null %}
                         {{ proforma.dureeLivraison.libelle }}
                     {% endif %}
                     </b></h5></td>									
-                </tr>
+                </tr>#}
             </tbody>
         </table>
     </div>

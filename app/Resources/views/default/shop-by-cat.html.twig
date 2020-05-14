@@ -19,9 +19,9 @@
 					{% if rayon.id == currentRayon.id %}
 					{% else %}
 						{% if rayon.id == currentCat.id %}
-							<a class="text-dark edge-menu-item badge mdb-color white-text p-2" style='font-size: 14px;font-weight: normal;text-transform: uppercase;font-family:OpenSans,"Open sans","PingFang SC","Microsoft YaHei","Helvetica Neue",Tahoma,Arial,Helvetica;' href="{{ path('shop_by_cat', {'rayon':rayon.parent.id, 'cat':rayon.id}) }}">  {{ rayon.catname }} ({{ rayon.articles|length }})  </a>
+							<a class="text-dark edge-menu-item badge mdb-color white-text p-2" style='font-size: 14px;font-weight: normal;text-transform: uppercase;font-family:OpenSans,"Open sans","PingFang SC","Microsoft YaHei","Helvetica Neue",Tahoma,Arial,Helvetica;' href="{{ path('shop_by_cat', {'rayon':rayon.parent.id, 'cat':rayon.id}) }}">  {{ rayon.catname }} ({{ rayon.typeArticles|length }})  </a>
 						{% else %}
-							<a class="text-dark edge-menu-item badge badge-info p-2" style='font-size: 14px;font-weight: normal;text-transform: uppercase;font-family:OpenSans,"Open sans","PingFang SC","Microsoft YaHei","Helvetica Neue",Tahoma,Arial,Helvetica;' href="{{ path('shop_by_cat', {'rayon':rayon.parent.id, 'cat':rayon.id}) }}">  {{ rayon.catname }} ({{ rayon.articles|length }})  </a> 
+							<a class="text-dark edge-menu-item badge badge-info p-2" style='font-size: 14px;font-weight: normal;text-transform: uppercase;font-family:OpenSans,"Open sans","PingFang SC","Microsoft YaHei","Helvetica Neue",Tahoma,Arial,Helvetica;' href="{{ path('shop_by_cat', {'rayon':rayon.parent.id, 'cat':rayon.id}) }}">  {{ rayon.catname }} ({{ rayon.typeArticles|length }})  </a> 
 						{% endif %}
 					{% endif %}
 				{%  endfor %}
@@ -125,9 +125,10 @@
 
 										        <!--Grid column-->
 										        <div class="col-md-6 mb-4">
-
-										          <img src="{{ prod.item.source1 }}" id="img-{{ prod.item.id }}" class="img-fluid" alt="">
-
+													
+													<div id="article-panier-{{ prod.item.id }}"></div>
+													<img src="{{ prod.item.source1 }}" id="img-{{ prod.item.id }}" class="img-fluid" alt="">
+													
 										        </div>
 										        <!--Grid column-->
 
@@ -171,7 +172,7 @@
 															<p id="designation-{{ prod.item.id }}"></p>
 															<p id="description-{{ prod.item.id }}"></p>
 															<input type="hidden" name="article-id" id="article-id-{{ prod.item.id }}" />
-															<button id="btn-add-card-{{ loop.index }}" disabled onclick="addCardNotif({{ loop.index }})" class="btn btn-primary btn-lg my-0 p add-button-{{ prod.item.id }}" type="submit"> Ajouter au panier
+															<button id="btn-add-card-{{ prod.item.id }}" disabled onclick=" valider($(this)); " class="btn btn-primary btn-lg my-0 p add-button-{{ prod.item.id }}" type="submit"> Ajouter au panier
 										                	<i class="fas fa-shopping-cart ml-1"></i>
 															</button>
 														</div>
@@ -181,7 +182,7 @@
 													<!-- closeShopModal -->
 
 													<!-- <i class="fas fa-camera fa-10x"></i> -->
-													<label id="notif-add-card-{{ loop.index }}" class="hide mt-4" style="display: none;">
+													<label id="notif-add-card-{{ prod.item.id }}" class="hide mt-4" style="display: none;">
 														Article ajout&eacute; au panier avec succ&egrave;s
 														<i class="far fa-check-circle green-text fa-10x"></i>
 													</label>
@@ -240,7 +241,6 @@
 			</div>
 		</div>
 	</div>#}
-
   </main>
   <!--Main layout-->
 
@@ -269,12 +269,13 @@
                     data: $(this).serialize()
                 })
                 .done(function (data) {
-                	console.log(data);
+                	//console.log(data);
                     if (typeof data !== 'undefined') {
                     	if (typeof data['nbrCart'] !== 'undefined') {
                         	$('#cart-length').html(data['nbrCart']);
                         	//$('#cart-length').html(data['nbrCart']);
                         	//alert('article ajoute au panier avec success');
+							addCardNotif(data.type_id);
                     	}
                     }
                 });
@@ -291,7 +292,8 @@
 
        	function addCardNotif(index){
        		$('#notif-add-card-'+index).show();
-       		$('#btn-add-card-'+index).hide();
+       		//$('#btn-add-card-'+index).hide();
+			chargerArticle(index);
        	}
 
 		function chargerArticle(id){
@@ -310,7 +312,7 @@
 				success: function(data){
 					if(data.length != 0){
 						$.each(data, function(index, value){
-							//console.log(value);
+							console.log(value);
 							$("#img-"+id).val( value.article.a_source1 );
 							if(value.price != null){
 								//console.log(value.price);
@@ -319,19 +321,33 @@
 							else{
 								$("#amount-"+id).text(value.article.a_defaultPrice);
 							}
-							
+
 							$("#article-id-"+id).val(value.article.a_id);
 							$("#designation-"+id).html("<h3><b>" + value.article.a_designation + "</b></h3>");
 							$("#description-"+id).html(value.article.a_description);
-							$(".add-button-"+id).prop("disabled", false);
+							
 
 							/* les quantités */
 							$(".form-qte-"+id).css("display", "");
 							$("#qte-"+id).empty();
+							var qtePanier = parseInt(value.qtePanier);
+							$("#article-panier-"+id).empty();
+							if(qtePanier != 0){
+								$("#article-panier-"+id).append("<b style=\"color: green;\">Quantité déjà selectionnée: " + qtePanier + "</b>");
+							}
 							var qte = parseInt(value.article.a_stock);
-							for(var i=1; i<=qte; i++){
-								option = $("<option value='"+i+"'>"+i+"</option>");
-								$("#qte-"+id).append(option);
+							if(qte > qtePanier){
+								qte -= qtePanier;
+								for(var i=1; i<=qte; i++){
+									option = $("<option value='"+i+"'>"+i+"</option>");
+									$("#qte-"+id).append(option);
+								}
+
+								$(".add-button-"+id).prop("disabled", false);
+							}
+							else{
+								$("#designation-"+id).html( $("#designation-"+id).html() + "(<i>Stock épuisé</i>)" )
+								$(".add-button-"+id).prop("disabled", true);
 							}
 						});
 					}
@@ -354,6 +370,11 @@
 			});
 		}
 
+
+		function valider(btn){
+			$(btn).click();
+			$(btn).prop('disabled', true);
+		}
 	</script>
 
 	

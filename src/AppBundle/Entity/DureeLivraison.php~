@@ -28,6 +28,10 @@ class DureeLivraison
      */
     private $libelle;
 
+    /**
+    * @ORM\OneToMany(targetEntity="Proformat", mappedBy="dureeLivraison")
+    */
+    private $proformats;
 
     /**
      * Get id
@@ -61,5 +65,46 @@ class DureeLivraison
     public function getLibelle()
     {
         return $this->libelle;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->proformats = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add proformat
+     *
+     * @param \AppBundle\Entity\Proformat $proformat
+     *
+     * @return DureeLivraison
+     */
+    public function addProformat(\AppBundle\Entity\Proformat $proformat)
+    {
+        $this->proformats[] = $proformat;
+
+        return $this;
+    }
+
+    /**
+     * Remove proformat
+     *
+     * @param \AppBundle\Entity\Proformat $proformat
+     */
+    public function removeProformat(\AppBundle\Entity\Proformat $proformat)
+    {
+        $this->proformats->removeElement($proformat);
+    }
+
+    /**
+     * Get proformats
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProformats()
+    {
+        return $this->proformats;
     }
 }

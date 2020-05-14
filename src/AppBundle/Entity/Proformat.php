@@ -82,7 +82,7 @@ class Proformat
     private $livraisonDomicile = false;
 
     /**
-     * @ORM\ManyToOne(targetEntity="DureeLivraison", inversedBy="proformats")
+     * @ORM\ManyToOne(targetEntity="DureeLivraison", inversedBy="proformats", fetch="EAGER")
      * @ORM\JoinColumn(name="duree_livraison_id", referencedColumnName="id", nullable=true)
      */
     private $dureeLivraison;
