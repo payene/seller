@@ -23,7 +23,7 @@ class ArticleSearchType extends AbstractType
             ->add('priceMax', TextType::class, array('mapped' => false,'required'=>false,'attr'=>array('class'=>'form-control','placeholder'=>'Et')))
             ->add('stockMin', TextType::class, array('label'=>'Stock','required'=>false, 'mapped' => false,'attr'=>array('class'=>'form-control','placeholder'=>'Stock compris entre')))
             ->add('stockMax', TextType::class, array('label'=>'Stock','required'=>false, 'mapped' => false,'attr'=>array('class'=>'form-control','placeholder'=>'Et')))
-            ->add('category', EntityType::class, array('class'=> 'AppBundle:Category', 'required' => false, 'choice_label' => 'catname','placeholder' => '--Choisir la categorie--','attr'=>array('class'=>'form-control')
+            ->add('typeArticle', EntityType::class, array('class'=> 'AppBundle:TypeArticle', 'required' => false, 'choice_label' => 'designation','placeholder' => '--Choisir le type --','attr'=>array('class'=>'form-control')
             ))
             
             ->add('save', SubmitType::class, array('label'=>'Rechercher','attr'=>array('class'=>'btn btn-md btn-primary pull-right m-t-n-xs')))

@@ -67,7 +67,7 @@ class Proformat
     /**
      * @var \DeliveryAdress
      *
-     * @ORM\ManyToOne(targetEntity="DeliveryAdress", fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="DeliveryAdress")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="delivery_adress", referencedColumnName="id", nullable=true)
      * })

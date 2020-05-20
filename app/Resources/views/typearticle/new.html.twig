@@ -15,7 +15,7 @@
 
 {% endblock %}
 
-{% set breadCrumbPosition = "Articles" %}
+{% set breadCrumbPosition = "Types Articles" %}
 {% set breadcrumbs = ['Nouveau'] %}
 
 
@@ -24,8 +24,8 @@
 
 <div class="row wrapper border-bottom white-bg page-heading">
             <div class="col-lg-10">
-                <h2>Ajout d'un article</h2>
-                <a href="{{ path('article_list') }}"><i class="fa fa-list"></i>Liste article</a>
+                <h2>Ajout d'un type article</h2>
+                <a href="{{ path('typearticle_index') }}"><i class="fa fa-list"></i>Liste types articles</a>
             </div>
         </div>
 
@@ -35,7 +35,7 @@
                 <div class="col-lg-12">
                     <div class="tabs-container">
                             <ul class="nav nav-tabs">
-                                <li class="active"><a data-toggle="tab" href="#tab-1"> Ajout Article</a></li>
+                                <li class="active"><a data-toggle="tab" href="#tab-1"> Ajout Type Article</a></li>
                             </ul>
                             
                             <div class="tab-content">
@@ -44,9 +44,9 @@
                                         {{ form_start(form,{'multipart':'true'}) }}
                                         <fieldset class="form-horizontal">
                                             <div class="form-group">
-                                                <label class="col-sm-2 control-label">{{ form_label(form.typeArticle) }}:</label>
+                                                <label class="col-sm-2 control-label">{{ form_label(form.category) }}:</label>
                                                 <div class="col-sm-10">
-                                                    {{ form_widget(form.typeArticle, {'attr': {'class' : 'form-control'} } ) }}
+                                                    {{ form_widget(form.category, {'attr': {'class' : 'form-control'} } ) }}
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -55,56 +55,22 @@
                                                     {{ form_widget(form.designation, {'attr' : {'autocomplete':'OFF'}}) }}
                                                 </div>
                                             </div>
-                                            <div class="form-group"><label class="col-sm-2 control-label">{{ form_label(form.defaultPrice) }}:</label>
-                                                <div class="col-sm-10">
-                                                    {{ form_widget(form.defaultPrice, {'attr' : {'autocomplete':'OFF'}}) }}
+                                            <div class="form-group"><label class="col-sm-2 control-label">Prix(entre):</label>
+                                                <div class="col-sm-5">
+                                                    {{ form_widget(form.prixMin, {'attr' : {'autocomplete':'OFF'}}) }}
+                                                </div>
+                                                <div class="col-sm-5">
+                                                    {{ form_widget(form.prixMax, {'attr' : {'autocomplete':'OFF'}}) }}
                                                 </div>
                                             </div>
                                             <div class="form-group"><label class="col-sm-2 control-label">{{ form_label(form.description) }}:</label>
                                                 <div class="col-sm-10">
                                                         {{ form_widget(form.description) }}
-
                                                 </div>
                                             </div>
-                                            <div class="form-group"><label class="col-sm-2 control-label">{{ form_label(form.stock) }}:</label>
+                                            <div class="form-group"><label class="col-sm-2 control-label">{{ form_label(form.caracteristiques) }}:</label>
                                                 <div class="col-sm-10">
-                                                    {{ form_widget(form.stock, {'attr' : {'autocomplete':'OFF'}}) }}
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="col-sm-3 control-label">{{ form_label(form.caracteristiques) }}:</label>
-                                                <div class="col-sm-5">
-                                                    {{ form_widget(form.caracteristiques) }}
-                                                </div>
-                                                <div  class="col-sm-2">
-                                                    <input type="text" class="form-control" id="valeur-caracteristique" />
-                                                </div>
-                                                <div  class="col-sm-2">
-                                                    <button class="btn btn-primary" type="button" id="ajouter-valeur">Ajouter</button>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-md-8 col-md-offset-2">
-                                                    <div class="text-center">
-                                                        <table class="table table-bordered">
-                                                            <thead>
-                                                                <tr>
-                                                                    <td>Caractéristique</td>
-                                                                    <td>Valeur</td>
-                                                                    <td></td>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody id="valeur-caracteristique-body">
-                                                            {% for valeur in article.valeurs %}
-                                                            <tr id="carac-{{valeur.caracteristique.id}}">
-                                                                <td><input type="hidden" name="val_{{valeur.caracteristique.id}}" value="{{ valeur.valeurCaracteristique }}" />{{ valeur.caracteristique.libelle }}</td>
-                                                                <td>{{ valeur.valeurCaracteristique }}</td>
-                                                                <td><a href="javascript:void(0)" onclick="RetirerCarac('{{valeur.caracteristique.id}}', '{{ valeur.caracteristique.libelle }}'); " class="btn btn-danger">Supprimer</a></td>
-                                                            </tr>
-                                                            {% endfor %}
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
+                                                    {{ form_widget(form.caracteristiques, {'attr' : {'autocomplete':'OFF'}}) }}
                                                 </div>
                                             </div>
 
@@ -129,7 +95,7 @@
                                                 <tbody>
                                                 <tr>
                                                     <td>
-                                                        <img class="img-responsive rounded" id="img_1" src="{{ article.source1 }}" style="width: 100px;height: 100px;">
+                                                        <img class="img-responsive rounded" id="img_1" src="{{ asset('photos/point.jpeg') }}" style="width: 100px;height: 100px;">
                                                     </td>
                                                     
                                                     <td>
@@ -141,7 +107,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                                        <img class="img-responsive rounded" id="img_2" src="{{ article.source2 }}" style="width: 100px;height: 100px;">
+                                                        <img class="img-responsive rounded" id="img_2" src="{{ asset('photos/point.jpeg') }}" style="width: 100px;height: 100px;">
                                                     </td>
                                                     
                                                     <td>
@@ -154,7 +120,7 @@
 
                                                 <tr>
                                                     <td>
-                                                        <img class="img-responsive rounded" id="img_3" src="{{ article.source3 }}" style="width: 100px;height: 100px;">
+                                                        <img class="img-responsive rounded" id="img_3" src="{{ asset('photos/point.jpeg') }}" style="width: 100px;height: 100px;">
                                                     </td>
                                                     
                                                     <td>
@@ -166,7 +132,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                                        <img class="img-responsive rounded" id="img_4" src="{{ article.source4 }}" style="width: 100px;height: 100px;">
+                                                        <img class="img-responsive rounded" id="img_4" src="{{ asset('photos/point.jpeg') }}" style="width: 100px;height: 100px;">
                                                     </td>
                                                     
                                                     <td>
@@ -182,10 +148,9 @@
                                         </div>
 
 
-                                            
-                                        <div class="">
-                                            <button type="button" id="appbundle_article_save" class="btn btn-md btn-primary pull-right m-t-n-xs">Valider</button>
-                                        </div>
+                                            <div class="">
+                                                {{ form_widget(form.save) }}
+                                            </div>
                                             
                                         </fieldset>
                                         {{ form_end(form) }}
@@ -196,7 +161,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
 
 
@@ -267,92 +231,5 @@
         }
         reader.readAsDataURL(event.target.files[0]);
     }
-
-    $("#ajouter-valeur").on("click", function(){
-        var valeur = $("#valeur-caracteristique").val();
-        if( valeur != "" ){
-            //Caracteristique sélectionnée
-        var texte = $("#appbundle_article_caracteristiques").find("option:selected").text();
-            var id = $("#appbundle_article_caracteristiques").find("option:selected").val();
-                                
-            var tr=$("<tr></tr>");
-            var td1 = $("<td>"+ texte +"</td>");
-            var input = $("<input type='hidden' name='val_"+id+"' value='"+ valeur +"' />");
-            td1.append(input);
-            tr.append(td1);
-            var td2 = $("<td>"+ valeur +"</td>");
-            tr.append(td2);
-            var sup = $("<a href='javascript:void(0)' class='btn btn-danger'>supprimer</a>");
-            var td3 = $("<td></td>");
-            td3.append(sup);
-            tr.append(td3);
-            sup.on('click', function(){
-                tr.remove();
-                var option = $('<option></option>');
-                        option.val(id);
-                        option.text(texte);
-                    $('#appbundle_article_caracteristiques').append(option);
-                    $("#ajouter-valeur").prop("disabled", false);
-            });
-
-            $("#valeur-caracteristique-body").append(tr);
-            $("#appbundle_article_caracteristiques").find("option:selected").remove();
-            $("#valeur-caracteristique").val("");
-            if( $("#appbundle_article_caracteristiques").find("option").length == 0 ){
-                $("#ajouter-valeur").prop("disabled", true);
-            }
-        }
-        else{
-            alert('Veuillez entrer une valeur.');
-        }
-    });
-</script>
-<script>
-    var $type = $('#appbundle_article_typeArticle');
-    function checkCaracteristique(){
-        var $form = $type.closest('form');
-        var data = $type.val();
-        $.ajax({
-            url : '{{  path('typearticle_caracteristiques')|escape('js') }}',
-            type: 'POST',
-            data : { "id" : data},
-            datatype: "json",
-            success: function(data) {
-                $('#appbundle_article_caracteristiques').empty();
-                $.each(data, function(index, value){
-                    var option = $('<option></option>');
-                        option.val(value.id);
-                        option.text(value.libelle);
-                    $('#appbundle_article_caracteristiques').append(option);
-                });
-                $('#valeur-caracteristique-body').empty();
-            }
-        });
-    }
-    // When sport gets selected ...
-    $type.change(function() {
-        checkCaracteristique();
-    });
-
-    $('#appbundle_article_save').click(function(){
-        if( $("#appbundle_article_caracteristiques").find("option").length > 0 ){
-            alert("Veuillez enregistrer toutes les caractéristiques avant de valider\n(ou en définir dans le type d'article)");
-        }
-        else{
-            $(this).closest('form').submit();
-        }
-    });
-
-    function RetirerCarac(id, texte){
-        //alert();
-        var option = $('<option></option>');
-                        option.val(id);
-                        option.text(texte);
-                    $('#appbundle_article_caracteristiques').append(option);
-                    $("#carac-"+id).remove();
-    }
-    {%  if article.valeurs|length == 0 %}
-    checkCaracteristique();
-    {% endif %}
 </script>
 {% endblock %}

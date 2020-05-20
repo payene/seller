@@ -81,6 +81,11 @@ class Article
     private $medias;
 
     /**
+    * @ORM\OneToMany(targetEntity="Valeur", mappedBy="article", cascade={"remove"})
+    */
+    private $valeurs;
+
+    /**
      * @var \Category
      *
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="articles")
@@ -645,5 +650,39 @@ class Article
     public function getTypeArticle()
     {
         return $this->typeArticle;
+    }
+
+    /**
+     * Add valeur
+     *
+     * @param \AppBundle\Entity\Valeur $valeur
+     *
+     * @return Article
+     */
+    public function addValeur(\AppBundle\Entity\Valeur $valeur)
+    {
+        $this->valeurs[] = $valeur;
+
+        return $this;
+    }
+
+    /**
+     * Remove valeur
+     *
+     * @param \AppBundle\Entity\Valeur $valeur
+     */
+    public function removeValeur(\AppBundle\Entity\Valeur $valeur)
+    {
+        $this->valeurs->removeElement($valeur);
+    }
+
+    /**
+     * Get valeurs
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getValeurs()
+    {
+        return $this->valeurs;
     }
 }

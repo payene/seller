@@ -124,7 +124,6 @@
 										        <!--Grid column-->
 										        <div class="col-md-6 mb-4">
 													
-													<div id="article-panier-{{ prod.item.id }}"></div>
 													<img src="{{ prod.item.source1 }}" id="img-{{ prod.item.id }}" class="img-fluid" alt="">
 													
 										        </div>
@@ -137,9 +136,9 @@
 										          <div class="p-4">
 
 										            <div class="mb-3">
-										              <a href="javascript:void(0);">
+										              {#<a href="javascript:void(0);">
 										                <span class="badge purple mr-1">  {{ currentRayon.catname }} / {{ prod.item.category }} </span>
-										              </a>
+										              </a>#}
 										            </div>
 
 										            <p class="lead">
@@ -180,9 +179,8 @@
 													<!-- closeShopModal -->
 
 													<!-- <i class="fas fa-camera fa-10x"></i> -->
-													<label id="notif-add-card-{{ prod.item.id }}" class="hide mt-4" style="display: none;">
-														Article ajout&eacute; au panier avec succ&egrave;s
-														<i class="far fa-check-circle green-text fa-10x"></i>
+													<label class="mt-4">
+														<div id="article-panier-{{ prod.item.id }}"></div>
 													</label>
 		
 										          </div>
@@ -271,8 +269,7 @@
        	}
 
        	function addCardNotif(index){
-       		$('#notif-add-card-'+index).show();
-       		//$('#btn-add-card-'+index).hide();
+       		toastr.success('Article ajouté avec succès.');
 			chargerArticle(index);
        	}
 
@@ -293,7 +290,7 @@
 					if(data.length != 0){
 						$.each(data, function(index, value){
 							console.log(value);
-							$("#img-"+id).val( value.article.a_source1 );
+							$("#img-"+id).attr( "src", value.article.a_source1 );
 							if(value.price != null){
 								//console.log(value.price);
 								$("#amount-"+id).text(value.price);
@@ -313,7 +310,7 @@
 							var qtePanier = parseInt(value.qtePanier);
 							$("#article-panier-"+id).empty();
 							if(qtePanier != 0){
-								$("#article-panier-"+id).append("<b style=\"color: green;\">Quantité déjà selectionnée: " + qtePanier + "</b>");
+								$("#article-panier-"+id).append("<b style=\"color: green;\">Quantité dans le panier: " + qtePanier + "</b>");
 							}
 							var qte = parseInt(value.article.a_stock);
 							if(qte > qtePanier){

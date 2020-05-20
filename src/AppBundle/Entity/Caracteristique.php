@@ -28,6 +28,10 @@ class Caracteristique
      */
     private $libelle;
 
+    /**
+    * @ORM\ManyToMany(targetEntity="TypeArticle", mappedBy="caracteristiques")
+    */
+    private $typeArticles;
 
     /**
      * Get id
@@ -61,5 +65,46 @@ class Caracteristique
     public function getLibelle()
     {
         return $this->libelle;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->typeArticles = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add typeArticle
+     *
+     * @param \AppBundle\Entity\TypeArticle $typeArticle
+     *
+     * @return Caracteristique
+     */
+    public function addTypeArticle(\AppBundle\Entity\TypeArticle $typeArticle)
+    {
+        $this->typeArticles[] = $typeArticle;
+
+        return $this;
+    }
+
+    /**
+     * Remove typeArticle
+     *
+     * @param \AppBundle\Entity\TypeArticle $typeArticle
+     */
+    public function removeTypeArticle(\AppBundle\Entity\TypeArticle $typeArticle)
+    {
+        $this->typeArticles->removeElement($typeArticle);
+    }
+
+    /**
+     * Get typeArticles
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTypeArticles()
+    {
+        return $this->typeArticles;
     }
 }

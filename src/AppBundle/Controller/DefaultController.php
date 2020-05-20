@@ -119,7 +119,7 @@ class DefaultController extends Controller
                     // exit;
                     //$medias = $em->getRepository('AppBundle:Media')->findBy(['article' => $article->getId()]);
                     $qtePanier = isset($cart[$article["a_id"]])?$cart[$article["a_id"]]["nbr"]:0;
-                    $shop[] = array('article' => $article, 'client' => $client, 'price' => $price==null?null:$price->getMontant() );
+                    $shop[] = array('article' => $article, 'client' => $client, 'price' => $price==null?null:$price->getMontant(), "qtePanier" => $qtePanier );
                     $personnaliser = true;                
                 }
             }

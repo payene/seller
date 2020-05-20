@@ -44,9 +44,9 @@
                                         {{ form_start(form,{'multipart':'true'}) }}
                                         <fieldset class="form-horizontal">
                                             <div class="form-group">
-                                                <label class="col-sm-2 control-label">{{ form_label(form.category) }}:</label>
+                                                <label class="col-sm-2 control-label">{{ form_label(form.typeArticle) }}:</label>
                                                 <div class="col-sm-10">
-                                                    {{ form_widget(form.category, {'attr': {'class' : 'form-control select2'} } ) }}
+                                                    {{ form_widget(form.typeArticle, {'attr': {'class' : 'form-control'} } ) }}
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -71,6 +71,35 @@
                                                     {{ form_widget(form.stock, {'attr' : {'autocomplete':'OFF'}}) }}
                                                 </div>
                                             </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">{{ form_label(form.caracteristiques) }}:</label>
+                                                <div class="col-sm-5">
+                                                    {{ form_widget(form.caracteristiques) }}
+                                                </div>
+                                                <div  class="col-sm-2">
+                                                    <input type="text" class="form-control" id="valeur-caracteristique" />
+                                                </div>
+                                                <div  class="col-sm-2">
+                                                    <button class="btn btn-primary" type="button" id="ajouter-valeur">Ajouter</button>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-8 col-md-offset-2">
+                                                    <div class="text-center">
+                                                        <table class="table table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <td>Caractéristique</td>
+                                                                    <td>Valeur</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="valeur-caracteristique-body">
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
 
                                             {#IMAGE#}
 
@@ -93,51 +122,51 @@
                                                 <tbody>
                                                 <tr>
                                                     <td>
-                                                        <img class="img-responsive rounded" src="{{ asset('photos/point.jpeg') }}" style="width: 100px;height: 100px;">
+                                                        <img class="img-responsive rounded" id="img_1" src="{{ asset('photos/point.jpeg') }}" style="width: 100px;height: 100px;">
                                                     </td>
                                                     
                                                     <td>
                                                         <input type="text" class="form-control" disabled value="1">
                                                     </td>
                                                     <td>
-                                                        <input type="file" id="" name="photo1">
+                                                        <input type="file" id="" name="photo1" onchange="preview_image1(event);" data-img="img_1">
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                                        <img class="img-responsive rounded" src="{{ asset('photos/point.jpeg') }}" style="width: 100px;height: 100px;">
+                                                        <img class="img-responsive rounded" id="img_2" src="{{ asset('photos/point.jpeg') }}" style="width: 100px;height: 100px;">
                                                     </td>
                                                     
                                                     <td>
                                                         <input type="text" class="form-control" disabled value="2">
                                                     </td>
                                                     <td>
-                                                        <input type="file" id="" name="photo2">
+                                                        <input type="file" id="" name="photo2" onchange="preview_image2(event);" data-img="img_2">
                                                     </td>
                                                 </tr>
 
                                                 <tr>
                                                     <td>
-                                                        <img class="img-responsive rounded" src="{{ asset('photos/point.jpeg') }}" style="width: 100px;height: 100px;">
+                                                        <img class="img-responsive rounded" id="img_3" src="{{ asset('photos/point.jpeg') }}" style="width: 100px;height: 100px;">
                                                     </td>
                                                     
                                                     <td>
                                                         <input type="text" class="form-control" disabled value="3">
                                                     </td>
                                                     <td>
-                                                        <input type="file" id="" name="photo3">
+                                                        <input type="file" id="" name="photo3" onchange="preview_image3(event);">
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                                        <img class="img-responsive rounded" src="{{ asset('photos/point.jpeg') }}" style="width: 100px;height: 100px;">
+                                                        <img class="img-responsive rounded" id="img_4" src="{{ asset('photos/point.jpeg') }}" style="width: 100px;height: 100px;">
                                                     </td>
                                                     
                                                     <td>
                                                         <input type="text" class="form-control" disabled value="4">
                                                     </td>
                                                     <td>
-                                                        <input type="file" id="" name="photo4">
+                                                        <input type="file" id="" name="photo4" onchange="preview_image4(event);">
                                                     </td>
                                                 </tr>
                                                 
@@ -146,9 +175,10 @@
                                         </div>
 
 
-                                            <div class="">
-                                                {{ form_widget(form.save) }}
-                                            </div>
+                                            
+                                        <div class="">
+                                            <button type="button" id="appbundle_article_save" class="btn btn-md btn-primary pull-right m-t-n-xs">Valider</button>
+                                        </div>
                                             
                                         </fieldset>
                                         {{ form_end(form) }}
@@ -189,5 +219,123 @@
 
     });
 </script>
+<script type='text/javascript'>
+    function preview_image1(event) 
+    {
+        var reader = new FileReader();
+        reader.onload = function()
+        {
+            var output = document.getElementById('img_1');
+            output.src = reader.result;
+        }
+        reader.readAsDataURL(event.target.files[0]);
+    }
+    function preview_image2(event) 
+    {
+        var reader = new FileReader();
+        reader.onload = function()
+        {
+            var output = document.getElementById('img_2');
+            output.src = reader.result;
+        }
+        reader.readAsDataURL(event.target.files[0]);
+    }
+    function preview_image3(event) 
+    {
+        var reader = new FileReader();
+        reader.onload = function()
+        {
+            var output = document.getElementById('img_3');
+            output.src = reader.result;
+        }
+        reader.readAsDataURL(event.target.files[0]);
+    }
+    function preview_image4(event) 
+    {
+        var reader = new FileReader();
+        reader.onload = function()
+        {
+            var output = document.getElementById('img_4');
+            output.src = reader.result;
+        }
+        reader.readAsDataURL(event.target.files[0]);
+    }
 
+    $("#ajouter-valeur").on("click", function(){
+        var valeur = $("#valeur-caracteristique").val();
+        if( valeur != "" ){
+            //Caracteristique sélectionnée
+        var texte = $("#appbundle_article_caracteristiques").find("option:selected").text();
+            var id = $("#appbundle_article_caracteristiques").find("option:selected").val();
+                                
+            var tr=$("<tr></tr>");
+            var td1 = $("<td>"+ texte +"</td>");
+            var input = $("<input type='hidden' name='val_"+id+"' value='"+ valeur +"' />");
+            td1.append(input);
+            tr.append(td1);
+            var td2 = $("<td>"+ valeur +"</td>");
+            tr.append(td2);
+            var sup = $("<a href='javascript:void(0)' class='btn btn-danger'>supprimer</a>");
+            var td3 = $("<td></td>");
+            td3.append(sup);
+            tr.append(td3);
+            sup.on('click', function(){
+                tr.remove();
+                var option = $('<option></option>');
+                        option.val(id);
+                        option.text(texte);
+                    $('#appbundle_article_caracteristiques').append(option);
+                    $("#ajouter-valeur").prop("disabled", false);
+            });
+
+            $("#valeur-caracteristique-body").append(tr);
+            $("#appbundle_article_caracteristiques").find("option:selected").remove();
+            $("#valeur-caracteristique").val("");
+            if( $("#appbundle_article_caracteristiques").find("option").length == 0 ){
+                $("#ajouter-valeur").prop("disabled", true);
+            }
+        }
+        else{
+            alert('Veuillez entrer une valeur.');
+        }
+    });
+</script>
+<script>
+    var $type = $('#appbundle_article_typeArticle');
+    function checkCaracteristique(){
+        var $form = $type.closest('form');
+        var data = $type.val();
+        $.ajax({
+            url : '{{  path('typearticle_caracteristiques')|escape('js') }}',
+            type: 'POST',
+            data : { "id" : data},
+            datatype: "json",
+            success: function(data) {
+                $('#appbundle_article_caracteristiques').empty();
+                $.each(data, function(index, value){
+                    var option = $('<option></option>');
+                        option.val(value.id);
+                        option.text(value.libelle);
+                    $('#appbundle_article_caracteristiques').append(option);
+                });
+                $('#valeur-caracteristique-body').empty();
+            }
+        });
+    }
+    // When sport gets selected ...
+    $type.change(function() {
+        checkCaracteristique();
+    });
+
+    $('#appbundle_article_save').click(function(){
+        if( $("#appbundle_article_caracteristiques").find("option").length > 0 ){
+            alert("Veuillez enregistrer toutes les caractéristiques avant de valider\n(ou en définir dans le type d'article)");
+        }
+        else{
+            $(this).closest('form').submit();
+        }
+    });
+
+    checkCaracteristique();
+</script>
 {% endblock %}

@@ -81,6 +81,11 @@ class Article
     private $medias;
 
     /**
+    * @ORM\OneToMany(targetEntity="Valeur", mappedBy="article")
+    */
+    private $valeurs;
+
+    /**
      * @var \Category
      *
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="articles")

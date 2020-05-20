@@ -1,0 +1,51 @@
+{% extends "adminLayout.html.twig" %}
+
+
+{% set breadCrumbPosition = "Caracteristiques" %}
+{% set breadcrumbs = ['Nouveau'] %}
+
+
+{% block body %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+            <h2>Ajout d'une caractéristique</h2>
+            <a href="{{ path('caracteristique_index') }}"><i class="fa fa-list"></i>Liste caractéristiques</a>
+        </div>
+    </div>
+
+    <div class="wrapper wrapper-content animated fadeInRight ecommerce">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="tabs-container">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#tab-1"> Ajout Caracteristique</a></li>
+                    </ul>
+                    
+                    <div class="tab-content">
+                        <div class="panel-body">
+                            {{ form_start(form) }}
+                            <div class="form-horizontal col-md-6 offset-md-3">
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">{{ form_label(form.libelle) }}</label>
+                                    <div class="col-md-6">
+                                        {{ form_widget(form.libelle, {'attr': {'class' : 'form-control'} } ) }}
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button class="btn btn-primary" type="submit">Ajouter</button>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            {{ form_end(form) }}
+                        </div>
+                    </div>                        
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+{% endblock %}

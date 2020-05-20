@@ -1,0 +1,54 @@
+{% extends "adminLayout.html.twig" %}
+
+{% set breadCrumbPosition = "Caracteristiques" %}
+{% set breadcrumbs = ['Liste'] %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-content">
+
+                        <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
+                        <thead>
+                        <tr>
+                            <th data-toggle="true">Libelle</th>
+                            <th class="text-right" data-sort-ignore="true">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        
+                        {% for caracteristique in caracteristiques %}
+
+                            <tr>
+                                <td>
+                                    {{ caracteristique.libelle }}
+                                </td>                            
+                                <td class="text-right">
+                                    <div class="btn-group">
+                                        <a href="{{ path('caracteristique_edit', { 'id': caracteristique.id }) }}"><button class="btn-white btn btn-xs">Modifier</button></a>
+                                        {% if caracteristique.typeArticles|length == 0 %}
+                                        <a href="{{ path('caracteristique_delete',{id : caracteristique.id}) }}" onclick="confirm('Êtes vous sûr de vouloir supprimer cette caractéristique?');"><button class="btn-danger btn btn-xs">Supprimer</button></a>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                        </tr>
+                        {% endfor %}
+                        
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td colspan="6">
+                                <ul class="pagination pull-right"></ul>
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}

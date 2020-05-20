@@ -1,3 +1,11 @@
+app_type_article:
+    resource: "@AppBundle/Controller/TypeArticleController.php"
+    type:     annotation
+
+app_caracteristique:
+    resource: "@AppBundle/Controller/CaracteristiqueController.php"
+    type:     annotation
+
 app_arrivage:
     resource: "@AppBundle/Controller/ArrivageController.php"
     type:     annotation

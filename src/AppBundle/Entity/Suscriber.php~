@@ -41,7 +41,7 @@ class Suscriber
     /**
      * @var \Client
      *
-     * @ORM\ManyToOne(targetEntity="Client", inversedBy="members",cascade={"persist"}, fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="Client", inversedBy="members",cascade={"persist"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="client", referencedColumnName="id")
      * })

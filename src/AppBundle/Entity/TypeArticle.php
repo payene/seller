@@ -89,6 +89,7 @@ class TypeArticle
      * @ORM\ManyToMany(targetEntity="Caracteristique", cascade={"persist"})
      */
     private $caracteristiques;
+    
     /**
      * Constructor
      */

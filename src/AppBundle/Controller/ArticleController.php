@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Article;
+use AppBundle\Entity\Valeur;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -63,20 +64,20 @@ class ArticleController extends Controller
 
                 
                 echo    $artName = $article->getDesignation();
-                $category = $article->getCategory();
+                $typeArticle = $article->getTypeArticle();
 
                 $query = $em->createQueryBuilder();
                  $artQuery = $query
                         ->select('a')
                         ->from('AppBundle:Article', 'a')
-                        ->join('a.category', 'c')
+                        ->join('a.typeArticle', 't')
                         ->where("a.designation LIKE  :artName")
                         ->setParameter('artName', "%$artName%");
                         
 
-                        if(!empty($category)){
-                            $query->andwhere("c.id = :cat ")
-                            ->setParameter('cat', $category->getId());
+                        if(!empty($typeArticle)){
+                            $query->andwhere("t.id = :type ")
+                            ->setParameter('type', $typeArticle->getId());
                         }
 
                         
@@ -123,9 +124,10 @@ class ArticleController extends Controller
         $form->handleRequest($request);
         //die($this->container->getParameter('photo_directory'));
         $main_path = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() . '/photos/';
-
+//dump($request->request); exit;
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $article->setCategory($article->getTypeArticle()->getCategory());
             $em->persist($article);
 
             $photo1 = $request->files->get('photo1');
@@ -175,6 +177,16 @@ class ArticleController extends Controller
 
             $em->flush();
 
+            $caracteristiques = $article->getTypeArticle()->getCaracteristiques();
+            foreach($caracteristiques as $caracteristique){
+                $valeur = new Valeur();
+                $valeur->setArticle($article);
+                $valeur->setCaracteristique($caracteristique);
+                $valeur->setValeurCaracteristique( $request->request->get("val_" . $caracteristique->getId()) );
+                $em->persist($valeur);
+                $em->flush();
+            }
+
             return $this->redirectToRoute('article-show', array('id' => $article->getId()));
         }
 
@@ -211,13 +223,12 @@ class ArticleController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $article = $em->getRepository('AppBundle:Article')->findOneById($id);
-        $deleteForm = $this->createDeleteForm($article);
         $editForm = $this->createForm('AppBundle\Form\ArticleType', $article);
         $editForm->handleRequest($request);
         $main_path = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() . '/photos/';
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-
+            $article->setCategory($article->getTypeArticle()->getCategory());
             //Upload des fichiers
             $photo1 = $request->files->get('photo1');
             if ($photo1 != null) {
@@ -264,15 +275,26 @@ class ArticleController extends Controller
             }
             
             $this->getDoctrine()->getManager()->flush();
-            //dump($request->request->get('fileInput'));exit;
-
-            return $this->redirectToRoute('article_edit', array('id' => $article->getId()));
+            
+            $caracteristiques = $article->getTypeArticle()->getCaracteristiques();
+            foreach($caracteristiques as $caracteristique){
+                $valeur = $em->getRepository("AppBundle:Valeur")->findOneBy(["article" => $article, "caracteristique" => $caracteristique]);
+                if($valeur == null){
+                    $valeur = new Valeur();
+                    $valeur->setArticle($article);
+                    $valeur->setCaracteristique($caracteristique);
+                }
+                $valeur->setValeurCaracteristique( $request->request->get("val_" . $caracteristique->getId()) );
+                $em->persist($valeur);
+                $em->flush();
+            }
+            $this->addFlash("success", "Modification réussie!");
+            return $this->redirectToRoute('article-show', array('id' => $article->getId()));
         }
 
         return $this->render('article/article_edit.html.twig', array(
             'article' => $article,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'form' => $editForm->createView(),
         ));
     }
 

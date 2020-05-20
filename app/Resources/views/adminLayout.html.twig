@@ -83,6 +83,22 @@
                     </li>
                     
                     <li>
+                        <a href="#"><i class="fa fa-picture-o"></i> <span class="nav-label">Caracteristiques</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li><a href="{{path('caracteristique_index')}}">Liste</a></li>
+                            <li><a href="{{path('caracteristique_new')}}">Nouveau</a></li>
+                        </ul>
+                    </li>
+                    
+                    <li>
+                        <a href="#"><i class="fa fa-picture-o"></i> <span class="nav-label">Types Articles</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li><a href="{{path('typearticle_index')}}">Liste</a></li>
+                            <li><a href="{{path('typearticle_new')}}">Nouveau</a></li>
+                        </ul>
+                    </li>
+                    
+                    <li>
                         <a href="#"><i class="fa fa-picture-o"></i> <span class="nav-label">Articles</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
                             <li><a href="{{path('article_list')}}">Liste</a></li>
@@ -252,8 +268,6 @@
         });
 
     </script>
-
-
     {% endblock %}
 
 
