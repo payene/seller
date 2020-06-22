@@ -1,0 +1,46 @@
+<!--Card content-->
+
+<div class="card z-depth-0 border border-light rounded-0">
+    <div class="card-body">
+        <h4 class="mb-4 mt-1 h5 text-center font-weight-bold">Votre panier</h4>
+
+        {% for order in cart|reverse %}
+        <hr>
+        <dl class="row">
+            <dd class="col-sm-2">
+                <img style="width: 100%;" src="{{ order.article.source1 }}" alt="#" />
+            </dd>
+            <dd class="col-sm-8">
+                {% if order.price is defined %}
+                {% set pu = order.price %} 
+                {% else %} 
+                    {% set pu = order.article.defaultPrice %} 
+                {% endif %}
+                <span title="{{ order.article.description }}">{{ order.article.designation }}({{ pu ~ " " ~ devise }})</span>
+                <br/>
+                <div class="row">
+                    <div class="col-sm-5">
+                        <label class="badge badge-success">{{ order.nbr }} pcs</label>
+                    </div>
+                    <div class="col-sm-7">
+                        <label class="badge badge-warning">{{ order.nbr * pu ~ " " ~ devise }}</label>
+                    </div>
+                </div>
+            </dd>
+        </dl>
+        <div class="text-center">
+            <center><a class="" href="{{ path('cart') }}" style="color: #00c851;"><i class="fa fa-edit"></i>Modifier la commande</a></center>
+        </div>
+        {% endfor %}
+        <hr>
+
+        <dl class="row">
+        <dt class="col-sm-4">
+            Total
+        </dt>
+        <dt class="col-sm-6" style="text-align: right">
+            <span>{{ cartAmount ~ " " ~ devise }}</span>
+        </dt>
+        </dl>
+    </div>
+</div>

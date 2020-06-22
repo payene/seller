@@ -1,0 +1,63 @@
+{% trans_default_domain 'FOSUserBundle' %}
+{% extends "base-shop.html.twig" %}
+
+
+{% block header %}
+	{{ parent() }}	
+{% endblock %}
+
+{% block menuarea %}
+{% endblock %}
+
+{% block body %}
+    <section class="pessonal-detail section-padding">
+        <div class="container">
+            <div class="row">
+				<div class="col-md-12 col-sm-12 col-xs-12">
+					<div class="stay-left">
+                        {{ form_start(form) }}
+                        <div class="col-md-8 offset-md-2 mb-4">
+                                <hr>
+                                <br>
+                                <div class="row">
+                                    <div class="col-md-12 mb-4">
+                                        <div class="card">
+                                            <!--Card content-->
+                                            
+                                            <div class="card-header">
+                                                <div class="header">
+                                                <center><h2>Reinitialiser mot de passe</h2></center>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                {{ form_start(form, { 'action': path('fos_user_resetting_reset', {'token': token}), 'attr': { 'class': 'fos_user_resetting_reset' } }) }}
+                                                    <div class="col-md-6">
+                                                        {{ form_label(form.plainPassword.first) }}
+                                                        {{ form_widget(form.plainPassword.first, { "attr":{"tabindex" : "2"} }) }}
+                                                        <div class="alert alert-danger">
+                                                        {{ form_errors(form.plainPassword.first) }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        {{form_label(form.plainPassword.second)}}
+                                                        {{ form_widget(form.plainPassword.second, { "attr":{"tabindex" : "3"} }) }}
+                                                        <div class="alert alert-danger">
+                                                        {{ form_errors(form.plainPassword.second) }}
+                                                        </div>
+                                                    </div>
+                                                    {{ form_widget(form) }}
+                                                    <div>
+                                                        <input type="submit" value="{{ 'resetting.reset.submit'|trans }}" />
+                                                    </div>
+                                                {{ form_end(form) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>

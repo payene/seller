@@ -82,7 +82,7 @@
 														{% set pu = order.article.defaultPrice %} 
 													{% endif %}
 
-													<li> PU : {{ pu }} </li>
+													<li> PU : {{ pu ~ " " ~ devise }} </li>
 													
 												</ul>
 												
@@ -159,7 +159,7 @@
 	        </h4>
 	        <h4 class="d-flex justify-content-between align-items-center mb-3">
 	            <span class="text-muted">Total : </span>
-	            <span id="invoice-amount" class="badge badge-secondary badge-pill">{{ cartAmount }} </span>
+	            <span id="invoice-amount" class="badge badge-secondary badge-pill">{{ cartAmount }} </span> {{ devise}}
 	        </h4>
           	<!-- Heading -->
 			<h4 class="justify-content-between align-items-center mb-3">

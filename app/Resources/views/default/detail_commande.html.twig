@@ -38,38 +38,29 @@
             </thead>
             <tbody>
             {% set i = 1   %}
-            {#% for order in proforma.lpCollection|reverse %}
+            {% for order in proforma.lpCollection|reverse %}
                 <tr>
                     <td> {{ i }} </td>
                     <td> <h6>{{ order.article.designation }}</h6> </td>
-                    <td> <h6>{{ order.prix|number_format(0, '.', ' ') }}</h6> </td>
+                    <td> <h6>{{ order.prix|number_format(0, '.', ' ') ~ " " ~ devise }}</h6> </td>
                     <td> <h6>{{ order.qte }}</h6> </td>
-                    <td> <h6>{{ (order.prix * order.qte)|number_format(0, '.', ' ') }}</h6>   </td>
+                    <td> <h6>{{ (order.prix * order.qte)|number_format(0, '.', ' ') ~ " " ~ devise }}</h6>   </td>
                     {% set i = i +1   %}
                 </tr>
             {% endfor %}
                 <tr>
-                    <td colspan="4" class="text-left"><h5><b>Total</b></h5></td>
-                    <td><h5><b>{{ proforma.total|number_format(0, '.', ' ') }} FCFA</b></h5></td>									
-                </tr>
-                <tr>
-                    <td colspan="4" class="text-left"><h5><b>Mode de livraison</b></h5></td>
-                    <td><h5><b>
+                    <td colspan="4" class="text-left"><h5><b>Total(
                     {% if proforma.livraisonDomicile %}
                     Livraison à domicile
                     {% else %}
                     Livraison en magasin
                     {% endif %}
-                    </b></h5></td>									
-                </tr>
-                <tr>
-                    <td colspan="4" class="text-left"><h5><b>Durée de livraison</b></h5></td>
-                    <td><h5><b>
-                    {% if proforma.dureeLivraison is not null %}
+                    {% if proforma.dureeLivraison is not null %}/
                         {{ proforma.dureeLivraison.libelle }}
                     {% endif %}
-                    </b></h5></td>									
-                </tr>#}
+                    )</b></h5></td>
+                    <td><h5><b>{{ proforma.total|number_format(0, '.', ' ') ~ " " ~ devise }} </b></h5></td>									
+                </tr>
             </tbody>
         </table>
     </div>

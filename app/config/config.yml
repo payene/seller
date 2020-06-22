@@ -40,6 +40,8 @@ framework:
 twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
+    globals:
+        devise: FCFA
     form_themes:
         - 'form/fields.html.twig'
 
@@ -72,7 +74,6 @@ swiftmailer:
     username: '%mailer_user%'
     password: '%mailer_password%'
     spool: { type: memory }
-
 
 knp_snappy:
     pdf:

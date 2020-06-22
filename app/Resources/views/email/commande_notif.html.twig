@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		body {
+		    background: grey;
+		    margin-top: 120px;
+		    margin-bottom: 120px;
+		}
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        table
+        {
+            border-collapse : collapse;
+            width: 100%;
+        }
+
+        th {
+            height: 50px;
+        }
+
+        th,td {
+            text-align: center;
+            width: 20%;
+            border: 1px solid black;
+            color: black;
+        }
+
+        .total{
+            text-align: left;
+            font-weight: bold;
+        }
+	</style>
+</head>
+<body>
+<div>
+    <h1>Une nouvelle commande a &eacute;t&eacute; enregistr&eacute;e</h1>
+    <h1>Client: {{ proforma.client.prenom ~ " " ~ proforma.client.prenom }}</h1>    
+    <hr>
+    <table>
+        <thead>
+            <tr>
+                <th>N&deg;</th>
+                <th>Article({{ lpCollection|length }})</th>
+                <th>P.U</th>
+                <th>Quantit&eacute;</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% set i = 1   %}
+            {% for order in lpCollection|reverse %}
+                <tr>
+                    <td> {{ i }} </td>
+                    <td> <h6>{{ order.article.designation }}</h6> </td>
+                    <td> <h6>{{ order.prix|number_format(0, '.', ' ') }}</h6> </td>
+                    <td> <h6>{{ order.qte }}</h6> </td>
+                    <td> <h6>{{ (order.prix * order.qte)|number_format(0, '.', ' ') }}</h6>   </td>
+                    {% set i = i +1   %}
+                </tr>
+            {% endfor %}
+                <tr>
+                    <td colspan="4" class="total"><h5><b>Total</b></h5></td>
+                    <td><h5><b>{{ proforma.total|number_format(0, '.', ' ') }} FCFA</b></h5></td>									
+                </tr>
+                <tr>
+                    <td colspan="4" class="text-left"><h5><b>Mode de livraison</b></h5></td>
+                    <td><h5><b>
+                    {% if proforma.livraisonDomicile %}
+                    Livraison à domicile
+                    {% else %}
+                    Livraison en magasin
+                    {% endif %}
+                    </b></h5></td>									
+                </tr>
+        </tbody>
+    </table>
+    <div style="width: 100%;  text-align: center;">
+        
+        <a href="{{ absolute_url(path("detail_proforma", {"proforma" : proforma.id})) }}" style="margin-top: 50px; color: #188fff;"><h4>Aller à la boutique</h4></a>
+    </div>
+</div>
+</body>
+</html>

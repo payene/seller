@@ -13,8 +13,12 @@
   <!-- Material Design Bootstrap -->
   <link href="{{ asset('mdb/css/mdb.min.css') }}" rel="stylesheet">
   <!-- Your custom styles (optional) -->
+  <link href="{{ asset('mdb/css/compiled-4.16.0.min.css') }}" rel="stylesheet">
   <link href="{{ asset('mdb/css/style.min.css') }}" rel="stylesheet">
   <link href="{{ asset('mdb/css/toastr.min.css') }}" rel="stylesheet">
+  <link href="{{ asset('mdb/css/toastr.min.css') }}" rel="stylesheet">
+  {% block stylesheets %}
+  {% endblock %}
   <style type="text/css">
     html,
     body,
@@ -43,15 +47,15 @@
       }
     }
 
-    a.text-dark.edge-menu-item:hover{
+    /*a.text-dark.edge-menu-item:hover{
       color: blue!important;
-    }
+    }*/
 
   </style>
 </head>
 
 <body>
-   {% block navbar %}
+   {#{% block navbar %}
   <!-- Navbar -->
   <nav class="navbar fixed-top navbar-expand-lg navbar-light white scrolling-navbar">
     <div class="container">
@@ -115,6 +119,85 @@
       </div>
 
     </div>
+  </nav>
+  <!-- Navbar -->
+  {% endblock %}#}
+  
+  
+  {% block navbar %}
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light white darken-4">
+
+    <!-- Navbar brand -->
+    <a class="blue-text navbar-brand text-uppercase font-weight-bold" href="{{ path('homepage') }}">Les petits Bras</a>
+
+    <!-- Collapse button -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent2"
+      aria-controls="navbarSupportedContent2" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent2">
+
+      <!-- Links -->
+      <ul class="navbar-nav mr-auto">
+
+        <!-- Features -->
+        <li class="nav-item dropdown mega-dropdown">
+          <a class="nav-link dropdown-toggle text-uppercase" id="navbarDropdownMenuLink2" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false"> nos rayons
+            <span class="sr-only">(current)</span>
+          </a>
+          <div class="dropdown-menu mega-menu v-2 z-depth-1 blue darken-1 py-5 px-3"
+            aria-labelledby="navbarDropdownMenuLink2">
+            <div id="mega-menu-div" class="row">
+              
+            </div>
+          </div>
+        </li>
+
+      </ul>
+      <!-- Links -->
+
+      <!-- Search form -->
+      <form class="form-inline mr-auto" method="GET" action="{{ path('shop_article_search') }}" id="article-search-form">
+        <div class="input-group ml-5 m-0">
+          <div class="md-form my-0">
+            <input value="{{ app.request.get('article') }}" name="article" id="article-search-input" class="form-control mr-sm-2" type="text" placeholder="Faire une recherche"  aria-label="Search">
+            <button class="btn btn-mdb-color btn-rounded btn-sm my-0 ml-sm-2" onclick="rechercherArticle();" type="submit">Valider</button>
+          </div>
+        </div>
+      </form>
+
+      <ul class="navbar-nav nav-flex-icons">
+            <li class="nav-item">
+              <a href="{{ path('cart') }}" class="nav-link waves-effect">
+                {% set nbCart = app.session.get('nbrCart') %}
+                <span class="badge red z-depth-1 mr-1" id="cart-length"> {{ nbCart|number_format }}   </span>
+                <i class="fas fa-shopping-cart"></i>
+                <span class="clearfix d-none d-sm-inline-block"> Panier </span>
+              </a>
+            </li>
+            {% if is_granted("ROLE_USER") %}
+            <li class="nav-item">
+              <a href="{{ path('fos_user_security_logout') }}" class="nav-link">
+              <i class="fas fa-sign-out"></i>
+              <span class="clearfix d-none d-sm-inline-block">Déconnexion</span>
+              </a>
+            </li>
+            {% endif %}
+            <li class="nav-item">
+              <a href="{{ path('account') }}" class="nav-link waves-effect">
+                <i class="fas fa-user"></i>
+                <span class="clearfix d-none d-sm-inline-block"> Mon compte </span>
+              </a>
+            </li>
+          </ul>
+
+    </div>
+    <!-- Collapsible content -->
+
   </nav>
   <!-- Navbar -->
   {% endblock %}
@@ -187,7 +270,9 @@
     <!--Copyright-->
     <div class="footer-copyright py-3">
       © 2019 Copyright:
-      <a href="https://mdbootstrap.com/education/bootstrap/" target="_blank"> MDBootstrap.com </a>
+      <a href="https://mdbootstrap.com/education/bootstrap/" target="_blank"> Herpa Solution </a>
+      <br/>
+      <a href="{{ path('dashboardIndex') }}">Administration</a>
     </div>
     <!--/.Copyright-->
 
@@ -218,7 +303,40 @@
           $('#article-search-form').submit();
       }
     }
+    
+    
+    $('.multi-level-dropdown .dropdown-submenu > a').on("click", function(e) {
+    var submenu = $(this);
+    $('.multi-level-dropdown .dropdown-submenu .dropdown-menu').removeClass('show');
+    submenu.next('.dropdown-menu').addClass('show');
+    e.stopPropagation();
+    });
+
+    $('.multi-level-dropdown .dropdown').on("hidden.bs.dropdown", function() {
+    // hide any open menus when parent closes
+    $('.multi-level-dropdown .dropdown-menu.show').removeClass('show');
+    });
+
+    $.ajax({
+        method: "POST",
+        url: "{{ path('mega_menu_load') }}",
+        dataType: "html",
+    }).done( function(response) {
+        //alert(123);
+        //var htmlToDisplay = response.trim();
+        $("#mega-menu-div").html(response);
+    }).fail(function(jxh,textmsg,errorThrown){
+        console.log(textmsg);
+        console.log(errorThrown);
+    });
+
+
+    function formaterMontant(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    }
   </script>
+  
+  
 {% endblock %}
 </body>
 

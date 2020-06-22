@@ -44,28 +44,35 @@
 						<div class="card-body">
 							<div class="col-xs-12">
 								{% if error %}
-                                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                                {% endif %}
+                      <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                  {% endif %}
 
-                                <form action="{{ path("fos_user_security_check") }}" method="post">
-                                    {% if csrf_token %}
-                                        <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
-                                    {% endif %}
+                  <form action="{{ path("fos_user_security_check") }}" method="post">
+                      {% if csrf_token %}
+                          <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+                      {% endif %}
 
-                                    <label for="username">{{ 'security.login.username'|trans }}</label>
-                                    <input type="text" class="form-control" id="username" name="_username" value="{{ last_username }}" required="required" />
+                      <label for="username">{{ 'security.login.username'|trans }}</label>
+                      <input type="text" class="form-control" id="username" name="_username" value="{{ last_username }}" required="required" />
 
-                                    <label for="password">{{ 'security.login.password'|trans }}</label>
-                                    <input type="password" class="form-control" id="password" name="_password" required="required" />
-                                    
-                                    <div class="mb-4 mt-4 ml-1">
-                                    <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
-                                    <label for="remember_me">{{ 'security.login.remember_me'|trans }}</label>
-                                    </div>
-                                    <div class="text-center">
-                                        <input type="submit" class="btn btn-primary btn-lg" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}" />
-                                    </div>
-                                </form>
+                      <label for="password">{{ 'security.login.password'|trans }}</label>
+                      <input type="password" class="form-control" id="password" name="_password" required="required" />
+                      
+                      <div class="mb-4 mt-4 ml-1">
+                        <center><a href="{{ path("account_register") }}" class="badge badge-success">Pas de compte? Cliquez ici pour vous inscrire ></a></center>
+                      </div>
+                      <div class="mb-4 mt-4 ml-1">
+                        <center><a href="{{ path("fos_user_resetting_request") }}" class="">Mot de passe oublié?</a></center>
+                      </div>
+
+                      {#<div class="mb-4 mt-4 ml-1">
+                        <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+                        <label for="remember_me">{{ 'security.login.remember_me'|trans }}</label>
+                      </div>#}
+                      <div class="text-center">
+                          <input type="submit" class="btn btn-primary btn-lg" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}" />
+                      </div>
+                  </form>
 							</div>
 						</div>
 					</div>

@@ -92,7 +92,7 @@
 								     	
 										{% set theAmount = prod.item.defaultPrice %}
 										
-										 <strong> {{ theAmount }} </strong>
+										 <strong> {{ theAmount ~ " " ~ devise }} </strong>
 										<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#centralModalSm-{{ loop.index }}">
 											Commander
 										</button>
@@ -147,7 +147,8 @@
 										              	{#<span class="mr-1">
 										                	<del>$200</del>
 										              	</span>#}
-										              <span id="amount-{{ prod.item.id }}"> {{ theAmount }} </span>
+										              	<p id="designation-{{ prod.item.id }}"></p>
+														<p id="description-{{ prod.item.id }}"></p>
 										            </p>
 
 													<form action="{{ path('add_to_cart') }}" default-image="{{ prod.item.source1 }}"  class="ajaxForm d-flex justify-content-left" id="form-{{ prod.item.id }}" method="POST">
@@ -168,8 +169,10 @@
 																<select name="qte" class="mylabel" id="qte-{{ prod.item.id }}">
 																</select>
 															</div>
-															<p id="designation-{{ prod.item.id }}"></p>
-															<p id="description-{{ prod.item.id }}"></p>
+															<p>
+																<h3><b><span id="amount-{{ prod.item.id }}"> {{ theAmount ~ " " ~ devise}} </span></b></h3>
+															</p>
+															
 															<input type="hidden" name="article-id" id="article-id-{{ prod.item.id }}" />
 															<button id="btn-add-card-{{ prod.item.id }}" disabled onclick=" valider($(this)); " class="btn btn-primary btn-lg my-0 p add-button-{{ prod.item.id }}" type="submit"> Ajouter au panier
 										                	<i class="fas fa-shopping-cart ml-1"></i>
@@ -222,23 +225,6 @@
     </div>
 	
 
-	{#<div class="row">
-		<div class="col-xs-12">
-			<div class="shop-menu clearfix margin-close">
-				<div class="left floatleft">
-					<div class="tab-menu view-mode">
-						<a class="grid active" data-toggle="tab" href="#grid"><i class="fa fa-th"></i></a>
-						<a class="list" data-toggle="tab" href="#list"><i class="fa fa-bars"></i></a>
-					</div>
-				</div>
-				<div class="right floatright text-center">
-					<div class="pagnation-ul">
-						{% include 'default/shop-pagination.html.twig' with pagination %}
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>#}
   </main>
   <!--Main layout-->
 
@@ -309,18 +295,18 @@
 				success: function(data){
 					if(data.length != 0){
 						$.each(data, function(index, value){
-							console.log(value);
+							//console.log(value);
 							$("#img-"+id).attr( "src", value.article.a_source1 );
 							if(value.price != null){
 								//console.log(value.price);
-								$("#amount-"+id).text(value.price);
+								$("#amount-"+id).text( formaterMontant(value.price) + " {{ devise }} ");
 							}
 							else{
-								$("#amount-"+id).text(value.article.a_defaultPrice);
+								$("#amount-"+id).text(formaterMontant(value.article.a_defaultPrice) + " {{devise}} ");
 							}
 
 							$("#article-id-"+id).val(value.article.a_id);
-							$("#designation-"+id).html("<h3><b>" + value.article.a_designation + "</b></h3>");
+							$("#designation-"+id).html("<h3>" + value.article.a_designation + "</h3>");
 							$("#description-"+id).html(value.article.a_description);
 							
 
@@ -349,7 +335,7 @@
 						});
 					}
 					else{
-						$("#img-"+id).val( $('#form-'+id).attr("default-image") );
+						$("#img-"+id).attr("src", $('#form-'+id).attr("default-image") );
 						$("#amount-"+id).text("");
 						$("#designation-"+id).html("<span style='color:red;'>Aucun article disponible correspondant!</span>");
 						$("#description-"+id).html("");
@@ -359,6 +345,7 @@
 				},
 				error: function(){
 					//console.log("error");
+					$("#img-"+id).attr("src", $('#form-'+id).attr("default-image") );
 					$("#designation-"+id).html("<span style='color:red;'>Erreur de chargement, veuillez vérifier votre connexion internet</span>");
 					$("#description-"+id).html("");
 					$(".add-button-"+id).prop("disabled", true);
@@ -366,7 +353,6 @@
 				}
 			});
 		}
-
 
 		function valider(btn){
 			$(btn).click();

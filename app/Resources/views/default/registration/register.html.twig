@@ -1,0 +1,134 @@
+{% extends "base-shop.html.twig" %}
+
+{% block stylesheets %}
+  <link href="{{ asset('mdb/css/intlTelInput.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block header %}
+	{{ parent() }}	
+{% endblock %}
+
+{% block menuarea %}
+{% endblock %}
+
+{% block body %}
+    <section class="pessonal-detail section-padding">
+        <div class="container">
+            <div class="row">
+				<div class="col-md-12 col-sm-12 col-xs-12">
+					<div class="stay-left">
+                        {{ form_start(form) }}
+                        <div class="col-md-8 offset-md-2 mb-4">
+                                <hr>
+                                <br>
+                                <div class="row">
+                                    <div class="col-md-12 mb-4">
+                                        <div class="card">
+                                            <!--Card content-->
+                                            
+                                            <div class="card-header">
+                                                <div class="header">
+                                                <center><h2>INSCRIPTION</h2></center>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                            {% if app.request.hasPreviousSession %}
+                                                {% for type, messages in app.session.flashbag.all() %}
+                                                    {% for message in messages %}
+                                                        <div class="flash-{{ type }} alert alert-danger">
+                                                            {{ message }}
+                                                        </div>
+                                                    {% endfor %}
+                                                {% endfor %}
+                                            {% endif %}
+                                            <div class="row">
+                                                <div class="text-center col-md-12">
+                                                <input type="hidden" id="code-tel" name="code-tel" value="228" />
+                                                    {{ form_label(form.suscriber.client.telephone) }}:&nbsp;
+                                                    {{ form_widget(form.suscriber.client.telephone) }}
+                                                </div>
+                                                <div class="col-md-6">
+                                                    {{form_label(form.email)}}
+                                                    {{ form_widget(form.email, { "attr":{"tabindex" : "0"} }) }}
+                                                    {% for message in app.flashes('error') %}
+                                                    <span style="color: red;">{{ message }}</span><br>
+                                                    {% endfor %}
+                                                </div>
+                                                <div class="col-md-6">
+                                                    {{form_label(form.username)}}
+                                                    {{ form_widget(form.username, { "attr":{"tabindex" : "1"} }) }}
+                                                    {% for message in app.flashes('register_username_error') %}
+                                                    <span style="color: red;">{{ message }}</span><br>
+                                                    {% endfor %}
+                                                </div>
+                                                        
+                                                <div class="col-md-6">
+                                                    {{ form_label(form.plainPassword.first) }}
+                                                    {{ form_widget(form.plainPassword.first, { "attr":{"tabindex" : "2"} }) }}
+                                                </div>
+                                                <div class="col-md-6">
+                                                    {{form_label(form.plainPassword.second)}}
+                                                    {{ form_widget(form.plainPassword.second, { "attr":{"tabindex" : "3"} }) }}
+                                                    {% for message in app.flashes('register_password_error') %}
+                                                    <span style="color: red;">{{ message }}</span><br>
+                                                    {% endfor %}
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    {{ form_label(form.suscriber.client.nom) }}
+                                                    {{ form_widget(form.suscriber.client.nom, { "attr":{"tabindex" : "4"} }) }}
+                                                </div>
+                                                <div class="col-md-6">
+                                                    {{ form_label(form.suscriber.client.prenom) }}
+                                                    {{ form_widget(form.suscriber.client.prenom, { "attr":{"tabindex" : "5"} }) }}
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    {{ form_label(form.suscriber.client.raisoc) }}
+                                                    {{ form_widget(form.suscriber.client.raisoc, { "attr":{"tabindex" : "6"} }) }}
+                                                </div>
+                                                <div class="col-md-12">
+                                                    {{ form_label(form.suscriber.client.adresse) }}
+                                                    {{ form_widget(form.suscriber.client.adresse, { "attr":{"tabindex" : "7"} }) }}
+                                                </div>
+                                            </div>
+                                            {% for message in app.flashes('telephone_error') %}
+                                            <span style="color: red;">{{ message }}</span><br>
+                                            {% endfor %}
+                                            <br>
+                                            <div class="mb-4 mt-4 ml-1">
+                                                <center><a href="{{ path("fos_user_security_login") }}" class="badge badge-info">J'ai déjà un compte! Cliquez ici pour vous connecter ></a></center>
+                                            </div>
+                                            <br>
+                                            <div class="col-md-12">
+                                                <button type="submit" class="btn btn-success">CREER UN COMPTE</button>
+                                            </div>  
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script type="text/javascript" src="{{ asset('mdb/js/intlTelInput.js') }}"></script>
+<script type="text/javascript" src="{{ asset('mdb/js/intlTelInput-jquery.js') }}"></script>
+<script type="text/javascript">
+    $("#userbundle_user_suscriber_client_telephone").intlTelInput({
+        utilsScript: "{{ asset('mdb/js/utils.js') }}",
+        preferredCountries: ["tg"],
+    });
+
+    $("#userbundle_user_suscriber_client_telephone").on("countrychange",function() {
+        $(this).val("+"+window.intlTelInputGlobals.instances[0]["selectedCountryData"]["dialCode"]);
+    });
+
+</script>
+{% endblock %}

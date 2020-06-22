@@ -133,11 +133,11 @@
 												</tr>
 												{% else %}
 												
-													{% if app.request.get('type') == "non_p" %}
+													{#% if app.request.get('type') == "non_p" %}
+													{% endif %#}
 													<tr>
-														<td class="text-center" colspan="2">Toutes les commandes sont payées et/ou livrées</td>
+														<td class="text-center" colspan="2">Aucun résultat</td>
 													</tr>
-													{% endif %}
 
 											{% endfor %}
 											</tbody>

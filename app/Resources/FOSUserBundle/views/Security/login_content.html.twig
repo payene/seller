@@ -24,6 +24,16 @@
     </form>
 </div>
 #}
+
+						{% if app.request.hasPreviousSession %}
+						    {% for type, messages in app.session.flashbag.all() %}
+						        {% for message in messages %}
+						            <div class="flash-{{ type }}">
+						                {{ message }}
+						            </div>
+						        {% endfor %}
+						    {% endfor %}
+						{% endif %}
 <!-- cart page content section start -->
     <section class="login-page">
         <div class="container">

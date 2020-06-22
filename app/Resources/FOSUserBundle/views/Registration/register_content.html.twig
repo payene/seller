@@ -1,0 +1,19 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+{{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register'}}) }}
+    <div class="col-md-10 offset-md-1 mb-4">
+			<div class="row">
+				<div class="col-md-8 offset-md-2 mb-4">
+					<div class="card">
+						<!--Card content-->
+						<div class="card-body">
+                        {{ form_widget(form) }}
+                        <div class="col-md-10">
+                            <button type="submit" class="btn btn-success btn-lg btn-block">CREER UN COMPTE</button>
+                        </div>  
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{{ form_end(form) }}

@@ -1,5 +1,8 @@
 {% extends 'base-shop.html.twig' %}
 
+{% block stylesheets %}
+  <link href="{{ asset('mdb/css/intlTelInput.css') }}" rel="stylesheet">
+{% endblock %}
 
 
 {% block header %}
@@ -73,45 +76,49 @@
 								<h3><center>Inscription</center></h3>
 								<form action="{{ path("proforma_checkout_register") }}" method="post">
 									<div class="row">
+										
+										<div class="text-center col-md-12">
+										{{ form_label(form.suscriber.client.telephone) }}
+										{{ form_widget(form.suscriber.client.telephone) }}
+										</div>
+										<br>
 										<div class="col-md-6">
 											{{form_label(form.email)}}
-											{{ form_widget(form.email) }}
+											{{ form_widget(form.email, { "attr":{"tabindex" : "0"} }) }}
 											{% for message in app.flashes('register_email_error') %}
 											<span style="color: red;">{{ message }}</span><br>
 											{% endfor %}
 
 											{{ form_label(form.plainPassword.first) }}
-											{{ form_widget(form.plainPassword.first) }}
+											{{ form_widget(form.plainPassword.first, { "attr":{"tabindex" : "2"} }) }}
 
 											{{ form_label(form.suscriber.client.nom) }}
-											{{ form_widget(form.suscriber.client.nom) }}
+											{{ form_widget(form.suscriber.client.nom, { "attr":{"tabindex" : "4"} }) }}
 
 											{{ form_label(form.suscriber.client.raisoc) }}
-											{{ form_widget(form.suscriber.client.raisoc) }}
+											{{ form_widget(form.suscriber.client.raisoc, { "attr":{"tabindex" : "6"} }) }}
 										</div>
 										<div class="col-md-6">
 											{{form_label(form.username)}}
-											{{ form_widget(form.username) }}
+											{{ form_widget(form.username, { "attr":{"tabindex" : "1"} }) }}
 											{% for message in app.flashes('register_username_error') %}
 											<span style="color: red;">{{ message }}</span><br>
 											{% endfor %}
 
 											{{form_label(form.plainPassword.second)}}
-											{{ form_widget(form.plainPassword.second) }}
+											{{ form_widget(form.plainPassword.second, { "attr":{"tabindex" : "3"} }) }}
 											{% for message in app.flashes('register_password_error') %}
 											<span style="color: red;">{{ message }}</span><br>
 											{% endfor %}
 
 											{{ form_label(form.suscriber.client.prenom) }}
-											{{ form_widget(form.suscriber.client.prenom) }}
+											{{ form_widget(form.suscriber.client.prenom, { "attr":{"tabindex" : "5"} }) }}
 
 
 											{{ form_label(form.suscriber.client.adresse) }}
-											{{ form_widget(form.suscriber.client.adresse) }}
+											{{ form_widget(form.suscriber.client.adresse, { "attr":{"tabindex" : "7"} }) }}
 										</div>
 									</div>
-									{{ form_label(form.suscriber.client.telephone) }}
-									{{ form_widget(form.suscriber.client.telephone) }}
 									{% for message in app.flashes('telephone_error') %}
 									<span style="color: red;">{{ message }}</span><br>
 									{% endfor %}
@@ -129,43 +136,8 @@
 					<div class="col-md-4 mb-4">
 
 						<!--Card-->
-						<div class="card z-depth-0 border border-light rounded-0">
 
-						<!--Card content-->
-						<div class="card-body">
-							<h4 class="mb-4 mt-1 h5 text-center font-weight-bold">Votre panier</h4>
-
-							{% for order in cart|reverse %}
-							<hr>
-							<dl class="row">
-								<dd class="col-sm-2">
-									<img style="width: 100%;" src="{{ order.article.source1 }}" alt="#" />
-								</dd>
-								<dd class="col-sm-6">
-									{{ order.article.designation }} - {{ order.article.description }} 
-								</dd>
-								<dd class="col-sm-4">
-									{% if order.price is defined %}
-									{% set pu = order.price %} 
-									{% else %} 
-										{% set pu = order.article.defaultPrice %} 
-									{% endif %}
-									Qte:&nbsp;{{ order.nbr }} pcs<br>
-									Prix:&nbsp;{{ pu * order.nbr }}
-								</dd>
-							</dl>
-							{% endfor %}
-							<hr>
-
-							<dl class="row">
-							<dt class="col-sm-8">
-								Total
-							</dt>
-							<dt class="col-sm-4">
-								{{ cartAmount }}
-							</dt>
-							</dl>
-						</div>
+						{% include "default/checkout_panier.html.twig" %}
 
 						</div>
 				
@@ -236,5 +208,17 @@
             });
         }
 	</script>
+	<script type="text/javascript" src="{{ asset('mdb/js/intlTelInput.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('mdb/js/intlTelInput-jquery.js') }}"></script>
+	<script type="text/javascript">
+		$("#userbundle_user_suscriber_client_telephone").intlTelInput({
+			utilsScript: "{{ asset('mdb/js/utils.js') }}",
+			preferredCountries: ["tg"],
+		});
 
+		$("#userbundle_user_suscriber_client_telephone").on("countrychange",function() {
+			$(this).val("+"+window.intlTelInputGlobals.instances[0]["selectedCountryData"]["dialCode"]);
+		});
+
+	</script>
 {% endblock %}

@@ -33,6 +33,29 @@ use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 class DefaultController extends Controller
 {
+
+    /**
+     * @Route("/mega/menu/load", name="mega_menu_load")
+    **/
+    public function loadMegaMenuAction(Request $request)
+    {
+        
+        $em = $this->getDoctrine()->getManager();
+        $queryRayons = $em->createQueryBuilder();
+        $rayons = $queryRayons
+            ->select('c')
+            ->from('AppBundle:Category', 'c')
+            ->andwhere("c.id = c.parent")                       
+            ->orderBy('c.catname', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+        $htmlMenu =  $this->renderView('default/mega-menu.html.twig', [
+            'rayons' => $rayons
+        ]);
+        return new Response($htmlMenu);
+    }
+
     /**
      * @Route("/essai", name="essai")
     **/
@@ -900,6 +923,74 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/account/confirm", name="account_confirm")
+    **/
+    public function confirmRegisterAction(Request $request)
+    {
+        $user = $this->getUser();
+        
+        return $this->render('default/registration/confirmed.html.twig', ["user" => $user]);
+    }
+
+    /**
+     * @Route("/account/register", name="account_register")
+    **/
+    public function accountRegisterAction(Request $request)
+    {
+        $user = new User();
+        $user->setEnabled(True);
+        $form = $this->createForm('UserBundle\Form\UserType', $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $userRepo = $em->getRepository("UserBundle:User");
+            $autre = $userRepo->findByUsername($user->getUsername());
+            $autre2 = $userRepo->findByEmail( $user->getEmail() );
+            //dump( $autre ); exit();
+            if( $autre  != null ){
+                $this->addFlash("register_username_error", "Ce nom d'utiisateur existe déjà");
+            }
+            else if( $autre2 != null ){
+                $this->addFlash("register_email_error", "Cet email existe déjà");
+            }
+            else{
+                $suscriber = $user->getSuscriber();
+                $client = $suscriber->getClient();
+                $client->setEmail($user);
+
+                $autreClient = $em->getRepository("AppBundle:Client")->findByTelephone($client->getTelephone());
+                if($autreClient != null){
+                    $this->addFlash("telephone_error", "Ce numéro de téléphone est déjoà utilisé");
+                    return $this->redirectToRoute("account_register");
+                }
+
+                $em->persist($user);
+                $em->persist($suscriber);
+                $em->persist($client);
+                $em->flush();
+                //login de l'utilisatuer
+                $token = new UsernamePasswordToken($user, $user->getPassword(), "public", $user->getRoles());
+                $this->get("security.token_storage")->setToken($token);
+                $event = new InteractiveLoginEvent($request, $token);
+                $this->get("event_dispatcher")->dispatch("security.interactive_login", $event);
+                return $this->redirectToRoute("account_confirm");
+            }
+        }
+        else if($form->isSubmitted()) {
+            //Mots de passe incorrect
+            $this->addFlash("error", "Les mots de passe doivent être identiques");
+        }
+        
+
+        //Utilisateur connecté! Etape suivante
+        return $this->render('default/registration/register.html.twig', [
+            "form" => $form->createView(),
+        ]);
+        
+    }
+
+    /**
      * @Route("/proforma/{proforma}", name="proforma")
     **/
     public function proformaAction(Request $request, Proformat $proforma)
@@ -1009,6 +1100,26 @@ class DefaultController extends Controller
             );
             $mailer->send($message);
             $this->addFlash("success", 'Votre commande a été enregistrée avec succès !');
+
+            //Envoi de mail au service logistique
+            $serviceLogistiqueMails = $em->getRepository("AppBundle:ServiceLogistiqueMail")->findBy(["actif" =>true]);
+            foreach( $serviceLogistiqueMails as $service ){
+                $message = (new \Swift_Message('Une nouvelle commande vient d\'être passée !'))
+                ->setFrom(['no-reply@lespetitsbras-com.mon.world' => "Les petits bras"])
+                ->setTo($service->getEmail())
+                ->setBody(
+                    $this->renderView(
+                        'email/commande_notif.html.twig',
+                        [
+                            'proforma' => $proforma,
+                            'lpCollection' => $lpCollection,
+                        ]
+                    ),
+                    'text/html'
+                );
+                $mailer->send($message);
+            }
+            
 
             $session->set('cart', null);
             $session->set('nbrCart', null);

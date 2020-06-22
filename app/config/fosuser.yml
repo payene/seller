@@ -9,8 +9,8 @@ fos_user:
     firewall_name: main
     user_class: UserBundle\Entity\User
     from_email:
-        address: lucas.dumont@stardustmultimedia.com
-        sender_name: Lucas Dumont
+        address:        no-reply@lespetitsbras-com.mon.world
+        sender_name:    Les Petits Bras
     service:
         mailer: mailer
     

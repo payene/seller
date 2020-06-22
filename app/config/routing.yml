@@ -1,3 +1,7 @@
+app_service_logistique_mail:
+    resource: "@AppBundle/Controller/ServiceLogistiqueMailController.php"
+    type:     annotation
+
 app_type_article:
     resource: "@AppBundle/Controller/TypeArticleController.php"
     type:     annotation

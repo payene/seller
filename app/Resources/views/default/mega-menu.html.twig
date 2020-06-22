@@ -1,0 +1,16 @@
+{% for rayon in rayons %}
+
+<div class="col-md-6 col-xl-3 sub-menu mb-xl-0 mb-4">
+  <h6 class="sub-title text-uppercase font-weight-bold white-text"> {{ rayon.catname }} </h6>
+  <ul class="list-unstyled">
+  	{% for category in rayon.categories %}
+	    <li>
+			<a class="menu-item pl-0" href="{{ path('shop_by_cat', {'rayon':rayon.parent.id, 'cat':category.id}) }}">
+				<i class="fas fa-caret-right pl-1 pr-3"></i> {{ category.catname }}
+			</a>
+	    </li>
+    {% endfor %}
+  </ul>
+</div>
+
+{% endfor %}

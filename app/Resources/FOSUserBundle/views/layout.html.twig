@@ -30,21 +30,13 @@
             <div class="row">
 				<div class="col-md-12 col-sm-12 col-xs-12">
 					<div class="headline">
-						<h2>Identifiez-vous</h2>
+						<h2></h2>
 					</div>
 					<div class="stay-left">
-						{% if app.request.hasPreviousSession %}
-						    {% for type, messages in app.session.flashbag.all() %}
-						        {% for message in messages %}
-						            <div class="flash-{{ type }}">
-						                {{ message }}
-						            </div>
-						        {% endfor %}
-						    {% endfor %}
-						{% endif %}
 
 						{% block fos_user_content %}
 						{% endblock fos_user_content %}
+						
                     </div>
                 
                 </div>

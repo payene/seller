@@ -128,8 +128,10 @@ class ArticleController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $article->setCategory($article->getTypeArticle()->getCategory());
+            
             $em->persist($article);
-
+            $em->flush();
+            
             $photo1 = $request->files->get('photo1');
             if ($photo1 != null) {
                 $filename = $article->getId().'_1'.'.'.$photo1->guessExtension();
@@ -174,7 +176,7 @@ class ArticleController extends Controller
                 }
             }
 
-
+            $em->persist($article);
             $em->flush();
 
             $caracteristiques = $article->getTypeArticle()->getCaracteristiques();

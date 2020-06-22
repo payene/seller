@@ -55,6 +55,7 @@ class TypeArticleController extends Controller
             $typeArticle->setDefaultPrice($prixMin . " - " . $prixMax);
 
             $em->persist($typeArticle);
+            $em->flush();
 
             $photo1 = $request->files->get('photo1');
             if ($photo1 != null) {
@@ -101,7 +102,7 @@ class TypeArticleController extends Controller
             }
 
             $this->addFlash("success", "Type article ajouté avec succès");
-
+            $em->persist($typeArticle);
             $em->flush();
 
             return $this->redirectToRoute('typearticle_show', array('id' => $typeArticle->getId()));
